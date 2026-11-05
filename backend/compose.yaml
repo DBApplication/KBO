@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: kbo-postgres
+    environment:
+      POSTGRES_DB: kbo
+      POSTGRES_USER: kbo
+      POSTGRES_PASSWORD: kbo
+      TZ: Asia/Seoul
+    ports:
+      - "5432:5432"
+    volumes:
+      - kbo-pgdata:/var/lib/postgresql/data
+
+volumes:
+  kbo-pgdata:
