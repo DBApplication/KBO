@@ -2,6 +2,8 @@ package com.dbapplication.kbo.domain.team.entity;
 
 import com.dbapplication.kbo.domain.match.entity.Match;
 import com.dbapplication.kbo.domain.player.entity.Player;
+import com.dbapplication.kbo.domain.record.entity.BatterSeasonRecord;
+import com.dbapplication.kbo.domain.record.entity.PitcherSeasonRecord;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,6 +45,12 @@ public class Team {
 
     @OneToMany(mappedBy = "awayTeam")
     private List<Match> awayMatches = new ArrayList<>();
+
+    @OneToMany(mappedBy = "team")
+    private List<BatterSeasonRecord> batterSeasonRecords = new ArrayList<>();
+
+    @OneToMany(mappedBy = "team")
+    private List<PitcherSeasonRecord> pitcherSeasonRecords = new ArrayList<>();
 
     @Builder
     private Team(String name, String homeStadium, String logoUrl) {

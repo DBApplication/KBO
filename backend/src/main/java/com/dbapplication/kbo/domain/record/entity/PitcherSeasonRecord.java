@@ -1,6 +1,7 @@
 package com.dbapplication.kbo.domain.record.entity;
 
 import com.dbapplication.kbo.domain.player.entity.Player;
+import com.dbapplication.kbo.domain.team.entity.Team;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -30,8 +31,9 @@ public class PitcherSeasonRecord {
     @JoinColumn(name = "player_id", nullable = false)
     private Player player;
 
-    @Column(name = "team_id")
-    private Long teamId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")
+    private Team team;
 
     @Column(name = "season")
     private Integer season;
@@ -109,13 +111,13 @@ public class PitcherSeasonRecord {
     private Integer pitEr;
 
     @Builder
-    private PitcherSeasonRecord(Player player, Long teamId, Integer season, BigDecimal pitEra,
+    private PitcherSeasonRecord(Player player, Team team, Integer season, BigDecimal pitEra,
             Integer pitGames, Integer pitCg, Integer pitSho, Integer pitW, Integer pitL,
             Integer pitSv, Integer pitHld, BigDecimal pitWpct, Integer pitTbf, Integer pitOuts,
             Integer pitH, Integer pitHr, Integer pitBb, Integer pitHbp, Integer pitSo, Integer pitR,
             Integer pitEr) {
         this.player = player;
-        this.teamId = teamId;
+        this.team = team;
         this.season = season;
         this.pitEra = pitEra;
         this.pitGames = pitGames;

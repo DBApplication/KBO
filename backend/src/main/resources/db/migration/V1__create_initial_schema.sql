@@ -82,10 +82,12 @@ CREATE TABLE batter_season_record
     bat_obp   DECIMAL(4, 3),
     bat_e     INT,
     bat_ops   DECIMAL(4, 3),
-    CONSTRAINT fk_batter_season_record_player FOREIGN KEY (player_id) REFERENCES player (id)
+    CONSTRAINT fk_batter_season_record_player FOREIGN KEY (player_id) REFERENCES player (id),
+    CONSTRAINT fk_batter_season_record_team FOREIGN KEY (team_id) REFERENCES team (id)
 );
 
 CREATE INDEX idx_batter_season_record_player_id ON batter_season_record (player_id);
+CREATE INDEX idx_batter_season_record_team_id ON batter_season_record (team_id);
 CREATE INDEX idx_batter_season_record_season ON batter_season_record (season);
 
 CREATE TABLE pitcher_season_record
@@ -112,8 +114,10 @@ CREATE TABLE pitcher_season_record
     pit_so    INT,
     pit_r     INT,
     pit_er    INT,
-    CONSTRAINT fk_pitcher_season_record_player FOREIGN KEY (player_id) REFERENCES player (id)
+    CONSTRAINT fk_pitcher_season_record_player FOREIGN KEY (player_id) REFERENCES player (id),
+    CONSTRAINT fk_pitcher_season_record_team FOREIGN KEY (team_id) REFERENCES team (id)
 );
 
 CREATE INDEX idx_pitcher_season_record_player_id ON pitcher_season_record (player_id);
+CREATE INDEX idx_pitcher_season_record_team_id ON pitcher_season_record (team_id);
 CREATE INDEX idx_pitcher_season_record_season ON pitcher_season_record (season);
