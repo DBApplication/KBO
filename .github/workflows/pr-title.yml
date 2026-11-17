@@ -4,7 +4,9 @@ name: PR Title
 # 따라서 커밋 컨벤션 검사는 PR 제목에 건다.
 on:
   pull_request:
-    types: [opened, edited, reopened]
+    # synchronize 를 포함해야 커밋을 푸시할 때마다 재실행된다. 이게 없으면
+    # 워크플로 추가 이전에 열려 있던 PR 에서는 검사가 한 번도 돌지 않는다.
+    types: [opened, edited, reopened, synchronize]
 
 permissions:
   contents: read
