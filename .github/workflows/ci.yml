@@ -1,10 +1,11 @@
 name: CI
 
+# 브랜치 제한 없이 모든 푸시에서 실행한다.
+# 체크 결과는 커밋 SHA 에 붙으므로 pull_request 트리거가 없어도 PR 화면에 그대로 표시되고,
+# Branch protection 의 required status check 로도 쓸 수 있다.
+# (pull_request 트리거를 같이 두면 PR 브랜치에 푸시할 때마다 같은 커밋이 두 번 돈다)
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
 
 # 코드를 읽기만 하면 되므로 최소 권한으로 제한한다.
 permissions:
