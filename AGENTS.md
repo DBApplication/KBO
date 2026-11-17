@@ -40,11 +40,12 @@ cd backend
 ```
 global/error/    ErrorCode, BusinessException, ErrorResponse, GlobalExceptionHandler
 global/config/   SecurityConfig, RestClientConfig, JpaConfig
-domain/{player,team,match}/{entity,repository,service,controller,dto}
+domain/{player,team,match,record}/{entity,repository,service,controller,dto}
 ```
 
+- `record`는 시즌 기록(`BatterSeasonRecord`, `PitcherSeasonRecord`) 도메인이다. 기록은 선수·팀·시즌 세 축으로 조회되므로 `player`/`team` 에 종속시키지 않고 별도 도메인으로 둔다.
 - 도메인별 패키지 안에서 `controller → service → repository` 계층을 지키고, 컨트롤러에서 엔티티를 직접 반환하지 않는다 (`dto` 사용).
-- 예외는 `BusinessException(ErrorCode)` 로 던지고, 새 에러는 `ErrorCode`에 도메인 접두어(`P`/`T`/`M`/`C`)와 함께 추가한다. 응답 형식은 `GlobalExceptionHandler`가 통일한다.
+- 예외는 `BusinessException(ErrorCode)` 로 던지고, 새 에러는 `ErrorCode`에 도메인 접두어(`P`/`T`/`M`/`R`/`C`)와 함께 추가한다. 응답 형식은 `GlobalExceptionHandler`가 통일한다.
 - DB 스키마는 **Flyway 마이그레이션**(`src/main/resources/db/migration/V{번호}__{설명}.sql`)으로만 변경한다. `ddl-auto`는 `validate`이므로 엔티티와 스키마가 일치해야 한다. 이미 머지된 마이그레이션 파일은 수정하지 않는다.
 - Lombok 사용 가능. 엔티티에는 `@Data`/`@Setter`를 쓰지 않는다.
 - 설정은 `application.yml`(공통) + `application-{local,prod}.yml`. 환경별 값은 환경변수(`DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USERNAME`, `DB_PASSWORD`, `CORS_ALLOWED_ORIGINS`)로 주입한다.
