@@ -1,19 +1,23 @@
 name: CI
 
-# 브랜치 제한 없이 모든 푸시에서 실행한다.
-# 체크 결과는 커밋 SHA 에 붙으므로 pull_request 트리거가 없어도 PR 화면에 그대로 표시되고,
-# Branch protection 의 required status check 로도 쓸 수 있다.
-# (pull_request 트리거를 같이 두면 PR 브랜치에 푸시할 때마다 같은 커밋이 두 번 돈다)
 on:
+  # 브랜치 제한 없이 모든 푸시에서 실행한다. (브랜치 끝 커밋 기준)
   push:
+
+  # PR 은 "head 를 base 에 머지한 결과" 를 빌드한다.
+  # 내 브랜치만으로는 통과하지만 main 과 합치면 깨지는 경우를 여기서 잡는다.
+  # base 에 충돌이 생겨 머지 커밋을 만들 수 없으면 이 체크 자체가 통과하지 못한다.
+  pull_request:
 
 # 코드를 읽기만 하면 되므로 최소 권한으로 제한한다.
 permissions:
   contents: read
 
 # 같은 브랜치에 새 커밋이 올라오면 진행 중이던 이전 실행은 취소한다.
+# push 와 pull_request 는 github.ref 가 달라(refs/heads/* vs refs/pull/*/merge)
+# 서로 다른 그룹이 되므로, 둘이 서로를 취소하지는 않는다.
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
