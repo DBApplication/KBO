@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# 코드를 읽기만 하면 되므로 최소 권한으로 제한한다.
+permissions:
+  contents: read
+
+# 같은 브랜치에 새 커밋이 올라오면 진행 중이던 이전 실행은 취소한다.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend 빌드 · 테스트
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: 체크아웃
+        uses: actions/checkout@v4
+
+      - name: JDK 21 설정
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Gradle 설정 (의존성 · 빌드 캐시)
+        uses: gradle/actions/setup-gradle@v4
+
+      # ubuntu-latest 러너에는 Docker 가 설치돼 있어 Testcontainers 가 그대로 동작한다.
+      # (TestcontainersConfiguration 이 PostgreSQL 컨테이너를 띄우고 Flyway + ddl-auto=validate 로
+      #  엔티티와 스키마가 맞는지 검증한다)
+      - name: 빌드 · 테스트
+        run: ./gradlew build
+
+      - name: 테스트 리포트 업로드
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          # working-directory 와 무관하게 워크스페이스 루트 기준 경로를 쓴다.
+          path: backend/build/reports/tests/test
+          retention-days: 7
