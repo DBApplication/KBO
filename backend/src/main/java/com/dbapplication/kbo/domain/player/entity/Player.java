@@ -31,6 +31,10 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /** KBO 공식 playerId. 동명이인을 구분하는 키. */
+    @Column(name = "kbo_player_id", unique = true)
+    private Integer kboPlayerId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
@@ -63,8 +67,9 @@ public class Player {
     private List<PitcherSeasonRecord> pitcherSeasonRecords = new ArrayList<>();
 
     @Builder
-    private Player(Team team, String name, String position, String throwBat, LocalDate birthDate,
+    private Player(Integer kboPlayerId, Team team, String name, String position, String throwBat, LocalDate birthDate,
             Integer height, Integer weight, String imageUrl) {
+        this.kboPlayerId = kboPlayerId;
         this.team = team;
         this.name = name;
         this.position = position;

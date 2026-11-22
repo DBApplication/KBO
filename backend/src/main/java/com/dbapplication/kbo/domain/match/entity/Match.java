@@ -30,6 +30,10 @@ public class Match {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /** KBO 경기 ID (예: 20250601_OBWO0 = 날짜_원정+홈+더블헤더). */
+    @Column(name = "kbo_game_id", length = 20, unique = true)
+    private String kboGameId;
+
     @Column(name = "season")
     private Integer season;
 
@@ -66,13 +70,18 @@ public class Match {
     @Column(name = "sequence")
     private Integer sequence;
 
+    /** 더블헤더 구분. 0 = 일반 경기, 1·2 = 더블헤더 1·2경기. */
+    @Column(name = "doubleheader", nullable = false)
+    private Integer doubleheader = 0;
+
     @OneToMany(mappedBy = "match")
     private List<MatchHighlight> highlights = new ArrayList<>();
 
     @Builder
-    private Match(Integer season, LocalDate matchDate, LocalTime matchTime, Team homeTeam,
+    private Match(String kboGameId, Integer season, LocalDate matchDate, LocalTime matchTime, Team homeTeam,
             Team awayTeam, Integer homeScore, Integer awayScore, String stadium, String status,
-            String ticketUrl, Integer sequence) {
+            String ticketUrl, Integer sequence, Integer doubleheader) {
+        this.kboGameId = kboGameId;
         this.season = season;
         this.matchDate = matchDate;
         this.matchTime = matchTime;
@@ -84,5 +93,6 @@ public class Match {
         this.status = status;
         this.ticketUrl = ticketUrl;
         this.sequence = sequence;
+        this.doubleheader = doubleheader == null ? 0 : doubleheader;
     }
 }
