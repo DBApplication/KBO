@@ -26,7 +26,10 @@ public enum ErrorCode {
     TEAM_NOT_FOUND(HttpStatus.NOT_FOUND, "T001", "팀을 찾을 수 없습니다."),
 
     // Match
-    MATCH_NOT_FOUND(HttpStatus.NOT_FOUND, "M001", "경기를 찾을 수 없습니다.");
+    MATCH_NOT_FOUND(HttpStatus.NOT_FOUND, "M001", "경기를 찾을 수 없습니다."),
+
+    // Record
+    RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "R001", "해당 시즌 기록을 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String code;
