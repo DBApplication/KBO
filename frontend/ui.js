@@ -137,13 +137,13 @@ function dateControl() {
 function shortTeam(code) {
   return state.db.team.get(code)?.short_name || code || "—";
 }
-/** KBO 선수 ID로 이름을 조회하고 미등록 ID에는 안내 문구를 반환한다. */
-function playerName(id) {
-  return state.db.player.get(id)?.name || "이름 미확인";
+/** 팀 코드로 DB 팀 id 를 찾는다 (API 의 teamId 조건용). */
+function teamId(code) {
+  return state.db.team.get(code)?.id ?? "";
 }
 /** 선수 ID가 확인된 행만 개인 상세로 연결해 동명이인 기록을 잘못 연결하지 않게 한다. */
 function playerLink(id, name, type = kind()) {
-  return id && state.db.player.has(id)
+  return id
     ? link(
         url("player", { id, type, season: season() }),
         h(name),
@@ -176,6 +176,10 @@ function statHeader(key, label, sort, asc, defaultAsc = false) {
 /** 검색 범위와 기존 검색어를 유지하는 입력 폼을 만든다. */
 function searchForm(key, value, placeholder) {
   return `<form class="search" data-search="${key}" role="search"><input type="search" name="q" aria-label="${h(placeholder)}" placeholder="${h(placeholder)}" value="${h(value)}"><button aria-label="검색"><i class="lens" aria-hidden="true"></i></button></form>`;
+}
+/** 주소에서 요청한 페이지 번호(1부터). 서버에 페이지를 물을 때 쓴다. */
+function pageNumber() {
+  return Math.max(1, parseInt(get("page"), 10) || 1);
 }
 /** 요청한 페이지를 유효 범위로 제한해 첫 행 위치와 이전·다음 링크를 반환한다. */
 function paging(total, size = 25) {
@@ -214,13 +218,14 @@ export {
   date,
   dateControl,
   shortTeam,
-  playerName,
+  teamId,
   playerLink,
   photo,
   table,
   statHeader,
   searchForm,
   paging,
+  pageNumber,
   st,
   DEFAULT_DATE,
 };

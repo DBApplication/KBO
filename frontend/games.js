@@ -19,6 +19,7 @@ import {
   dateControl,
   shortTeam,
   playerLink,
+  teamId,
   photo,
   table,
   statHeader,
@@ -27,12 +28,13 @@ import {
   DEFAULT_DATE,
 } from "./ui.js";
 import { sortRecords, shiftDate } from "./records.js";
+import * as api from "./api.js";
 
 const statuses = {
   FINISHED: "경기 종료",
   CANCELED: "경기 취소",
   SCHEDULED: "경기 예정",
-  LIVE: "경기 중",
+  IN_PROGRESS: "경기 중",
 };
 const batDaily = [
   ["at_bats", "타수"],
@@ -50,13 +52,13 @@ const pitDaily = [
   ["pitches", "투구 수"],
   ["game_era", "ERA"],
 ];
-/** 선택한 날짜에 해당하는 경기 목록을 조회한다. */
+/** 선택한 날짜에 해당하는 경기 목록을 DB에서 조회한다. */
 function dayGames() {
-  return state.db.byDate.get(date()) || [];
+  return api.matches(date());
 }
-/** 더블헤더 경기도 구분할 수 있도록 경기 ID를 포함한 상세 주소를 만든다. */
+/** 더블헤더 경기도 구분할 수 있도록 DB 경기 id를 포함한 상세 주소를 만든다. */
 function gameUrl(g) {
-  return url("game", { id: g.kbo_game_id, date: g.match_date });
+  return url("game", { id: g.id, date: g.match_date });
 }
 /** 구장, 경기 상태, 홈·원정 점수를 한 장의 경기 카드로 표시한다. */
 function card(g) {
@@ -82,12 +84,10 @@ function noGames() {
   );
 }
 /** 일별 출전 기록에 팀·최소 타수 또는 이닝 조건을 적용해 홈 미리보기나 전체 목록을 만든다. */
-function daily(full = false) {
+async function daily(full = false, records) {
   const pit = kind() === "pit",
     cols = pit ? pitDaily : batDaily;
-  const all = (pit ? state.db.dailyPit : state.db.dailyBat).filter(
-    (r) => r.match_date === date(),
-  );
+  const all = (records || (await api.dailyRecords(date())))[pit ? "pit" : "bat"];
   const minKey = pit ? "outs_recorded" : "at_bats",
     min = get("min", pit ? "0" : "3");
   const selectedSort = cols.some(([k]) => k === get("sort"))
@@ -139,7 +139,7 @@ function daily(full = false) {
         ),
   );
   if (!all.length) {
-    const message = dayGames().some((g) => g.status === "FINISHED")
+    const message = (await dayGames()).some((g) => g.status === "FINISHED")
       ? "이 날짜의 일별 선수 기록은 아직 수집되지 않았습니다."
       : "표시할 일별 선수 기록이 없습니다.";
     return (
@@ -182,22 +182,23 @@ function daily(full = false) {
   );
 }
 /** 선택한 날짜의 경기 카드, 일별 선수 기록, 대표 선수 사진을 홈 화면에 배치한다. */
-function home() {
-  const games = dayGames();
+async function home() {
+  const [games, records] = await Promise.all([
+    dayGames(),
+    api.dailyRecords(date()),
+  ]);
   const featured = sortRecords(
-    state.db.dailyBat.filter(
-      (r) => r.match_date === date() && state.db.player.has(r.player_id),
-    ),
+    records.bat.filter((r) => r.player_id),
     "home_runs",
     false,
     "hits",
   )[0];
   const portrait = featured
-    ? `<aside class="home-photo">${link(url("player", { id: featured.player_id, type: "bat" }), photo(state.db.player.get(featured.player_id), "hero-photo") + `<div class="photo-caption"><span>${h(featured.team_name)}</span><strong>${h(featured.player_name)}</strong><span aria-hidden="true">↗</span></div>`)}</aside>`
+    ? `<aside class="home-photo">${link(url("player", { id: featured.player_id, type: "bat" }), photo({ name: featured.player_name, image_url: featured.image_url }, "hero-photo") + `<div class="photo-caption"><span>${h(featured.team_name)}</span><strong>${h(featured.player_name)}</strong><span aria-hidden="true">↗</span></div>`)}</aside>`
     : "";
   return `<div class="wrap">${heading("KBO 일별 기록", "날짜별 경기 결과와 선수의 기록을 한눈에 확인하세요.", dateControl())}</div>
   <section class="scoreband"><div class="wrap">${section("오늘의 경기", `<span class="count">${games.length}경기</span>` + next(url("games", { date: date() }), "일정 전체 보기"))}${games.length ? `<div class="cards">${games.map(card).join("")}</div>` : noGames()}</div></section>
-  <div class="wrap home-body ${portrait ? "with-photo" : ""}"><section>${daily()}</section>${portrait}</div>`;
+  <div class="wrap home-body ${portrait ? "with-photo" : ""}"><section>${await daily(false, records)}</section>${portrait}</div>`;
 }
 /** 선택 날짜가 속한 주의 월요일부터 일요일까지 날짜 이동 링크를 만든다. */
 function week() {
@@ -212,23 +213,21 @@ function week() {
     );
   }).join("")}</div>`;
 }
-/** 영상 한 개는 외부 재생 링크로, 여러 개는 경기 상세의 영상 목록으로 연결한다. */
+/** 영상 한 개는 외부 재생 링크로, 여러 개는 경기 상세의 영상 목록으로 연결한다 (서버의 버튼 규칙 actions). */
 function highlightLink(g) {
-  const videos = state.db.highlights.get(g.kbo_game_id) || [];
-  return videos.length === 1
-    ? external(videos[0].url, "하이라이트")
-    : videos.length
+  return g.actions.highlightUrl
+    ? external(g.actions.highlightUrl, "하이라이트")
+    : g.actions.highlightList
       ? next(gameUrl(g), "하이라이트 목록")
       : "";
 }
-/** 날짜·팀·경기 상태 조건에 맞는 일정을 표시하고 경기 상세로 연결한다. */
-function gamesPage() {
-  const rows = dayGames().filter(
-    (g) =>
-      (!get("team") ||
-        [g.home_team_code, g.away_team_code].includes(get("team"))) &&
-      (!get("status") || g.status === get("status")),
-  );
+/** 날짜·팀·경기 상태 조건에 맞는 일정을 표시하고 경기 상세로 연결한다. 조건은 서버(SQL)에서 거른다. */
+async function gamesPage() {
+  const filtered = Boolean(get("team") || get("status"));
+  const [rows, allDay] = await Promise.all([
+    api.matches(date(), { teamId: teamId(get("team")), status: get("status") }),
+    filtered ? dayGames() : null,
+  ]);
   const today = new Date(),
     localToday = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
   return `<div class="wrap page">${heading("경기 기록", "날짜별 경기 결과를 확인하세요.")}<div class="toolbar"><div class="controls">${dateControl()}${link(here({ date: localToday }), "오늘", "button")}</div><div class="controls">${teamsSelect()}${select(
@@ -258,7 +257,7 @@ function gamesPage() {
           "경기 목록",
           "matches",
         )
-      : dayGames().length
+      : filtered && allDay.length
         ? empty(
             "조건에 맞는 경기가 없습니다.",
             "",
@@ -268,34 +267,29 @@ function gamesPage() {
   }</div>`;
 }
 /** 경기 ID로 점수, 영상, 이닝별 득점, 주요 기록과 출전 선수를 모아 상세 화면을 만든다. */
-function gamePage() {
-  const g = state.db.game.get(get("id"));
-  if (!g)
-    return empty(
-      "경기를 찾을 수 없습니다.",
-      "",
-      next(url("games"), "경기 목록"),
-    );
-  const id = g.kbo_game_id,
-    videos = state.db.highlights.get(id) || [],
-    box = state.db.boxes.filter((r) => r.game_id === id);
-  const innings = state.db.innings.filter(
-    (r) => r.game_id === id && r.raw_value !== "" && r.status !== "not_played",
+async function gamePage() {
+  let detail;
+  try {
+    detail = await api.match(get("id"));
+  } catch (e) {
+    if (e instanceof api.ApiError && [400, 404].includes(e.status))
+      return empty(
+        "경기를 찾을 수 없습니다.",
+        "",
+        next(url("games"), "경기 목록"),
+      );
+    throw e;
+  }
+  const { game: g, highlights: videos, scoreboard: board, events: eventRows } =
+    detail;
+  const numbers = Array.from(
+    { length: board?.innings || 9 },
+    (_, i) => i + 1,
   );
-  const last = Math.max(
-    9,
-    ...innings
-      .filter((r) => !["-", ""].includes(r.raw_value))
-      .map((r) => Number(r.inning)),
-  );
-  const numbers = Array.from({ length: last }, (_, i) => i + 1);
   /** 스코어보드 한쪽에 홈·원정 구분과 팀 이름을 표시한다. */
   const scoreSide = (s) =>
     `<div><small>${s === "away" ? "원정" : "홈"}</small><b>${h(shortTeam(g[s + "_team_code"]))}</b></div>`;
-  const eventRows = state.db.events.filter((r) => r.game_id === id);
-  const players = (
-    kind() === "bat" ? state.db.dailyBat : state.db.dailyPit
-  ).filter((r) => r.game_id === id);
+  const players = kind() === "bat" ? detail.batters : detail.pitchers;
   const cols = kind() === "bat" ? batDaily : pitDaily;
   return `<div class="wrap page">${link(url("games", { date: g.match_date }), "‹ 경기 기록", "back")}${heading(shortTeam(g.away_team_code) + " vs " + shortTeam(g.home_team_code), `${displayDate(g.match_date)} · ${g.match_time || "시각 미정"} · ${g.stadium}`)}
   <div class="scoreboard">${scoreSide("away")}<div><small>${h(statuses[g.status] || g.status)}</small><strong>${st("score", g.away_score)} <em>:</em> ${st("score", g.home_score)}</strong></div>${scoreSide("home")}</div>
@@ -303,22 +297,15 @@ function gamePage() {
   ${
     g.status === "FINISHED"
       ? section("이닝별 기록") +
-        (box.length
+        (board
           ? table(
               ["팀", ...numbers, "R", "H", "E"],
-              box.map((r) => [
-                h(r.team_name),
-                ...numbers.map((i) =>
-                  h(
-                    innings.find(
-                      (n) =>
-                        n.team_side === r.team_side && Number(n.inning) === i,
-                    )?.raw_value || "—",
-                  ),
-                ),
-                r.runs,
-                r.hits,
-                r.errors,
+              [board.away, board.home].map((line) => [
+                h(line.team?.shortName),
+                ...numbers.map((i) => h(line.scores[i - 1] ?? "—")),
+                h(line.runs),
+                h(line.hits),
+                h(line.errors),
               ]),
               "이닝별 득점",
             )
@@ -330,7 +317,7 @@ function gamePage() {
       ? section("경기 주요 기록") +
         table(
           ["항목", "기록"],
-          eventRows.map((e) => [h(e.event_type), h(e.description)]),
+          eventRows.map((e) => [h(e.type), h(e.description)]),
           "경기 주요 기록",
           "events",
         )
@@ -359,8 +346,8 @@ function gamePage() {
   }</div>`;
 }
 /** 날짜를 바꾸거나 페이지를 넘겨 전체 일별 출전 기록을 볼 수 있는 화면을 만든다. */
-function dailyPage() {
-  return `<div class="wrap page">${link(url("home", { date: date() }), "‹ 홈", "back")}<div class="toolbar">${dateControl()}</div>${daily(true)}</div>`;
+async function dailyPage() {
+  return `<div class="wrap page">${link(url("home", { date: date() }), "‹ 홈", "back")}<div class="toolbar">${dateControl()}</div>${await daily(true)}</div>`;
 }
 
 export { home, gamesPage, gamePage, dailyPage };

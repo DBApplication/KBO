@@ -1,4 +1,4 @@
-import { loadRecords } from "./records.js";
+import { loadReference } from "./api.js";
 import {
   state,
   get,
@@ -7,7 +7,6 @@ import {
   here,
   link,
   shortTeam,
-  playerName,
   searchForm,
   empty,
   next,
@@ -22,7 +21,6 @@ import {
   choices,
   pair,
   recordKey,
-  includes,
 } from "./seasons.js";
 
 const header = document.querySelector("#header"),
@@ -39,8 +37,10 @@ const routes = {
   daily: ["일별 선수 기록", dailyPage],
   search: ["검색", searchPage],
 };
-/** 주소의 화면과 조회 조건을 읽어 본문과 메뉴를 그리고, 요청된 스크롤 위치를 복원한다. */
-function render({ scroll = 0, focus = false } = {}) {
+let renderId = 0;
+/** 주소의 화면과 조회 조건을 읽어 본문과 메뉴를 그리고, 요청된 스크롤 위치를 복원한다.
+ *  화면 데이터는 API 로 받아 오므로, 응답을 기다리는 사이 다른 화면으로 이동했으면 늦게 온 결과는 버린다. */
+async function render({ scroll = 0, focus = false } = {}) {
   if (!state.db) return;
   const [page, query] = location.hash.slice(1).replace(/^\//, "").split("?");
   state.page = page || "home";
@@ -57,9 +57,23 @@ function render({ scroll = 0, focus = false } = {}) {
   header.innerHTML = `<div class="wrap topbar">${link(url("home"), "DIAMOND <span>/ KBO</span>", "brand")}<button class="menu-button" aria-controls="site-nav" aria-expanded="false">메뉴</button><nav id="site-nav" aria-label="주 메뉴">${navigation}</nav>${searchForm("global", page === "search" ? get("q") : "", "선수 또는 팀 검색")}</div>`;
   if (dialog.open) dialog.close();
   const route = Object.hasOwn(routes, state.page) ? routes[state.page] : null;
-  main.innerHTML = route
-    ? route[1]()
-    : empty("페이지를 찾을 수 없습니다.", "", next(url("home"), "홈으로"));
+  const id = ++renderId;
+  main.setAttribute("aria-busy", "true");
+  let html;
+  try {
+    html = route
+      ? await route[1]()
+      : empty("페이지를 찾을 수 없습니다.", "", next(url("home"), "홈으로"));
+  } catch {
+    html = empty(
+      "기록을 불러오지 못했습니다.",
+      "백엔드 서버(localhost:8080)가 켜져 있는지 확인해 주세요.",
+      '<button data-retry>다시 시도</button>',
+    );
+  }
+  if (id !== renderId) return;
+  main.removeAttribute("aria-busy");
+  main.innerHTML = html;
   document.title = (route?.[0] || "페이지 없음") + " · DIAMOND / KBO";
   if (focus) main.focus({ preventScroll: true });
   window.scrollTo(0, scroll);
@@ -92,20 +106,29 @@ document.addEventListener("change", (e) => {
   if (key === "date" && !e.target.value) return;
   navigate(here({ [key]: e.target.value, page: "" }));
 });
-let side = "";
-/** 이름이나 팀으로 비교 후보를 좁히고, 반대쪽에 선택된 선수는 선택할 수 없게 한다. */
-function pickList(query) {
-  const selected = pair(),
-    other = selected[side === "left" ? "right" : "left"];
-  const rows = choices().filter((r) =>
-    includes(playerName(r.kbo_player_id) + " " + shortTeam(r.team_code), query),
-  );
+let side = "",
+  pickId = 0,
+  selectedPair = Promise.resolve({});
+/** 이름으로 비교 후보를 서버에서 찾고, 반대쪽에 선택된 선수는 선택할 수 없게 한다. */
+async function pickList(query) {
+  const id = ++pickId;
   const list = dialog.querySelector(".pick-list");
+  let rows, other;
+  try {
+    [rows, other] = await Promise.all([
+      choices(query),
+      selectedPair.then((p) => p[side === "left" ? "right" : "left"]),
+    ]);
+  } catch {
+    if (id === pickId) list.innerHTML = empty("선수 목록을 불러오지 못했습니다.");
+    return;
+  }
+  if (id !== pickId) return;
   list.innerHTML = rows.length
     ? rows
         .map((r) => {
-          const same = other?.kbo_player_id === r.kbo_player_id;
-          return `<button data-record="${h(recordKey(r))}" ${same ? "disabled" : ""}><strong>${h(playerName(r.kbo_player_id))}</strong><span>${h(shortTeam(r.team_code))} · ${same ? "이미 선택됨" : h(state.db.player.get(r.kbo_player_id)?.position || "포지션 미제공")}</span></button>`;
+          const same = other?.player_id === r.player_id;
+          return `<button data-record="${h(recordKey(r))}" ${same ? "disabled" : ""}><strong>${h(r.name)}</strong><span>${h(shortTeam(r.team_code))} · ${same ? "이미 선택됨" : h(r.position || "포지션 미제공")}</span></button>`;
         })
         .join("")
     : empty("조건에 맞는 선수가 없습니다.");
@@ -113,14 +136,18 @@ function pickList(query) {
 /** 왼쪽 또는 오른쪽 비교 선수를 바꿀 수 있도록 선택 창을 열고 검색창에 포커스를 둔다. */
 function pick(which) {
   side = which;
+  selectedPair = pair().catch(() => ({}));
   dialog.innerHTML = `<div class="section-title"><h2 id="picker-title">비교할 선수 선택</h2><button data-close aria-label="닫기">닫기</button></div><input type="search" aria-label="선수 또는 팀 이름" placeholder="선수 또는 팀 이름"><div class="pick-list"></div>`;
   pickList("");
   dialog.showModal();
   dialog.querySelector("input").focus();
 }
+let typing;
 // 선택 창에 입력할 때마다 비교 후보 목록을 갱신한다.
 dialog.addEventListener("input", (e) => {
-  if (e.target.matches("input")) pickList(e.target.value);
+  if (!e.target.matches("input")) return;
+  clearTimeout(typing);
+  typing = setTimeout(() => pickList(e.target.value), 200);
 });
 // 화면을 다시 그려도 버튼과 링크가 동작하도록 클릭을 문서에서 받아 처리한다.
 document.addEventListener("click", (e) => {
@@ -143,13 +170,18 @@ document.addEventListener("click", (e) => {
   }
   const record = e.target.closest("[data-record]");
   if (record) {
-    const selected = pair(),
-      params = {
+    dialog.close();
+    selectedPair.then((selected) => {
+      const params = {
         left: selected.left ? recordKey(selected.left) : "",
         right: selected.right ? recordKey(selected.right) : "",
       };
-    dialog.close();
-    navigate(here({ ...params, [side]: record.dataset.record }));
+      navigate(here({ ...params, [side]: record.dataset.record }));
+    });
+    return;
+  }
+  if (e.target.closest("[data-retry]")) {
+    render();
     return;
   }
   const a = e.target.closest("a");
@@ -183,17 +215,17 @@ document.addEventListener(
   },
   true,
 );
-/** 기록을 불러와 첫 화면을 그리고, 로딩에 실패하면 재시도 버튼을 제공한다. */
+/** 팀·시즌 목록을 DB에서 받아 첫 화면을 그리고, 실패하면 재시도 버튼을 제공한다. */
 async function start() {
   main.innerHTML =
     '<div class="wrap empty" role="status">경기 기록을 불러오는 중입니다…</div>';
   try {
-    state.db = await loadRecords();
+    state.db = await loadReference();
     render();
   } catch {
     main.innerHTML = empty(
       "기록을 불러오지 못했습니다.",
-      "연결 상태를 확인해 주세요.",
+      "백엔드 서버(localhost:8080)가 켜져 있는지 확인해 주세요.",
       '<button id="retry">다시 시도</button>',
     );
     main.querySelector("#retry").onclick = start;

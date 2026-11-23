@@ -16,16 +16,17 @@ import {
   section,
   empty,
   shortTeam,
-  playerName,
+  teamId,
   playerLink,
   photo,
   table,
   statHeader,
   searchForm,
   paging,
+  pageNumber,
   st,
 } from "./ui.js";
-import { sortRecords } from "./records.js";
+import * as api from "./api.js";
 
 const batCols = [
   ["bat_games", "경기"],
@@ -59,9 +60,12 @@ const detailBat =
 const detailPit =
   "era games cg sho w l sv hld wpct tbf outs h hr bb hbp so r er".split(" ");
 const abbr = { games: "G", outs: "IP", wpct: "WPCT" };
-/** 선택한 시즌과 기록 종류에 해당하는 타자 또는 투수 기록을 가져온다. */
-function inSeason() {
-  return state.db[kind()].filter((r) => r.season === season());
+/** 화면 열 이름(bat_avg, pit_outs) → 선수 기록 API 의 정렬 키(avg, innings). */
+function sortKey(col) {
+  const pit = col.startsWith("pit_"),
+    key = col.slice(4);
+  const field = (pit ? api.pitKeys : api.batKeys)[key];
+  return field === "outs" ? "innings" : field;
 }
 /** 검색 문자열의 유니코드 표기, 공백, 영문 대소문자 차이를 정규화한다. */
 function norm(s) {
@@ -74,8 +78,8 @@ function norm(s) {
 function includes(value, q) {
   return norm(value).includes(norm(q));
 }
-/** 시즌·팀·이름·최소 출전 조건을 적용하고 정렬 및 페이지 이동이 가능한 선수 목록을 만든다. */
-function playerPage() {
+/** 시즌·팀·이름·최소 출전 조건과 정렬·페이지를 서버(SQL)에 넘겨 선수 기록 목록을 만든다. */
+async function playerPage() {
   const pit = kind() === "pit",
     cols = pit ? pitCols : batCols;
   const sort = cols.some(([k]) => k === get("sort"))
@@ -86,21 +90,27 @@ function playerPage() {
   const asc = get("dir") ? get("dir") === "asc" : sort === "pit_era";
   const team = get("team"),
     min = Number(get("min", 0));
-  const rows = sortRecords(
-    inSeason().filter(
-      (r) =>
-        (!team || r.team_code === team) &&
-        Number(r[pit ? "pit_outs" : "bat_ab"]) >= min * (pit ? 3 : 1) &&
-        includes(playerName(r.kbo_player_id), get("q")),
-    ),
-    sort,
-    asc,
-    pit ? "pit_outs" : "bat_ab",
-  );
-  const { offset, controls } = paging(rows.length);
+  const params = {
+    season: season(),
+    teamId: teamId(team),
+    keyword: get("q").trim(),
+    [pit ? "minInnings" : "minPa"]: min || "",
+    sort: sortKey(sort),
+    order: asc ? "asc" : "desc",
+    size: 25,
+  };
+  let result = await api.seasonRanking(kind(), {
+    ...params,
+    page: pageNumber() - 1,
+  });
+  const last = Math.max(1, Math.ceil(result.total / 25));
+  if (pageNumber() > last)
+    result = await api.seasonRanking(kind(), { ...params, page: last - 1 });
+  const rows = result.rows;
+  const { offset, controls } = paging(result.total);
   return `<div class="wrap page">${heading("선수 기록", "시즌별 타자·투수 기록을 확인하세요.", seasonSelect())}${tabs()}
-  <div class="toolbar filters"><div class="controls">${teamsSelect()}${select("min", pit ? "최소 이닝" : "최소 타수", [["0", pit ? "이닝 제한 없음" : "타수 제한 없음"], ...[pit ? 10 : 50, pit ? 50 : 100, pit ? 100 : 300].map((n) => [n, n + (pit ? "이닝 이상" : "타수 이상")])], String(min))}</div>${searchForm("local", get("q"), "선수 이름 검색")}</div>
-  ${section(pit ? "투수 기록" : "타자 기록", `<span class="count">${rows.length}개 기록</span>`)}
+  <div class="toolbar filters"><div class="controls">${teamsSelect()}${select("min", pit ? "최소 이닝" : "최소 타석", [["0", pit ? "이닝 제한 없음" : "타석 제한 없음"], ...[pit ? 10 : 50, pit ? 50 : 100, pit ? 100 : 300].map((n) => [n, n + (pit ? "이닝 이상" : "타석 이상")])], String(min))}</div>${searchForm("local", get("q"), "선수 이름 검색")}</div>
+  ${section(pit ? "투수 기록" : "타자 기록", `<span class="count">${result.total}개 기록</span>`)}
   ${
     rows.length
       ? table(
@@ -112,14 +122,12 @@ function playerPage() {
               statHeader(k, n, sort, asc, k === "pit_era"),
             ),
           ],
-          rows
-            .slice(offset, offset + 25)
-            .map((r, i) => [
-              offset + i + 1,
-              playerLink(r.kbo_player_id, playerName(r.kbo_player_id)),
-              h(shortTeam(r.team_code)),
-              ...cols.map(([k]) => st(k, r[k])),
-            ]),
+          rows.map((r, i) => [
+            offset + i + 1,
+            playerLink(r.player_id, r.name),
+            h(shortTeam(r.team_code)),
+            ...cols.map(([k]) => st(k, r[k])),
+          ]),
           "시즌 선수 기록",
           "records",
         ) + controls
@@ -134,21 +142,21 @@ function playerPage() {
   }</div>`;
 }
 /** 선수 ID에 해당하는 프로필과 연도별 성적을 표시하며 이적 시즌의 팀별 기록을 구분한다. */
-function playerDetail() {
-  const p = state.db.player.get(get("id"));
-  if (!p)
-    return empty(
-      "선수를 찾을 수 없습니다.",
-      "",
-      next(url("players"), "선수 기록 보기"),
-    );
-  const id = p.kbo_player_id;
-  const byType = Object.fromEntries(
-    ["bat", "pit"].map((k) => [
-      k,
-      state.db[k].filter((r) => r.kbo_player_id === id),
-    ]),
-  );
+async function playerDetail() {
+  let detail;
+  try {
+    detail = await api.playerDetail(get("id"));
+  } catch (e) {
+    if (e instanceof api.ApiError && [400, 404].includes(e.status))
+      return empty(
+        "선수를 찾을 수 없습니다.",
+        "",
+        next(url("players"), "선수 기록 보기"),
+      );
+    throw e;
+  }
+  const p = detail.player;
+  const byType = { bat: detail.bat, pit: detail.pit };
   const type = byType[kind()].length
       ? kind()
       : byType.bat.length
@@ -184,10 +192,8 @@ function playerDetail() {
   }<p class="meta">팀명은 해당 시즌 기록의 소속팀입니다. 미제공 값은 —로 표시합니다.</p></div>`;
 }
 /** 시즌 기준일의 순위를 표시하고 선택한 팀의 최근 10경기 성적과 연속 기록을 보여준다. */
-function teamPage() {
-  const rows = state.db.standings
-    .filter((r) => r.season === season())
-    .sort((a, b) => a.team_rank - b.team_rank);
+async function teamPage() {
+  const rows = await api.standings(season());
   const selected = rows.find((r) => r.team_code === get("team")) || rows[0];
   const content = rows.length
     ? `<div class="table-scroll"><table class="standings"><caption class="sr">정규시즌 팀 순위</caption><thead><tr>${["순위", "팀", "경기", "승", "패", "무", "승률", "게임 차", "최근 10경기", "연속"].map((v) => `<th scope="col">${v}</th>`).join("")}</tr></thead><tbody>${rows.map((r) => `<tr class="${r === selected ? "chosen" : ""}"><td>${h(r.team_rank)}</td><td>${link(here({ team: r.team_code }), h(state.db.team.get(r.team_code)?.name || r.team_code), "player-link")}</td>${["games", "wins", "losses", "draws", "win_pct", "games_behind", "last10", "streak"].map((k) => `<td>${st(k, r[k])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
@@ -195,45 +201,58 @@ function teamPage() {
     : empty("해당 시즌의 순위가 없습니다.") + "</div>";
   return `<div class="wrap page">${heading("팀 기록", "정규시즌 순위", seasonSelect())}<p class="meta">기준일 ${h(rows[0]?.as_of_date?.replaceAll("-", ".") || "—")}</p>${content}`;
 }
-/** 같은 시즌에 이적한 선수의 기록을 구분하기 위해 선수 ID와 당시 팀 코드를 묶는다. */
-const recordKey = (r) => r.kbo_player_id + "@" + r.team_code;
-/** 현재 시즌의 비교 후보를 선수 이름순으로, 이름이 같으면 팀 코드순으로 정렬한다. */
-function choices() {
-  return inSeason()
-    .slice()
-    .sort(
-      (a, b) =>
-        playerName(a.kbo_player_id).localeCompare(
-          playerName(b.kbo_player_id),
-          "ko",
-        ) || a.team_code.localeCompare(b.team_code),
-    );
+/** 비교 선수는 DB 선수 id 로 주소에 남긴다. */
+const recordKey = (r) => String(r.player_id);
+/** 이름이나 팀으로 현재 시즌의 비교 후보를 서버에서 찾는다 (이름순, 최대 100명). */
+async function choices(query = "") {
+  const { rows } = await api.seasonRanking(kind(), {
+    season: season(),
+    keyword: query.trim(),
+    sort: "name",
+    order: "asc",
+    size: 100,
+    page: 0,
+  });
+  return rows;
 }
-/** 비교할 두 기록을 주소에서 복원하고, 선택값이 없으면 시안의 기본 선수 쌍을 찾는다. */
-function pair() {
-  const rows = choices(),
-    pit = kind() === "pit";
-  /** 기본 비교 선수의 이름으로 현재 시즌의 기록을 찾는다. */
-  const initial = (name) =>
-    rows.find((r) => playerName(r.kbo_player_id) === name);
+/** 비교할 두 선수를 주소에서 복원하고, 선택값이 없으면 시안의 기본 선수 쌍을 이름으로 찾는다. */
+async function pair() {
+  const pit = kind() === "pit";
   const explicit = state.params.has("left") || state.params.has("right");
-  /** 사용자가 비교 대상을 지정했으면 선수·팀 키로 찾고, 최초 진입 시에는 기본 선수를 찾는다. */
-  const find = (key, name) =>
-    explicit ? rows.find((r) => recordKey(r) === get(key)) : initial(name);
-  const left = find("left", pit ? "원태인" : "김도영"),
-    right = find("right", pit ? "김택연" : "구자욱");
+  /** 기본 비교 선수의 이름으로 현재 시즌의 기록을 찾는다. */
+  const initial = async (name) =>
+    (await choices(name)).find((r) => r.name === name);
+  /** 지정한 선수 id 의 프로필을 찾는다. */
+  const byId = async (key) => {
+    if (!get(key)) return undefined;
+    try {
+      const { player } = await api.playerDetail(get(key));
+      return { player_id: player.id, name: player.name, position: player.position, team_code: player.team_code };
+    } catch {
+      return undefined;
+    }
+  };
+  const [left, right] = explicit
+    ? await Promise.all([byId("left"), byId("right")])
+    : await Promise.all([
+        initial(pit ? "원태인" : "김도영"),
+        initial(pit ? "김택연" : "구자욱"),
+      ]);
   return {
     left,
-    right: right?.kbo_player_id === left?.kbo_player_id ? undefined : right,
+    right: right?.player_id === left?.player_id ? undefined : right,
   };
 }
-/** 두 선수의 같은 시즌 팀별 기록을 지표별로 나란히 표시한다. */
-function comparePage() {
-  const { left, right } = pair(),
+/** 두 선수의 같은 시즌 기록을 서버 비교 API로 받아 지표별로 나란히 표시한다. */
+async function comparePage() {
+  const { left: l, right: r } = await pair(),
     pit = kind() === "pit";
+  const records =
+    l && r ? await api.compare(kind(), season(), [l.player_id, r.player_id]) : null;
+  const [left, right] = records ? records : [l, r];
   /** 비교할 한쪽의 선수 정보와 선택 버튼을 표시한다. */
   const card = (r, side) =>
-    `<div class="compare-card"><div class="badge">${h(r?.team_code || "—")}</div><div><h2>${h(r ? playerName(r.kbo_player_id) : "선수 선택")}</h2><p>${r ? h(shortTeam(r.team_code) + " · " + (state.db.player.get(r.kbo_player_id)?.position || "포지션 미제공")) : "비교할 선수를 선택하세요."}</p>${r ? `<small>${h(season())} 시즌 팀별 기록</small>` : ""}</div><button data-pick="${side}">${r ? "선수 변경" : "선수 선택"}</button></div>`;
+    `<div class="compare-card"><div class="badge">${h(r?.team_code || "—")}</div><div><h2>${h(r ? r.name : "선수 선택")}</h2><p>${r ? h(shortTeam(r.team_code) + " · " + (r.position || "포지션 미제공")) : "비교할 선수를 선택하세요."}</p>${r ? `<small>${h(season())} 시즌 기록</small>` : ""}</div><button data-pick="${side}">${r ? "선수 변경" : "선수 선택"}</button></div>`;
   const keys = pit
     ? pitCols
     : [
@@ -251,44 +270,42 @@ function comparePage() {
       ];
   return `<div class="wrap page">${heading("선수 비교", "같은 시즌, 두 선수의 기록을 나란히 살펴보세요.", seasonSelect())}${tabs()}<div class="pair">${card(left, "left")}${card(right, "right")}</div>
   ${
-    left && right
+    records
       ? table(
-          [
-            "기록",
-            h(playerName(left.kbo_player_id)),
-            h(playerName(right.kbo_player_id)),
-          ],
+          ["기록", h(left.name), h(right.name)],
           keys.map(([k, n]) => [n, st(k, left[k]), st(k, right[k])]),
           "선수 비교",
           "comparison",
         )
-      : empty("두 선수를 선택하면 비교 기록이 표시됩니다.")
+      : l && r
+        ? empty("두 선수 중 이 시즌 기록이 없는 선수가 있습니다.", "시즌을 바꾸거나 다른 선수를 선택해 보세요.")
+        : empty("두 선수를 선택하면 비교 기록이 표시됩니다.")
   }
   <p class="meta">출전 경기와 ${pit ? "이닝" : "타석 수"}가 다릅니다. 누적 기록은 출전 기회와 함께 비교하세요.</p></div>`;
 }
-/** 통합 검색어로 팀과 선수를 찾아 각각 순위표와 개인 상세 화면으로 연결한다. */
-function searchPage() {
+/** 통합 검색어로 팀과 선수를 찾아 각각 순위표와 개인 상세 화면으로 연결한다. 선수는 서버에서 찾는다. */
+async function searchPage() {
   const q = get("q").trim(),
-    players = q ? state.db.players.filter((p) => includes(p.name, q)) : [],
-    teams = q ? state.db.teams.filter((t) => includes(t.name, q)) : [];
-  const { offset, controls } = paging(players.length);
+    found = q
+      ? await api.searchPlayers(q, pageNumber() - 1, 25)
+      : { rows: [], total: 0 },
+    players = found.rows,
+    teams = q
+      ? state.db.teams.filter((t) => includes(t.name + t.short_name, q))
+      : [];
+  const { controls } = paging(found.total);
   return `<div class="wrap page">${heading("검색 결과", q ? "“" + q + "” 검색 결과" : "선수 또는 팀 이름을 입력하세요.")}${searchForm("global", q, "선수 또는 팀 검색")}
   ${!players.length && !teams.length ? empty(q ? "검색 결과가 없습니다." : "선수·팀 검색", "선수 이름이나 구단명으로 검색해 보세요.") : ""}
   ${teams.length ? section("팀", `<span class="count">${teams.length}팀</span>`) + teams.map((t) => link(url("teams", { team: t.code, season: season() }), `<strong>${h(t.name)}</strong><span>팀 기록 →</span>`, "result")).join("") : ""}
   ${
     players.length
-      ? section("선수", `<span class="count">${players.length}명</span>`) +
+      ? section("선수", `<span class="count">${found.total}명</span>`) +
         players
-          .slice(offset, offset + 25)
           .map((p) =>
             link(
               url("player", {
-                id: p.kbo_player_id,
-                type: state.db.bat.some(
-                  (r) => r.kbo_player_id === p.kbo_player_id,
-                )
-                  ? "bat"
-                  : "pit",
+                id: p.id,
+                type: p.type,
               }),
               `<strong>${h(p.name)}</strong><span>${h(shortTeam(p.team_code))} · ${h(p.position)} →</span>`,
               "result",
