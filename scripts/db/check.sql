@@ -51,4 +51,7 @@ UNION ALL SELECT 'batter_season_record', count(*) FROM batter_season_record
 UNION ALL SELECT 'pitcher_season_record', count(*) FROM pitcher_season_record
 UNION ALL SELECT 'team_season_record', count(*) FROM team_season_record
 UNION ALL SELECT 'match_team_record', count(*) FROM match_team_record
-UNION ALL SELECT 'match_inning_score', count(*) FROM match_inning_score;
+UNION ALL SELECT 'match_inning_score', count(*) FROM match_inning_score
+UNION ALL SELECT 'batter_match_record', count(*) FROM batter_match_record
+UNION ALL SELECT 'pitcher_match_record', count(*) FROM pitcher_match_record
+UNION ALL SELECT 'match_event', count(*) FROM match_event;

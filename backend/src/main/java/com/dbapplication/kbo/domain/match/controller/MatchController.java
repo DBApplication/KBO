@@ -1,5 +1,6 @@
 package com.dbapplication.kbo.domain.match.controller;
 
+import com.dbapplication.kbo.domain.match.dto.DailyPlayerRecordsResponse;
 import com.dbapplication.kbo.domain.match.dto.MatchDetailResponse;
 import com.dbapplication.kbo.domain.match.dto.MatchSummaryResponse;
 import com.dbapplication.kbo.domain.match.service.MatchService;
@@ -36,6 +37,13 @@ public class MatchController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
             @RequestParam(required = false) Long teamId) {
         return matchService.getMatchDates(from, to, teamId);
+    }
+
+    /** 홈 일별 선수 기록: GET /api/matches/player-records?date=2025-06-01 (그 날 모든 경기의 타자·투수) */
+    @GetMapping("/player-records")
+    public DailyPlayerRecordsResponse getDailyPlayerRecords(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return matchService.getDailyPlayerRecords(date);
     }
 
     /** 경기 상세: GET /api/matches/{id} */

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # CSV(2024~2026 KBO 데이터) → PostgreSQL 적재.
-#   Flyway V1·V2 가 적용된 DB(서버를 한 번 띄우면 자동 적용)에 실행한다.
+#   Flyway V1~V3 가 적용된 DB(서버를 한 번 띄우면 자동 적용)에 실행한다.
 #   KBO 원본 키(team.code, kbo_player_id, kbo_game_id)로 UPSERT 하므로 여러 번 돌려도 중복이 생기지 않는다.
 #   전체가 한 트랜잭션이라 중간에 하나라도 실패하면 아무것도 바뀌지 않는다.
 #

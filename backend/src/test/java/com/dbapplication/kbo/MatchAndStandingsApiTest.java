@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
-/** 경기 기록 · 경기 상세 · 팀 기록 화면 API 를 실제 PostgreSQL(Testcontainers) + Flyway V1·V2 로 검증한다. */
+/** 경기 기록 · 경기 상세 · 팀 기록 화면 API 를 실제 PostgreSQL(Testcontainers) + Flyway V1~V3 로 검증한다. */
 @SpringBootTest
 @AutoConfigureMockMvc
 @Import(TestcontainersConfiguration.class)
@@ -137,5 +137,48 @@ class MatchAndStandingsApiTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].shortName").value("두산"));
+    }
+
+    @Test
+    @DisplayName("경기 상세: 주요 기록·출전 타자·등판 투수, 비율 기록은 계산해서 준다")
+    void matchDetailPlayers() throws Exception {
+        mockMvc.perform(get("/api/matches/10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.events", hasSize(1)))
+                .andExpect(jsonPath("$.events[0].type").value("결승타"))
+                .andExpect(jsonPath("$.batters", hasSize(2)))
+                .andExpect(jsonPath("$.batters[0].homeAway").value("AWAY"))
+                .andExpect(jsonPath("$.batters[0].player").value(nullValue()))
+                .andExpect(jsonPath("$.batters[0].playerName").value("김민석"))
+                .andExpect(jsonPath("$.batters[0].avg").value(0.0))
+                .andExpect(jsonPath("$.batters[1].player.id").value(101))
+                .andExpect(jsonPath("$.batters[1].totalBases").value(3))
+                .andExpect(jsonPath("$.batters[1].obp").value(0.75))
+                .andExpect(jsonPath("$.batters[1].ops").value(1.75))
+                .andExpect(jsonPath("$.pitchers", hasSize(1)))
+                .andExpect(jsonPath("$.pitchers[0].innings").value("6 1/3"))
+                .andExpect(jsonPath("$.pitchers[0].era").value(1.42))
+                .andExpect(jsonPath("$.pitchers[0].decision").value("L"));
+        mockMvc.perform(get("/api/matches/14"))
+                .andExpect(jsonPath("$.events", hasSize(0)))
+                .andExpect(jsonPath("$.batters", hasSize(0)))
+                .andExpect(jsonPath("$.pitchers", hasSize(0)));
+    }
+
+    @Test
+    @DisplayName("일별 선수 기록: 그 날짜 모든 경기, 미수집 날짜는 빈 목록")
+    void dailyPlayerRecords() throws Exception {
+        mockMvc.perform(get("/api/matches/player-records").param("date", "2025-06-01"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.date").value("2025-06-01"))
+                .andExpect(jsonPath("$.batters", hasSize(2)))
+                .andExpect(jsonPath("$.batters[0].matchId").value(10))
+                .andExpect(jsonPath("$.batters[1].team.code").value("WO"))
+                .andExpect(jsonPath("$.pitchers", hasSize(1)))
+                .andExpect(jsonPath("$.pitchers[0].player.name").value("최승용"));
+        mockMvc.perform(get("/api/matches/player-records").param("date", "2025-06-02"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.batters", hasSize(0)))
+                .andExpect(jsonPath("$.pitchers", hasSize(0)));
     }
 }

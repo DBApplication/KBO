@@ -1,8 +1,12 @@
 package com.dbapplication.kbo.domain.match.service;
 
+import com.dbapplication.kbo.domain.match.dto.BatterGameRecordResponse;
+import com.dbapplication.kbo.domain.match.dto.DailyPlayerRecordsResponse;
 import com.dbapplication.kbo.domain.match.dto.HighlightResponse;
 import com.dbapplication.kbo.domain.match.dto.MatchDetailResponse;
+import com.dbapplication.kbo.domain.match.dto.MatchEventResponse;
 import com.dbapplication.kbo.domain.match.dto.MatchSummaryResponse;
+import com.dbapplication.kbo.domain.match.dto.PitcherGameRecordResponse;
 import com.dbapplication.kbo.domain.match.dto.ScoreboardResponse;
 import com.dbapplication.kbo.domain.match.entity.HomeAway;
 import com.dbapplication.kbo.domain.match.entity.Match;
@@ -10,10 +14,13 @@ import com.dbapplication.kbo.domain.match.entity.MatchHighlight;
 import com.dbapplication.kbo.domain.match.entity.MatchInningScore;
 import com.dbapplication.kbo.domain.match.entity.MatchStatus;
 import com.dbapplication.kbo.domain.match.entity.MatchTeamRecord;
+import com.dbapplication.kbo.domain.match.repository.BatterMatchRecordRepository;
+import com.dbapplication.kbo.domain.match.repository.MatchEventRepository;
 import com.dbapplication.kbo.domain.match.repository.MatchHighlightRepository;
 import com.dbapplication.kbo.domain.match.repository.MatchInningScoreRepository;
 import com.dbapplication.kbo.domain.match.repository.MatchRepository;
 import com.dbapplication.kbo.domain.match.repository.MatchTeamRecordRepository;
+import com.dbapplication.kbo.domain.match.repository.PitcherMatchRecordRepository;
 import com.dbapplication.kbo.domain.team.dto.TeamSummary;
 import com.dbapplication.kbo.global.error.BusinessException;
 import com.dbapplication.kbo.global.error.ErrorCode;
@@ -42,6 +49,9 @@ public class MatchService {
     private final MatchHighlightRepository highlightRepository;
     private final MatchTeamRecordRepository teamRecordRepository;
     private final MatchInningScoreRepository inningScoreRepository;
+    private final BatterMatchRecordRepository batterRecordRepository;
+    private final PitcherMatchRecordRepository pitcherRecordRepository;
+    private final MatchEventRepository eventRepository;
 
     /** 경기 기록 화면: 날짜 + 팀 + 상태 조건. 영상은 경기 수와 상관없이 쿼리 1번으로 붙인다. */
     public List<MatchSummaryResponse> getMatches(LocalDate date, Long teamId, String status) {
@@ -65,7 +75,7 @@ public class MatchService {
                 .toList();
     }
 
-    /** 경기 상세: 점수 + 하이라이트 + 이닝별 기록표. */
+    /** 경기 상세: 점수 + 하이라이트 + 이닝별 기록표 + 주요 기록 + 출전 선수 기록. */
     public MatchDetailResponse getMatch(Long matchId) {
         Match match = matchRepository.findWithTeamsById(matchId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MATCH_NOT_FOUND));
@@ -74,7 +84,17 @@ public class MatchService {
         return new MatchDetailResponse(
                 MatchSummaryResponse.of(match, urls),
                 highlights.stream().map(HighlightResponse::from).toList(),
-                buildScoreboard(match));
+                buildScoreboard(match),
+                eventRepository.findByMatchIdOrderByIdAsc(matchId).stream().map(MatchEventResponse::from).toList(),
+                batterRecordRepository.findByMatchId(matchId).stream().map(BatterGameRecordResponse::from).toList(),
+                pitcherRecordRepository.findByMatchId(matchId).stream().map(PitcherGameRecordResponse::from).toList());
+    }
+
+    /** 홈 화면 일별 선수 기록: 그 날짜 모든 경기의 타자·투수. 필터·정렬은 화면에서 한다 (하루 최대 수백 행). */
+    public DailyPlayerRecordsResponse getDailyPlayerRecords(LocalDate date) {
+        return new DailyPlayerRecordsResponse(date,
+                batterRecordRepository.findByMatchDate(date).stream().map(BatterGameRecordResponse::from).toList(),
+                pitcherRecordRepository.findByMatchDate(date).stream().map(PitcherGameRecordResponse::from).toList());
     }
 
     /** 달력: 기간 안에서 경기가 있는 날짜만. */

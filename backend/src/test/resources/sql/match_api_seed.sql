@@ -1,4 +1,4 @@
-TRUNCATE match_inning_score, match_team_record, match_highlight, team_season_record,
+TRUNCATE match_event, batter_match_record, pitcher_match_record, match_inning_score, match_team_record, match_highlight, team_season_record,
     batter_season_record, pitcher_season_record, matches, player, team RESTART IDENTITY CASCADE;
 
 INSERT INTO team (id, code, name, short_name, home_stadium) VALUES
@@ -34,3 +34,22 @@ INSERT INTO team_season_record (team_id, season, as_of_date, team_rank, games, w
     (2, 2025, '2025-10-31', 2, 144, 47, 93, 4, 0.336, 33.0, '3승0무7패', '5패'),
     (1, 2024, '2024-10-31', 1, 144, 74, 68, 2, 0.521, 0.0, '5승0무5패', '1승'),
     (2, 2024, '2024-10-31', 2, 144, 58, 86, 0, 0.403, 17.0, '4승0무6패', '2패');
+
+-- V3 경기별 선수 기록 (6/1 두산-키움). 김민석은 동명이인이라 선수 연결 없음(player_id NULL).
+INSERT INTO player (id, kbo_player_id, team_id, name, position) VALUES
+    (100, 51264, 1, '최승용', '투수'),
+    (101, 67341, 2, '김재현', '포수');
+
+INSERT INTO batter_match_record (match_id, team_id, home_away, seq, player_id, player_name, batting_order, position,
+                                 pa, ab, hits, doubles, triples, home_runs, rbi, runs, walks, hit_by_pitch,
+                                 strikeouts, sac_flies) VALUES
+    (10, 1, 'AWAY', 1, NULL, '김민석', 1, '좌', 5, 4, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0),
+    (10, 2, 'HOME', 1, 101, '김재현', 8, '포', 4, 3, 2, 1, 0, 0, 1, 0, 1, 0, 0, 0);
+
+INSERT INTO pitcher_match_record (match_id, team_id, home_away, seq, player_id, player_name, is_starter, decision,
+                                  outs, batters_faced, pitches, hits_allowed, home_runs_allowed, bb_hbp,
+                                  strikeouts, runs_allowed, earned_runs) VALUES
+    (10, 1, 'AWAY', 1, 100, '최승용', true, 'L', 19, 25, 95, 5, 0, 0, 6, 1, 1);
+
+INSERT INTO match_event (match_id, event_type, item_no, description) VALUES
+    (10, '결승타', 1, '김재현(2회 2사 1,2루서 중전 안타)');
