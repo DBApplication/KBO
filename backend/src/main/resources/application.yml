@@ -15,8 +15,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        jdbc:
-          time_zone: Asia/Seoul
+        # jdbc.time_zone(Asia/Seoul) 을 두면 서버 JVM 이 UTC 일 때 TIME 칼럼(match_time)이
+        # 9시간 밀려서 나온다 (DB 14:00 → API 05:00). 시간대 없는 DATE/TIME 만 쓰므로 변환하지 않는다.
   flyway:
     enabled: true
     locations: classpath:db/migration
