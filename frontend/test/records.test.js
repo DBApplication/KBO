@@ -110,6 +110,16 @@ test("경기 상세: 이닝표(9회말 X), 주요 기록, 출전 선수, 없는 
   assert.match(await gamePage(), /경기를 찾을 수 없습니다/);
 });
 
+test("선수 기록: 처음에는 KBO 기록실처럼 규정타석·규정이닝 이상", async () => {
+  route("players", "season=2025");
+  const html = await playerPage();
+  assert.match(html, /규정타석 이상 \(446타석\)/);
+  assert.ok(requested.some((u) => u.includes("minPa=446") && u.includes("sort=avg")));
+  route("players", "season=2025&type=pit");
+  assert.match(await playerPage(), /규정이닝 이상 \(144이닝\)/);
+  assert.ok(requested.some((u) => u.includes("minInnings=144") && u.includes("sort=era")));
+});
+
 test("선수 기록: 필터·정렬·페이지는 서버에 넘긴다", async () => {
   route("players", "season=2025&q=김도영");
   assert.match(await playerPage(), /김도영/);

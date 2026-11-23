@@ -89,7 +89,18 @@ async function playerPage() {
       : "bat_avg";
   const asc = get("dir") ? get("dir") === "asc" : sort === "pit_era";
   const team = get("team"),
-    min = Number(get("min", 0));
+    // KBO 기록실처럼 처음에는 규정타석(팀 경기 수 × 3.1)·규정이닝(팀 경기 수 × 1) 이상만 보여 준다.
+    // 이름으로 찾을 때는 규정 미달 선수도 나오도록 제한을 풀어 둔다.
+    minChoice = get("min", get("q").trim() ? "0" : "q");
+  const standing = await api.standings(season());
+  const teamGames = Math.max(
+    0,
+    ...standing
+      .filter((r) => !team || r.team_code === team)
+      .map((r) => Number(r.games)),
+  );
+  const qualified = pit ? teamGames : Math.floor(teamGames * 3.1);
+  const min = minChoice === "q" ? qualified : Number(minChoice) || 0;
   const params = {
     season: season(),
     teamId: teamId(team),
@@ -109,7 +120,7 @@ async function playerPage() {
   const rows = result.rows;
   const { offset, controls } = paging(result.total);
   return `<div class="wrap page">${heading("선수 기록", "시즌별 타자·투수 기록을 확인하세요.", seasonSelect())}${tabs()}
-  <div class="toolbar filters"><div class="controls">${teamsSelect()}${select("min", pit ? "최소 이닝" : "최소 타석", [["0", pit ? "이닝 제한 없음" : "타석 제한 없음"], ...[pit ? 10 : 50, pit ? 50 : 100, pit ? 100 : 300].map((n) => [n, n + (pit ? "이닝 이상" : "타석 이상")])], String(min))}</div>${searchForm("local", get("q"), "선수 이름 검색")}</div>
+  <div class="toolbar filters"><div class="controls">${teamsSelect()}${select("min", pit ? "최소 이닝" : "최소 타석", [...(qualified ? [["q", pit ? `규정이닝 이상 (${qualified}이닝)` : `규정타석 이상 (${qualified}타석)`]] : []), ["0", pit ? "이닝 제한 없음" : "타석 제한 없음"], ...[pit ? 10 : 50, pit ? 50 : 100, pit ? 100 : 300].map((n) => [n, n + (pit ? "이닝 이상" : "타석 이상")])], minChoice)}</div>${searchForm("local", get("q"), "선수 이름 검색")}</div>
   ${section(pit ? "투수 기록" : "타자 기록", `<span class="count">${result.total}개 기록</span>`)}
   ${
     rows.length

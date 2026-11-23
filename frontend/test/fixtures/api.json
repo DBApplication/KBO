@@ -7949,7 +7949,2007 @@
    "message": "경기를 찾을 수 없습니다.",
    "status": 404,
    "errors": [],
-   "timestamp": "2026-11-23T10:09:02.518268399"
+   "timestamp": "2026-11-23T10:16:04.104730535"
+  }
+ },
+ "/api/standings?season=2025": {
+  "status": 200,
+  "body": {
+   "season": 2025,
+   "asOfDate": "2025-10-31",
+   "standings": [
+    {
+     "rank": 1,
+     "team": {
+      "id": 2,
+      "code": "LG",
+      "name": "LG 트윈스",
+      "shortName": "LG",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LG.png"
+     },
+     "games": 144,
+     "wins": 85,
+     "losses": 56,
+     "draws": 3,
+     "winPct": 0.603,
+     "gamesBehind": 0,
+     "last10": "4승0무6패",
+     "streak": "3패"
+    },
+    {
+     "rank": 2,
+     "team": {
+      "id": 6,
+      "code": "HH",
+      "name": "한화 이글스",
+      "shortName": "한화",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HH.png"
+     },
+     "games": 144,
+     "wins": 83,
+     "losses": 57,
+     "draws": 4,
+     "winPct": 0.593,
+     "gamesBehind": 1.5,
+     "last10": "5승1무4패",
+     "streak": "1패"
+    },
+    {
+     "rank": 3,
+     "team": {
+      "id": 8,
+      "code": "SK",
+      "name": "SSG 랜더스",
+      "shortName": "SSG",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SK.png"
+     },
+     "games": 144,
+     "wins": 75,
+     "losses": 65,
+     "draws": 4,
+     "winPct": 0.536,
+     "gamesBehind": 9.5,
+     "last10": "6승0무4패",
+     "streak": "2패"
+    },
+    {
+     "rank": 4,
+     "team": {
+      "id": 5,
+      "code": "SS",
+      "name": "삼성 라이온즈",
+      "shortName": "삼성",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SS.png"
+     },
+     "games": 144,
+     "wins": 74,
+     "losses": 68,
+     "draws": 2,
+     "winPct": 0.521,
+     "gamesBehind": 11.5,
+     "last10": "7승0무3패",
+     "streak": "1패"
+    },
+    {
+     "rank": 5,
+     "team": {
+      "id": 9,
+      "code": "NC",
+      "name": "NC 다이노스",
+      "shortName": "NC",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_NC.png"
+     },
+     "games": 144,
+     "wins": 71,
+     "losses": 67,
+     "draws": 6,
+     "winPct": 0.514,
+     "gamesBehind": 12.5,
+     "last10": "9승0무1패",
+     "streak": "9승"
+    },
+    {
+     "rank": 6,
+     "team": {
+      "id": 10,
+      "code": "KT",
+      "name": "KT 위즈",
+      "shortName": "KT",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_KT.png"
+     },
+     "games": 144,
+     "wins": 71,
+     "losses": 68,
+     "draws": 5,
+     "winPct": 0.511,
+     "gamesBehind": 13,
+     "last10": "5승1무4패",
+     "streak": "1승"
+    },
+    {
+     "rank": 7,
+     "team": {
+      "id": 4,
+      "code": "LT",
+      "name": "롯데 자이언츠",
+      "shortName": "롯데",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LT.png"
+     },
+     "games": 144,
+     "wins": 66,
+     "losses": 72,
+     "draws": 6,
+     "winPct": 0.478,
+     "gamesBehind": 17.5,
+     "last10": "2승0무8패",
+     "streak": "3패"
+    },
+    {
+     "rank": 8,
+     "team": {
+      "id": 7,
+      "code": "HT",
+      "name": "KIA 타이거즈",
+      "shortName": "KIA",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HT.png"
+     },
+     "games": 144,
+     "wins": 65,
+     "losses": 75,
+     "draws": 4,
+     "winPct": 0.464,
+     "gamesBehind": 19.5,
+     "last10": "4승0무6패",
+     "streak": "2승"
+    },
+    {
+     "rank": 9,
+     "team": {
+      "id": 1,
+      "code": "OB",
+      "name": "두산 베어스",
+      "shortName": "두산",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_OB.png"
+     },
+     "games": 144,
+     "wins": 61,
+     "losses": 77,
+     "draws": 6,
+     "winPct": 0.442,
+     "gamesBehind": 22.5,
+     "last10": "5승0무5패",
+     "streak": "2승"
+    },
+    {
+     "rank": 10,
+     "team": {
+      "id": 3,
+      "code": "WO",
+      "name": "키움 히어로즈",
+      "shortName": "키움",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_WO.png"
+     },
+     "games": 144,
+     "wins": 47,
+     "losses": 93,
+     "draws": 4,
+     "winPct": 0.336,
+     "gamesBehind": 37.5,
+     "last10": "3승0무7패",
+     "streak": "5패"
+    }
+   ]
+  }
+ },
+ "/api/records/batters?season=2025&minPa=446&sort=avg&order=desc&size=25&page=0": {
+  "status": 200,
+  "body": {
+   "content": [
+    {
+     "rank": 1,
+     "player": {
+      "id": 834,
+      "name": "양의지",
+      "position": "포수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/76232.jpg"
+     },
+     "team": {
+      "id": 1,
+      "code": "OB",
+      "name": "두산 베어스",
+      "shortName": "두산",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_OB.png"
+     },
+     "stats": {
+      "avg": 0.337,
+      "games": 130,
+      "pa": 517,
+      "ab": 454,
+      "runs": 56,
+      "hits": 153,
+      "doubles": 27,
+      "triples": 1,
+      "homeRuns": 20,
+      "totalBases": 242,
+      "rbi": 89,
+      "stolenBases": 4,
+      "caughtStealing": 2,
+      "walks": 50,
+      "hitByPitch": 7,
+      "strikeouts": 63,
+      "gdp": 10,
+      "slg": 0.533,
+      "obp": 0.406,
+      "errors": 5,
+      "ops": 0.939
+     }
+    },
+    {
+     "rank": 2,
+     "player": {
+      "id": 120,
+      "name": "안현민",
+      "position": "외야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/52001.jpg"
+     },
+     "team": {
+      "id": 10,
+      "code": "KT",
+      "name": "KT 위즈",
+      "shortName": "KT",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_KT.png"
+     },
+     "stats": {
+      "avg": 0.334,
+      "games": 112,
+      "pa": 482,
+      "ab": 395,
+      "runs": 72,
+      "hits": 132,
+      "doubles": 19,
+      "triples": 4,
+      "homeRuns": 22,
+      "totalBases": 225,
+      "rbi": 80,
+      "stolenBases": 7,
+      "caughtStealing": 1,
+      "walks": 75,
+      "hitByPitch": 9,
+      "strikeouts": 72,
+      "gdp": 4,
+      "slg": 0.57,
+      "obp": 0.448,
+      "errors": 8,
+      "ops": 1.018
+     }
+    },
+    {
+     "rank": 3,
+     "player": {
+      "id": 685,
+      "name": "김성윤",
+      "position": "외야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/67449.jpg"
+     },
+     "team": {
+      "id": 5,
+      "code": "SS",
+      "name": "삼성 라이온즈",
+      "shortName": "삼성",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SS.png"
+     },
+     "stats": {
+      "avg": 0.331,
+      "games": 127,
+      "pa": 538,
+      "ab": 456,
+      "runs": 92,
+      "hits": 151,
+      "doubles": 29,
+      "triples": 9,
+      "homeRuns": 6,
+      "totalBases": 216,
+      "rbi": 61,
+      "stolenBases": 26,
+      "caughtStealing": 7,
+      "walks": 65,
+      "hitByPitch": 5,
+      "strikeouts": 54,
+      "gdp": 11,
+      "slg": 0.474,
+      "obp": 0.419,
+      "errors": 2,
+      "ops": 0.893
+     }
+    },
+    {
+     "rank": 4,
+     "player": {
+      "id": 277,
+      "name": "레이예스",
+      "position": "외야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/54529.jpg"
+     },
+     "team": {
+      "id": 4,
+      "code": "LT",
+      "name": "롯데 자이언츠",
+      "shortName": "롯데",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LT.png"
+     },
+     "stats": {
+      "avg": 0.326,
+      "games": 144,
+      "pa": 643,
+      "ab": 573,
+      "runs": 75,
+      "hits": 187,
+      "doubles": 44,
+      "triples": 1,
+      "homeRuns": 13,
+      "totalBases": 272,
+      "rbi": 107,
+      "stolenBases": 7,
+      "caughtStealing": 1,
+      "walks": 58,
+      "hitByPitch": 3,
+      "strikeouts": 66,
+      "gdp": 25,
+      "slg": 0.475,
+      "obp": 0.386,
+      "errors": 2,
+      "ops": 0.861
+     }
+    },
+    {
+     "rank": 5,
+     "player": {
+      "id": 220,
+      "name": "문현빈",
+      "position": "외야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/53764.jpg"
+     },
+     "team": {
+      "id": 6,
+      "code": "HH",
+      "name": "한화 이글스",
+      "shortName": "한화",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HH.png"
+     },
+     "stats": {
+      "avg": 0.32,
+      "games": 141,
+      "pa": 592,
+      "ab": 528,
+      "runs": 71,
+      "hits": 169,
+      "doubles": 30,
+      "triples": 2,
+      "homeRuns": 12,
+      "totalBases": 239,
+      "rbi": 80,
+      "stolenBases": 17,
+      "caughtStealing": 6,
+      "walks": 38,
+      "hitByPitch": 10,
+      "strikeouts": 82,
+      "gdp": 11,
+      "slg": 0.453,
+      "obp": 0.37,
+      "errors": 3,
+      "ops": 0.823
+     }
+    },
+    {
+     "rank": 6,
+     "player": {
+      "id": 527,
+      "name": "구자욱",
+      "position": "외야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/62404.jpg"
+     },
+     "team": {
+      "id": 5,
+      "code": "SS",
+      "name": "삼성 라이온즈",
+      "shortName": "삼성",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SS.png"
+     },
+     "stats": {
+      "avg": 0.319,
+      "games": 142,
+      "pa": 616,
+      "ab": 529,
+      "runs": 106,
+      "hits": 169,
+      "doubles": 43,
+      "triples": 2,
+      "homeRuns": 19,
+      "totalBases": 273,
+      "rbi": 96,
+      "stolenBases": 4,
+      "caughtStealing": 1,
+      "walks": 73,
+      "hitByPitch": 5,
+      "strikeouts": 91,
+      "gdp": 9,
+      "slg": 0.516,
+      "obp": 0.402,
+      "errors": 3,
+      "ops": 0.918
+     }
+    },
+    {
+     "rank": 7,
+     "player": {
+      "id": 614,
+      "name": "송성문",
+      "position": "내야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2025/65357.jpg"
+     },
+     "team": {
+      "id": 3,
+      "code": "WO",
+      "name": "키움 히어로즈",
+      "shortName": "키움",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_WO.png"
+     },
+     "stats": {
+      "avg": 0.315,
+      "games": 144,
+      "pa": 646,
+      "ab": 574,
+      "runs": 103,
+      "hits": 181,
+      "doubles": 37,
+      "triples": 4,
+      "homeRuns": 26,
+      "totalBases": 304,
+      "rbi": 90,
+      "stolenBases": 25,
+      "caughtStealing": 2,
+      "walks": 68,
+      "hitByPitch": 1,
+      "strikeouts": 96,
+      "gdp": 6,
+      "slg": 0.53,
+      "obp": 0.387,
+      "errors": 14,
+      "ops": 0.917
+     }
+    },
+    {
+     "rank": 8,
+     "player": {
+      "id": 264,
+      "name": "디아즈",
+      "position": "내야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/54400.jpg"
+     },
+     "team": {
+      "id": 5,
+      "code": "SS",
+      "name": "삼성 라이온즈",
+      "shortName": "삼성",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SS.png"
+     },
+     "stats": {
+      "avg": 0.314,
+      "games": 144,
+      "pa": 628,
+      "ab": 551,
+      "runs": 93,
+      "hits": 173,
+      "doubles": 32,
+      "triples": 0,
+      "homeRuns": 50,
+      "totalBases": 355,
+      "rbi": 158,
+      "stolenBases": 1,
+      "caughtStealing": 0,
+      "walks": 60,
+      "hitByPitch": 6,
+      "strikeouts": 100,
+      "gdp": 15,
+      "slg": 0.644,
+      "obp": 0.381,
+      "errors": 4,
+      "ops": 1.025
+     }
+    },
+    {
+     "rank": 9,
+     "player": {
+      "id": 186,
+      "name": "오스틴",
+      "position": "내야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/53123.jpg"
+     },
+     "team": {
+      "id": 2,
+      "code": "LG",
+      "name": "LG 트윈스",
+      "shortName": "LG",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LG.png"
+     },
+     "stats": {
+      "avg": 0.313,
+      "games": 116,
+      "pa": 499,
+      "ab": 425,
+      "runs": 82,
+      "hits": 133,
+      "doubles": 25,
+      "triples": 1,
+      "homeRuns": 31,
+      "totalBases": 253,
+      "rbi": 95,
+      "stolenBases": 3,
+      "caughtStealing": 0,
+      "walks": 61,
+      "hitByPitch": 2,
+      "strikeouts": 62,
+      "gdp": 11,
+      "slg": 0.595,
+      "obp": 0.393,
+      "errors": 8,
+      "ops": 0.988
+     }
+    },
+    {
+     "rank": 10,
+     "player": {
+      "id": 609,
+      "name": "신민재",
+      "position": "내야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/65207.jpg"
+     },
+     "team": {
+      "id": 2,
+      "code": "LG",
+      "name": "LG 트윈스",
+      "shortName": "LG",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LG.png"
+     },
+     "stats": {
+      "avg": 0.313,
+      "games": 135,
+      "pa": 538,
+      "ab": 463,
+      "runs": 87,
+      "hits": 145,
+      "doubles": 15,
+      "triples": 7,
+      "homeRuns": 1,
+      "totalBases": 177,
+      "rbi": 61,
+      "stolenBases": 15,
+      "caughtStealing": 9,
+      "walks": 62,
+      "hitByPitch": 3,
+      "strikeouts": 57,
+      "gdp": 7,
+      "slg": 0.382,
+      "obp": 0.395,
+      "errors": 12,
+      "ops": 0.777
+     }
+    },
+    {
+     "rank": 11,
+     "player": {
+      "id": 816,
+      "name": "최형우",
+      "position": "외야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/72443.jpg"
+     },
+     "team": {
+      "id": 7,
+      "code": "HT",
+      "name": "KIA 타이거즈",
+      "shortName": "KIA",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HT.png"
+     },
+     "stats": {
+      "avg": 0.307,
+      "games": 133,
+      "pa": 549,
+      "ab": 469,
+      "runs": 74,
+      "hits": 144,
+      "doubles": 30,
+      "triples": 1,
+      "homeRuns": 24,
+      "totalBases": 248,
+      "rbi": 86,
+      "stolenBases": 1,
+      "caughtStealing": 0,
+      "walks": 67,
+      "hitByPitch": 8,
+      "strikeouts": 98,
+      "gdp": 9,
+      "slg": 0.529,
+      "obp": 0.399,
+      "errors": 0,
+      "ops": 0.928
+     }
+    },
+    {
+     "rank": 12,
+     "player": {
+      "id": 710,
+      "name": "문성주",
+      "position": "외야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/68119.jpg"
+     },
+     "team": {
+      "id": 2,
+      "code": "LG",
+      "name": "LG 트윈스",
+      "shortName": "LG",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LG.png"
+     },
+     "stats": {
+      "avg": 0.305,
+      "games": 135,
+      "pa": 542,
+      "ab": 475,
+      "runs": 57,
+      "hits": 145,
+      "doubles": 20,
+      "triples": 2,
+      "homeRuns": 3,
+      "totalBases": 178,
+      "rbi": 70,
+      "stolenBases": 4,
+      "caughtStealing": 3,
+      "walks": 54,
+      "hitByPitch": 4,
+      "strikeouts": 59,
+      "gdp": 10,
+      "slg": 0.375,
+      "obp": 0.375,
+      "errors": 1,
+      "ops": 0.75
+     }
+    },
+    {
+     "rank": 13,
+     "player": {
+      "id": 540,
+      "name": "박민우",
+      "position": "내야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/62907.jpg"
+     },
+     "team": {
+      "id": 9,
+      "code": "NC",
+      "name": "NC 다이노스",
+      "shortName": "NC",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_NC.png"
+     },
+     "stats": {
+      "avg": 0.302,
+      "games": 117,
+      "pa": 468,
+      "ab": 404,
+      "runs": 64,
+      "hits": 122,
+      "doubles": 25,
+      "triples": 8,
+      "homeRuns": 3,
+      "totalBases": 172,
+      "rbi": 67,
+      "stolenBases": 28,
+      "caughtStealing": 8,
+      "walks": 44,
+      "hitByPitch": 12,
+      "strikeouts": 64,
+      "gdp": 5,
+      "slg": 0.426,
+      "obp": 0.384,
+      "errors": 10,
+      "ops": 0.81
+     }
+    },
+    {
+     "rank": 14,
+     "player": {
+      "id": 336,
+      "name": "케이브",
+      "position": "외야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2025/55208.jpg"
+     },
+     "team": {
+      "id": 1,
+      "code": "OB",
+      "name": "두산 베어스",
+      "shortName": "두산",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_OB.png"
+     },
+     "stats": {
+      "avg": 0.299,
+      "games": 136,
+      "pa": 593,
+      "ab": 538,
+      "runs": 72,
+      "hits": 161,
+      "doubles": 28,
+      "triples": 6,
+      "homeRuns": 16,
+      "totalBases": 249,
+      "rbi": 87,
+      "stolenBases": 17,
+      "caughtStealing": 1,
+      "walks": 43,
+      "hitByPitch": 4,
+      "strikeouts": 116,
+      "gdp": 7,
+      "slg": 0.463,
+      "obp": 0.351,
+      "errors": 2,
+      "ops": 0.814
+     }
+    },
+    {
+     "rank": 15,
+     "player": {
+      "id": 836,
+      "name": "김현수",
+      "position": "외야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/76290.jpg"
+     },
+     "team": {
+      "id": 2,
+      "code": "LG",
+      "name": "LG 트윈스",
+      "shortName": "LG",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LG.png"
+     },
+     "stats": {
+      "avg": 0.298,
+      "games": 140,
+      "pa": 552,
+      "ab": 483,
+      "runs": 66,
+      "hits": 144,
+      "doubles": 24,
+      "triples": 0,
+      "homeRuns": 12,
+      "totalBases": 204,
+      "rbi": 90,
+      "stolenBases": 4,
+      "caughtStealing": 0,
+      "walks": 64,
+      "hitByPitch": 4,
+      "strikeouts": 73,
+      "gdp": 10,
+      "slg": 0.422,
+      "obp": 0.384,
+      "errors": 4,
+      "ops": 0.806
+     }
+    },
+    {
+     "rank": 16,
+     "player": {
+      "id": 861,
+      "name": "전준우",
+      "position": "외야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/78513.jpg"
+     },
+     "team": {
+      "id": 4,
+      "code": "LT",
+      "name": "롯데 자이언츠",
+      "shortName": "롯데",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LT.png"
+     },
+     "stats": {
+      "avg": 0.293,
+      "games": 114,
+      "pa": 472,
+      "ab": 410,
+      "runs": 50,
+      "hits": 120,
+      "doubles": 26,
+      "triples": 1,
+      "homeRuns": 8,
+      "totalBases": 172,
+      "rbi": 70,
+      "stolenBases": 2,
+      "caughtStealing": 1,
+      "walks": 44,
+      "hitByPitch": 9,
+      "strikeouts": 71,
+      "gdp": 9,
+      "slg": 0.42,
+      "obp": 0.369,
+      "errors": 0,
+      "ops": 0.789
+     }
+    },
+    {
+     "rank": 17,
+     "player": {
+      "id": 115,
+      "name": "김주원",
+      "position": "내야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/51907.jpg"
+     },
+     "team": {
+      "id": 9,
+      "code": "NC",
+      "name": "NC 다이노스",
+      "shortName": "NC",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_NC.png"
+     },
+     "stats": {
+      "avg": 0.289,
+      "games": 144,
+      "pa": 624,
+      "ab": 539,
+      "runs": 98,
+      "hits": 156,
+      "doubles": 26,
+      "triples": 8,
+      "homeRuns": 15,
+      "totalBases": 243,
+      "rbi": 65,
+      "stolenBases": 44,
+      "caughtStealing": 11,
+      "walks": 63,
+      "hitByPitch": 16,
+      "strikeouts": 111,
+      "gdp": 8,
+      "slg": 0.451,
+      "obp": 0.379,
+      "errors": 29,
+      "ops": 0.83
+     }
+    },
+    {
+     "rank": 18,
+     "player": {
+      "id": 868,
+      "name": "채은성",
+      "position": "내야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/79192.jpg"
+     },
+     "team": {
+      "id": 6,
+      "code": "HH",
+      "name": "한화 이글스",
+      "shortName": "한화",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HH.png"
+     },
+     "stats": {
+      "avg": 0.288,
+      "games": 132,
+      "pa": 527,
+      "ab": 480,
+      "runs": 54,
+      "hits": 138,
+      "doubles": 27,
+      "triples": 1,
+      "homeRuns": 19,
+      "totalBases": 224,
+      "rbi": 88,
+      "stolenBases": 1,
+      "caughtStealing": 2,
+      "walks": 31,
+      "hitByPitch": 13,
+      "strikeouts": 96,
+      "gdp": 4,
+      "slg": 0.467,
+      "obp": 0.347,
+      "errors": 6,
+      "ops": 0.814
+     }
+    },
+    {
+     "rank": 19,
+     "player": {
+      "id": 591,
+      "name": "박찬호",
+      "position": "내야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/64646.jpg"
+     },
+     "team": {
+      "id": 7,
+      "code": "HT",
+      "name": "KIA 타이거즈",
+      "shortName": "KIA",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HT.png"
+     },
+     "stats": {
+      "avg": 0.287,
+      "games": 134,
+      "pa": 595,
+      "ab": 516,
+      "runs": 75,
+      "hits": 148,
+      "doubles": 18,
+      "triples": 2,
+      "homeRuns": 5,
+      "totalBases": 185,
+      "rbi": 42,
+      "stolenBases": 27,
+      "caughtStealing": 6,
+      "walks": 62,
+      "hitByPitch": 3,
+      "strikeouts": 69,
+      "gdp": 7,
+      "slg": 0.359,
+      "obp": 0.363,
+      "errors": 16,
+      "ops": 0.722
+     }
+    },
+    {
+     "rank": 20,
+     "player": {
+      "id": 55,
+      "name": "최지훈",
+      "position": "외야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/50854.jpg"
+     },
+     "team": {
+      "id": 8,
+      "code": "SK",
+      "name": "SSG 랜더스",
+      "shortName": "SSG",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SK.png"
+     },
+     "stats": {
+      "avg": 0.284,
+      "games": 140,
+      "pa": 574,
+      "ab": 517,
+      "runs": 66,
+      "hits": 147,
+      "doubles": 16,
+      "triples": 4,
+      "homeRuns": 7,
+      "totalBases": 192,
+      "rbi": 45,
+      "stolenBases": 28,
+      "caughtStealing": 7,
+      "walks": 43,
+      "hitByPitch": 5,
+      "strikeouts": 87,
+      "gdp": 2,
+      "slg": 0.371,
+      "obp": 0.342,
+      "errors": 5,
+      "ops": 0.713
+     }
+    },
+    {
+     "rank": 21,
+     "player": {
+      "id": 871,
+      "name": "허경민",
+      "position": "내야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/79240.jpg"
+     },
+     "team": {
+      "id": 10,
+      "code": "KT",
+      "name": "KT 위즈",
+      "shortName": "KT",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_KT.png"
+     },
+     "stats": {
+      "avg": 0.283,
+      "games": 114,
+      "pa": 481,
+      "ab": 420,
+      "runs": 47,
+      "hits": 119,
+      "doubles": 18,
+      "triples": 0,
+      "homeRuns": 4,
+      "totalBases": 149,
+      "rbi": 44,
+      "stolenBases": 4,
+      "caughtStealing": 1,
+      "walks": 39,
+      "hitByPitch": 15,
+      "strikeouts": 35,
+      "gdp": 14,
+      "slg": 0.355,
+      "obp": 0.362,
+      "errors": 10,
+      "ops": 0.717
+     }
+    },
+    {
+     "rank": 22,
+     "player": {
+      "id": 522,
+      "name": "류지혁",
+      "position": "내야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/62234.jpg"
+     },
+     "team": {
+      "id": 5,
+      "code": "SS",
+      "name": "삼성 라이온즈",
+      "shortName": "삼성",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SS.png"
+     },
+     "stats": {
+      "avg": 0.28,
+      "games": 129,
+      "pa": 464,
+      "ab": 400,
+      "runs": 54,
+      "hits": 112,
+      "doubles": 14,
+      "triples": 0,
+      "homeRuns": 1,
+      "totalBases": 129,
+      "rbi": 37,
+      "stolenBases": 11,
+      "caughtStealing": 6,
+      "walks": 33,
+      "hitByPitch": 13,
+      "strikeouts": 73,
+      "gdp": 11,
+      "slg": 0.323,
+      "obp": 0.351,
+      "errors": 5,
+      "ops": 0.674
+     }
+    },
+    {
+     "rank": 23,
+     "player": {
+      "id": 111,
+      "name": "고명준",
+      "position": "내야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/51868.jpg"
+     },
+     "team": {
+      "id": 8,
+      "code": "SK",
+      "name": "SSG 랜더스",
+      "shortName": "SSG",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SK.png"
+     },
+     "stats": {
+      "avg": 0.278,
+      "games": 130,
+      "pa": 500,
+      "ab": 471,
+      "runs": 46,
+      "hits": 131,
+      "doubles": 20,
+      "triples": 1,
+      "homeRuns": 17,
+      "totalBases": 204,
+      "rbi": 64,
+      "stolenBases": 2,
+      "caughtStealing": 0,
+      "walks": 20,
+      "hitByPitch": 2,
+      "strikeouts": 99,
+      "gdp": 12,
+      "slg": 0.433,
+      "obp": 0.306,
+      "errors": 3,
+      "ops": 0.739
+     }
+    },
+    {
+     "rank": 24,
+     "player": {
+      "id": 528,
+      "name": "박해민",
+      "position": "외야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/62415.jpg"
+     },
+     "team": {
+      "id": 2,
+      "code": "LG",
+      "name": "LG 트윈스",
+      "shortName": "LG",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LG.png"
+     },
+     "stats": {
+      "avg": 0.276,
+      "games": 144,
+      "pa": 544,
+      "ab": 442,
+      "runs": 80,
+      "hits": 122,
+      "doubles": 18,
+      "triples": 2,
+      "homeRuns": 3,
+      "totalBases": 153,
+      "rbi": 43,
+      "stolenBases": 49,
+      "caughtStealing": 14,
+      "walks": 68,
+      "hitByPitch": 8,
+      "strikeouts": 94,
+      "gdp": 7,
+      "slg": 0.346,
+      "obp": 0.379,
+      "errors": 1,
+      "ops": 0.725
+     }
+    },
+    {
+     "rank": 25,
+     "player": {
+      "id": 762,
+      "name": "문보경",
+      "position": "내야수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/69102.jpg"
+     },
+     "team": {
+      "id": 2,
+      "code": "LG",
+      "name": "LG 트윈스",
+      "shortName": "LG",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LG.png"
+     },
+     "stats": {
+      "avg": 0.276,
+      "games": 141,
+      "pa": 607,
+      "ab": 515,
+      "runs": 91,
+      "hits": 142,
+      "doubles": 21,
+      "triples": 1,
+      "homeRuns": 24,
+      "totalBases": 237,
+      "rbi": 108,
+      "stolenBases": 3,
+      "caughtStealing": 1,
+      "walks": 79,
+      "hitByPitch": 4,
+      "strikeouts": 108,
+      "gdp": 15,
+      "slg": 0.46,
+      "obp": 0.371,
+      "errors": 16,
+      "ops": 0.831
+     }
+    }
+   ],
+   "page": 0,
+   "size": 25,
+   "totalElements": 42,
+   "totalPages": 2
+  }
+ },
+ "/api/records/pitchers?season=2025&minInnings=144&sort=era&order=asc&size=25&page=0": {
+  "status": 200,
+  "body": {
+   "content": [
+    {
+     "rank": 1,
+     "player": {
+      "id": 399,
+      "name": "폰세",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2025/55730.jpg"
+     },
+     "team": {
+      "id": 6,
+      "code": "HH",
+      "name": "한화 이글스",
+      "shortName": "한화",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HH.png"
+     },
+     "stats": {
+      "era": 1.89,
+      "games": 29,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 17,
+      "losses": 1,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.944,
+      "battersFaced": 697,
+      "outs": 542,
+      "innings": "180 2/3",
+      "hits": 128,
+      "homeRuns": 10,
+      "walks": 41,
+      "hitByPitch": 6,
+      "strikeouts": 252,
+      "runs": 41,
+      "earnedRuns": 38
+     }
+    },
+    {
+     "rank": 2,
+     "player": {
+      "id": 288,
+      "name": "네일",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/54640.jpg"
+     },
+     "team": {
+      "id": 7,
+      "code": "HT",
+      "name": "KIA 타이거즈",
+      "shortName": "KIA",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HT.png"
+     },
+     "stats": {
+      "era": 2.25,
+      "games": 27,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 8,
+      "losses": 4,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.667,
+      "battersFaced": 664,
+      "outs": 493,
+      "innings": "164 1/3",
+      "hits": 135,
+      "homeRuns": 6,
+      "walks": 41,
+      "hitByPitch": 15,
+      "strikeouts": 152,
+      "runs": 46,
+      "earnedRuns": 41
+     }
+    },
+    {
+     "rank": 3,
+     "player": {
+      "id": 309,
+      "name": "앤더슨",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2025/54833.jpg"
+     },
+     "team": {
+      "id": 8,
+      "code": "SK",
+      "name": "SSG 랜더스",
+      "shortName": "SSG",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SK.png"
+     },
+     "stats": {
+      "era": 2.25,
+      "games": 30,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 12,
+      "losses": 7,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.632,
+      "battersFaced": 694,
+      "outs": 515,
+      "innings": "171 2/3",
+      "hits": 121,
+      "homeRuns": 13,
+      "walks": 51,
+      "hitByPitch": 9,
+      "strikeouts": 245,
+      "runs": 53,
+      "earnedRuns": 43
+     }
+    },
+    {
+     "rank": 4,
+     "player": {
+      "id": 201,
+      "name": "후라도",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/53375.jpg"
+     },
+     "team": {
+      "id": 5,
+      "code": "SS",
+      "name": "삼성 라이온즈",
+      "shortName": "삼성",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SS.png"
+     },
+     "stats": {
+      "era": 2.6,
+      "games": 30,
+      "completeGames": 3,
+      "shutouts": 2,
+      "wins": 15,
+      "losses": 8,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.652,
+      "battersFaced": 786,
+      "outs": 592,
+      "innings": "197 1/3",
+      "hits": 177,
+      "homeRuns": 17,
+      "walks": 36,
+      "hitByPitch": 4,
+      "strikeouts": 142,
+      "runs": 65,
+      "earnedRuns": 57
+     }
+    },
+    {
+     "rank": 5,
+     "player": {
+      "id": 342,
+      "name": "잭로그",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/55239.jpg"
+     },
+     "team": {
+      "id": 1,
+      "code": "OB",
+      "name": "두산 베어스",
+      "shortName": "두산",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_OB.png"
+     },
+     "stats": {
+      "era": 2.81,
+      "games": 30,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 10,
+      "losses": 8,
+      "saves": 0,
+      "holds": 1,
+      "winPct": 0.556,
+      "battersFaced": 722,
+      "outs": 528,
+      "innings": "176",
+      "hits": 146,
+      "homeRuns": 8,
+      "walks": 39,
+      "hitByPitch": 17,
+      "strikeouts": 156,
+      "runs": 66,
+      "earnedRuns": 55
+     }
+    },
+    {
+     "rank": 6,
+     "player": {
+      "id": 297,
+      "name": "와이스",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2025/54755.jpg"
+     },
+     "team": {
+      "id": 6,
+      "code": "HH",
+      "name": "한화 이글스",
+      "shortName": "한화",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HH.png"
+     },
+     "stats": {
+      "era": 2.87,
+      "games": 30,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 16,
+      "losses": 5,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.762,
+      "battersFaced": 725,
+      "outs": 536,
+      "innings": "178 2/3",
+      "hits": 127,
+      "homeRuns": 13,
+      "walks": 56,
+      "hitByPitch": 13,
+      "strikeouts": 207,
+      "runs": 63,
+      "earnedRuns": 57
+     }
+    },
+    {
+     "rank": 7,
+     "player": {
+      "id": 511,
+      "name": "임찬규",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/61101.jpg"
+     },
+     "team": {
+      "id": 2,
+      "code": "LG",
+      "name": "LG 트윈스",
+      "shortName": "LG",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LG.png"
+     },
+     "stats": {
+      "era": 3.03,
+      "games": 27,
+      "completeGames": 1,
+      "shutouts": 1,
+      "wins": 11,
+      "losses": 7,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.611,
+      "battersFaced": 670,
+      "outs": 481,
+      "innings": "160 1/3",
+      "hits": 163,
+      "homeRuns": 9,
+      "walks": 40,
+      "hitByPitch": 6,
+      "strikeouts": 107,
+      "runs": 61,
+      "earnedRuns": 54
+     }
+    },
+    {
+     "rank": 8,
+     "player": {
+      "id": 789,
+      "name": "원태인",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/69446.jpg"
+     },
+     "team": {
+      "id": 5,
+      "code": "SS",
+      "name": "삼성 라이온즈",
+      "shortName": "삼성",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SS.png"
+     },
+     "stats": {
+      "era": 3.24,
+      "games": 27,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 12,
+      "losses": 4,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.75,
+      "battersFaced": 671,
+      "outs": 500,
+      "innings": "166 2/3",
+      "hits": 157,
+      "homeRuns": 20,
+      "walks": 27,
+      "hitByPitch": 6,
+      "strikeouts": 108,
+      "runs": 66,
+      "earnedRuns": 60
+     }
+    },
+    {
+     "rank": 9,
+     "player": {
+      "id": 2,
+      "name": "소형준",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/50030.jpg"
+     },
+     "team": {
+      "id": 10,
+      "code": "KT",
+      "name": "KT 위즈",
+      "shortName": "KT",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_KT.png"
+     },
+     "stats": {
+      "era": 3.3,
+      "games": 26,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 10,
+      "losses": 7,
+      "saves": 1,
+      "holds": 0,
+      "winPct": 0.588,
+      "battersFaced": 617,
+      "outs": 442,
+      "innings": "147 1/3",
+      "hits": 155,
+      "homeRuns": 6,
+      "walks": 29,
+      "hitByPitch": 3,
+      "strikeouts": 123,
+      "runs": 60,
+      "earnedRuns": 54
+     }
+    },
+    {
+     "rank": 10,
+     "player": {
+      "id": 568,
+      "name": "고영표",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/64001.jpg"
+     },
+     "team": {
+      "id": 10,
+      "code": "KT",
+      "name": "KT 위즈",
+      "shortName": "KT",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_KT.png"
+     },
+     "stats": {
+      "era": 3.3,
+      "games": 29,
+      "completeGames": 1,
+      "shutouts": 1,
+      "wins": 11,
+      "losses": 8,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.579,
+      "battersFaced": 685,
+      "outs": 483,
+      "innings": "161",
+      "hits": 170,
+      "homeRuns": 10,
+      "walks": 30,
+      "hitByPitch": 15,
+      "strikeouts": 154,
+      "runs": 70,
+      "earnedRuns": 59
+     }
+    },
+    {
+     "rank": 11,
+     "player": {
+      "id": 333,
+      "name": "치리노스",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/55146.jpg"
+     },
+     "team": {
+      "id": 2,
+      "code": "LG",
+      "name": "LG 트윈스",
+      "shortName": "LG",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LG.png"
+     },
+     "stats": {
+      "era": 3.31,
+      "games": 30,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 13,
+      "losses": 6,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.684,
+      "battersFaced": 737,
+      "outs": 531,
+      "innings": "177",
+      "hits": 173,
+      "homeRuns": 5,
+      "walks": 36,
+      "hitByPitch": 9,
+      "strikeouts": 137,
+      "runs": 71,
+      "earnedRuns": 65
+     }
+    },
+    {
+     "rank": 12,
+     "player": {
+      "id": 675,
+      "name": "손주영",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/67143.jpg"
+     },
+     "team": {
+      "id": 2,
+      "code": "LG",
+      "name": "LG 트윈스",
+      "shortName": "LG",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LG.png"
+     },
+     "stats": {
+      "era": 3.41,
+      "games": 30,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 11,
+      "losses": 6,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.647,
+      "battersFaced": 644,
+      "outs": 459,
+      "innings": "153",
+      "hits": 153,
+      "homeRuns": 8,
+      "walks": 49,
+      "hitByPitch": 4,
+      "strikeouts": 132,
+      "runs": 67,
+      "earnedRuns": 58
+     }
+    },
+    {
+     "rank": 13,
+     "player": {
+      "id": 411,
+      "name": "라일리",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/55903.jpg"
+     },
+     "team": {
+      "id": 9,
+      "code": "NC",
+      "name": "NC 다이노스",
+      "shortName": "NC",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_NC.png"
+     },
+     "stats": {
+      "era": 3.45,
+      "games": 30,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 17,
+      "losses": 7,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.708,
+      "battersFaced": 709,
+      "outs": 516,
+      "innings": "172",
+      "hits": 136,
+      "homeRuns": 18,
+      "walks": 56,
+      "hitByPitch": 3,
+      "strikeouts": 216,
+      "runs": 76,
+      "earnedRuns": 66
+     }
+    },
+    {
+     "rank": 14,
+     "player": {
+      "id": 73,
+      "name": "송승기",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/51111.jpg"
+     },
+     "team": {
+      "id": 2,
+      "code": "LG",
+      "name": "LG 트윈스",
+      "shortName": "LG",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LG.png"
+     },
+     "stats": {
+      "era": 3.5,
+      "games": 28,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 11,
+      "losses": 6,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.647,
+      "battersFaced": 629,
+      "outs": 432,
+      "innings": "144",
+      "hits": 149,
+      "homeRuns": 15,
+      "walks": 49,
+      "hitByPitch": 1,
+      "strikeouts": 125,
+      "runs": 61,
+      "earnedRuns": 56
+     }
+    },
+    {
+     "rank": 15,
+     "player": {
+      "id": 390,
+      "name": "올러",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/55633.jpg"
+     },
+     "team": {
+      "id": 7,
+      "code": "HT",
+      "name": "KIA 타이거즈",
+      "shortName": "KIA",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HT.png"
+     },
+     "stats": {
+      "era": 3.62,
+      "games": 26,
+      "completeGames": 1,
+      "shutouts": 0,
+      "wins": 11,
+      "losses": 7,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.611,
+      "battersFaced": 620,
+      "outs": 447,
+      "innings": "149",
+      "hits": 125,
+      "homeRuns": 8,
+      "walks": 47,
+      "hitByPitch": 8,
+      "strikeouts": 169,
+      "runs": 64,
+      "earnedRuns": 60
+     }
+    },
+    {
+     "rank": 16,
+     "player": {
+      "id": 259,
+      "name": "헤이수스",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2025/54354.jpg"
+     },
+     "team": {
+      "id": 10,
+      "code": "KT",
+      "name": "KT 위즈",
+      "shortName": "KT",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_KT.png"
+     },
+     "stats": {
+      "era": 3.96,
+      "games": 32,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 9,
+      "losses": 9,
+      "saves": 0,
+      "holds": 1,
+      "winPct": 0.5,
+      "battersFaced": 712,
+      "outs": 491,
+      "innings": "163 2/3",
+      "hits": 173,
+      "homeRuns": 17,
+      "walks": 44,
+      "hitByPitch": 8,
+      "strikeouts": 165,
+      "runs": 85,
+      "earnedRuns": 72
+     }
+    },
+    {
+     "rank": 17,
+     "player": {
+      "id": 344,
+      "name": "콜어빈",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2025/55257.jpg"
+     },
+     "team": {
+      "id": 1,
+      "code": "OB",
+      "name": "두산 베어스",
+      "shortName": "두산",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_OB.png"
+     },
+     "stats": {
+      "era": 4.48,
+      "games": 28,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 8,
+      "losses": 12,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.4,
+      "battersFaced": 649,
+      "outs": 434,
+      "innings": "144 2/3",
+      "hits": 142,
+      "homeRuns": 9,
+      "walks": 79,
+      "hitByPitch": 18,
+      "strikeouts": 128,
+      "runs": 80,
+      "earnedRuns": 72
+     }
+    },
+    {
+     "rank": 18,
+     "player": {
+      "id": 412,
+      "name": "로건",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/55912.jpg"
+     },
+     "team": {
+      "id": 9,
+      "code": "NC",
+      "name": "NC 다이노스",
+      "shortName": "NC",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_NC.png"
+     },
+     "stats": {
+      "era": 4.53,
+      "games": 32,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 7,
+      "losses": 12,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.368,
+      "battersFaced": 770,
+      "outs": 519,
+      "innings": "173",
+      "hits": 180,
+      "homeRuns": 18,
+      "walks": 67,
+      "hitByPitch": 10,
+      "strikeouts": 149,
+      "runs": 98,
+      "earnedRuns": 87
+     }
+    },
+    {
+     "rank": 19,
+     "player": {
+      "id": 575,
+      "name": "박세웅",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/64021.jpg"
+     },
+     "team": {
+      "id": 4,
+      "code": "LT",
+      "name": "롯데 자이언츠",
+      "shortName": "롯데",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LT.png"
+     },
+     "stats": {
+      "era": 4.93,
+      "games": 29,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 11,
+      "losses": 13,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.458,
+      "battersFaced": 722,
+      "outs": 482,
+      "innings": "160 2/3",
+      "hits": 183,
+      "homeRuns": 15,
+      "walks": 54,
+      "hitByPitch": 8,
+      "strikeouts": 156,
+      "runs": 99,
+      "earnedRuns": 88
+     }
+    },
+    {
+     "rank": 20,
+     "player": {
+      "id": 583,
+      "name": "하영민",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/64350.jpg"
+     },
+     "team": {
+      "id": 3,
+      "code": "WO",
+      "name": "키움 히어로즈",
+      "shortName": "키움",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_WO.png"
+     },
+     "stats": {
+      "era": 4.99,
+      "games": 28,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 7,
+      "losses": 14,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.333,
+      "battersFaced": 669,
+      "outs": 460,
+      "innings": "153 1/3",
+      "hits": 169,
+      "homeRuns": 13,
+      "walks": 41,
+      "hitByPitch": 9,
+      "strikeouts": 134,
+      "runs": 90,
+      "earnedRuns": 85
+     }
+    },
+    {
+     "rank": 21,
+     "player": {
+      "id": 852,
+      "name": "김광현",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/77829.jpg"
+     },
+     "team": {
+      "id": 8,
+      "code": "SK",
+      "name": "SSG 랜더스",
+      "shortName": "SSG",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SK.png"
+     },
+     "stats": {
+      "era": 5,
+      "games": 28,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 10,
+      "losses": 10,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.5,
+      "battersFaced": 636,
+      "outs": 432,
+      "innings": "144",
+      "hits": 164,
+      "homeRuns": 13,
+      "walks": 50,
+      "hitByPitch": 4,
+      "strikeouts": 138,
+      "runs": 86,
+      "earnedRuns": 80
+     }
+    },
+    {
+     "rank": 22,
+     "player": {
+      "id": 851,
+      "name": "양현종",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/77637.jpg"
+     },
+     "team": {
+      "id": 7,
+      "code": "HT",
+      "name": "KIA 타이거즈",
+      "shortName": "KIA",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HT.png"
+     },
+     "stats": {
+      "era": 5.06,
+      "games": 30,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 7,
+      "losses": 9,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.438,
+      "battersFaced": 677,
+      "outs": 459,
+      "innings": "153",
+      "hits": 171,
+      "homeRuns": 12,
+      "walks": 57,
+      "hitByPitch": 4,
+      "strikeouts": 109,
+      "runs": 101,
+      "earnedRuns": 86
+     }
+    }
+   ],
+   "page": 0,
+   "size": 25,
+   "totalElements": 22,
+   "totalPages": 1
   }
  },
  "/api/records/batters?season=2025&keyword=%EA%B9%80%EB%8F%84%EC%98%81&sort=avg&order=desc&size=25&page=0": {
@@ -8959,6 +10959,10 @@
    }
   }
  },
+ "/api/players/264/records/pitcher": {
+  "status": 200,
+  "body": []
+ },
  "/api/players/264/records/batter": {
   "status": 200,
   "body": [
@@ -9062,10 +11066,6 @@
     }
    }
   ]
- },
- "/api/players/264/records/pitcher": {
-  "status": 200,
-  "body": []
  },
  "/api/standings?season=2024": {
   "status": 200,
@@ -9256,54 +11256,6 @@
    ]
   }
  },
- "/api/records/pitchers?season=2025&keyword=%EC%9B%90%ED%83%9C%EC%9D%B8&sort=name&order=asc&size=100&page=0": {
-  "status": 200,
-  "body": {
-   "content": [
-    {
-     "rank": 1,
-     "player": {
-      "id": 789,
-      "name": "원태인",
-      "position": "투수",
-      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/69446.jpg"
-     },
-     "team": {
-      "id": 5,
-      "code": "SS",
-      "name": "삼성 라이온즈",
-      "shortName": "삼성",
-      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SS.png"
-     },
-     "stats": {
-      "era": 3.24,
-      "games": 27,
-      "completeGames": 0,
-      "shutouts": 0,
-      "wins": 12,
-      "losses": 4,
-      "saves": 0,
-      "holds": 0,
-      "winPct": 0.75,
-      "battersFaced": 671,
-      "outs": 500,
-      "innings": "166 2/3",
-      "hits": 157,
-      "homeRuns": 20,
-      "walks": 27,
-      "hitByPitch": 6,
-      "strikeouts": 108,
-      "runs": 66,
-      "earnedRuns": 60
-     }
-    }
-   ],
-   "page": 0,
-   "size": 100,
-   "totalElements": 1,
-   "totalPages": 1
-  }
- },
  "/api/records/pitchers?season=2025&keyword=%EA%B9%80%ED%83%9D%EC%97%B0&sort=name&order=asc&size=100&page=0": {
   "status": 200,
   "body": {
@@ -9343,6 +11295,54 @@
       "strikeouts": 79,
       "runs": 31,
       "earnedRuns": 26
+     }
+    }
+   ],
+   "page": 0,
+   "size": 100,
+   "totalElements": 1,
+   "totalPages": 1
+  }
+ },
+ "/api/records/pitchers?season=2025&keyword=%EC%9B%90%ED%83%9C%EC%9D%B8&sort=name&order=asc&size=100&page=0": {
+  "status": 200,
+  "body": {
+   "content": [
+    {
+     "rank": 1,
+     "player": {
+      "id": 789,
+      "name": "원태인",
+      "position": "투수",
+      "imageUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2026/69446.jpg"
+     },
+     "team": {
+      "id": 5,
+      "code": "SS",
+      "name": "삼성 라이온즈",
+      "shortName": "삼성",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SS.png"
+     },
+     "stats": {
+      "era": 3.24,
+      "games": 27,
+      "completeGames": 0,
+      "shutouts": 0,
+      "wins": 12,
+      "losses": 4,
+      "saves": 0,
+      "holds": 0,
+      "winPct": 0.75,
+      "battersFaced": 671,
+      "outs": 500,
+      "innings": "166 2/3",
+      "hits": 157,
+      "homeRuns": 20,
+      "walks": 27,
+      "hitByPitch": 6,
+      "strikeouts": 108,
+      "runs": 66,
+      "earnedRuns": 60
      }
     }
    ],
@@ -9454,194 +11454,5 @@
     }
    }
   ]
- },
- "/api/standings?season=2025": {
-  "status": 200,
-  "body": {
-   "season": 2025,
-   "asOfDate": "2025-10-31",
-   "standings": [
-    {
-     "rank": 1,
-     "team": {
-      "id": 2,
-      "code": "LG",
-      "name": "LG 트윈스",
-      "shortName": "LG",
-      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LG.png"
-     },
-     "games": 144,
-     "wins": 85,
-     "losses": 56,
-     "draws": 3,
-     "winPct": 0.603,
-     "gamesBehind": 0,
-     "last10": "4승0무6패",
-     "streak": "3패"
-    },
-    {
-     "rank": 2,
-     "team": {
-      "id": 6,
-      "code": "HH",
-      "name": "한화 이글스",
-      "shortName": "한화",
-      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HH.png"
-     },
-     "games": 144,
-     "wins": 83,
-     "losses": 57,
-     "draws": 4,
-     "winPct": 0.593,
-     "gamesBehind": 1.5,
-     "last10": "5승1무4패",
-     "streak": "1패"
-    },
-    {
-     "rank": 3,
-     "team": {
-      "id": 8,
-      "code": "SK",
-      "name": "SSG 랜더스",
-      "shortName": "SSG",
-      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SK.png"
-     },
-     "games": 144,
-     "wins": 75,
-     "losses": 65,
-     "draws": 4,
-     "winPct": 0.536,
-     "gamesBehind": 9.5,
-     "last10": "6승0무4패",
-     "streak": "2패"
-    },
-    {
-     "rank": 4,
-     "team": {
-      "id": 5,
-      "code": "SS",
-      "name": "삼성 라이온즈",
-      "shortName": "삼성",
-      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SS.png"
-     },
-     "games": 144,
-     "wins": 74,
-     "losses": 68,
-     "draws": 2,
-     "winPct": 0.521,
-     "gamesBehind": 11.5,
-     "last10": "7승0무3패",
-     "streak": "1패"
-    },
-    {
-     "rank": 5,
-     "team": {
-      "id": 9,
-      "code": "NC",
-      "name": "NC 다이노스",
-      "shortName": "NC",
-      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_NC.png"
-     },
-     "games": 144,
-     "wins": 71,
-     "losses": 67,
-     "draws": 6,
-     "winPct": 0.514,
-     "gamesBehind": 12.5,
-     "last10": "9승0무1패",
-     "streak": "9승"
-    },
-    {
-     "rank": 6,
-     "team": {
-      "id": 10,
-      "code": "KT",
-      "name": "KT 위즈",
-      "shortName": "KT",
-      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_KT.png"
-     },
-     "games": 144,
-     "wins": 71,
-     "losses": 68,
-     "draws": 5,
-     "winPct": 0.511,
-     "gamesBehind": 13,
-     "last10": "5승1무4패",
-     "streak": "1승"
-    },
-    {
-     "rank": 7,
-     "team": {
-      "id": 4,
-      "code": "LT",
-      "name": "롯데 자이언츠",
-      "shortName": "롯데",
-      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LT.png"
-     },
-     "games": 144,
-     "wins": 66,
-     "losses": 72,
-     "draws": 6,
-     "winPct": 0.478,
-     "gamesBehind": 17.5,
-     "last10": "2승0무8패",
-     "streak": "3패"
-    },
-    {
-     "rank": 8,
-     "team": {
-      "id": 7,
-      "code": "HT",
-      "name": "KIA 타이거즈",
-      "shortName": "KIA",
-      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HT.png"
-     },
-     "games": 144,
-     "wins": 65,
-     "losses": 75,
-     "draws": 4,
-     "winPct": 0.464,
-     "gamesBehind": 19.5,
-     "last10": "4승0무6패",
-     "streak": "2승"
-    },
-    {
-     "rank": 9,
-     "team": {
-      "id": 1,
-      "code": "OB",
-      "name": "두산 베어스",
-      "shortName": "두산",
-      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_OB.png"
-     },
-     "games": 144,
-     "wins": 61,
-     "losses": 77,
-     "draws": 6,
-     "winPct": 0.442,
-     "gamesBehind": 22.5,
-     "last10": "5승0무5패",
-     "streak": "2승"
-    },
-    {
-     "rank": 10,
-     "team": {
-      "id": 3,
-      "code": "WO",
-      "name": "키움 히어로즈",
-      "shortName": "키움",
-      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_WO.png"
-     },
-     "games": 144,
-     "wins": 47,
-     "losses": 93,
-     "draws": 4,
-     "winPct": 0.336,
-     "gamesBehind": 37.5,
-     "last10": "3승0무7패",
-     "streak": "5패"
-    }
-   ]
-  }
  }
 }
