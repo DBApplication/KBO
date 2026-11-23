@@ -175,6 +175,22 @@ class ScreenApiTest {
                 .andExpect(jsonPath("$.code").value("R001"));
     }
 
+    @Test
+    void api_docs에_화면별_API와_설명이_노출된다() throws Exception {
+        mvc.perform(get("/v3/api-docs"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.paths['/api/records/batters']").exists())
+                .andExpect(jsonPath("$.paths['/api/records/pitchers/compare']").exists())
+                .andExpect(jsonPath("$.paths['/api/players/{playerId}/records/batter']").exists())
+                .andExpect(jsonPath("$.paths['/api/records/batters'].get.parameters[?(@.name=='season')].description")
+                        .isNotEmpty())
+                .andExpect(jsonPath("$.paths['/api/records/batters'].get.responses['400']").exists())
+                .andExpect(jsonPath("$.paths['/api/records/batters'].get.responses['200']").exists())
+                .andExpect(jsonPath("$.paths['/api/players/{id}'].get.responses['404']").exists())
+                .andExpect(jsonPath("$.components.schemas.ErrorResponse").exists())
+                .andExpect(jsonPath("$.components.schemas.BatterStats.properties.ops.description").exists());
+    }
+
     private static BatterSeasonRecord batter(Player p, Team t, int season, String ops, int pa) {
         return BatterSeasonRecord.builder().player(p).team(t).season(season)
                 .batOps(new BigDecimal(ops)).batPa(pa).batGames(100).build();

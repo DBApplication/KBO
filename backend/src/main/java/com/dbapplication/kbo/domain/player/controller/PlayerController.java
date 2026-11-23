@@ -1,5 +1,6 @@
 package com.dbapplication.kbo.domain.player.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import com.dbapplication.kbo.domain.player.dto.PlayerDetailResponse;
 import com.dbapplication.kbo.domain.player.dto.PlayerSearchItem;
 import com.dbapplication.kbo.domain.player.dto.PlayerType;
@@ -25,17 +26,17 @@ public class PlayerController {
     @Operation(summary = "선수 검색 (헤더 검색, 선수 비교 선택용)")
     @GetMapping
     public PageResponse<PlayerSearchItem> search(
-            @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) Long teamId,
-            @RequestParam(required = false) PlayerType type,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
+            @Parameter(description = "선수 이름 검색어 (부분 일치, 대소문자 무시)") @RequestParam(required = false) String keyword,
+            @Parameter(description = "팀 ID 필터 (미지정 시 전체 팀)") @RequestParam(required = false) Long teamId,
+            @Parameter(description = "타자/투수 필터 (BATTER | PITCHER)") @RequestParam(required = false) PlayerType type,
+            @Parameter(description = "페이지 번호 (0부터)", example = "0") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "페이지 크기 (최대 100)", example = "50") @RequestParam(defaultValue = "20") int size) {
         return playerService.search(keyword, teamId, type, page, size);
     }
 
     @Operation(summary = "선수 상세 프로필")
     @GetMapping("/{id}")
-    public PlayerDetailResponse detail(@PathVariable Long id) {
+    public PlayerDetailResponse detail(@Parameter(description = "선수 ID", example = "1") @PathVariable Long id) {
         return playerService.getDetail(id);
     }
 }
