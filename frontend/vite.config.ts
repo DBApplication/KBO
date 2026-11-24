@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 
 // 화면은 /api 로 백엔드(Spring Boot, 기본 localhost:8080)를 부른다.
@@ -14,6 +14,6 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     testTimeout: 15000,
-    setupFiles: ["./src/test-setup.js"],
+    setupFiles: ["./src/test-setup.ts"],
   },
 });

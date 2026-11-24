@@ -1,55 +1,37 @@
 /** 홈·일별 기록·경기 목록·경기 상세가 함께 쓰는 경기 카드와 일별 선수 기록 표. */
 import { Link } from "react-router";
-import { useQuery, useReference } from "../hooks.js";
-import { displayDate } from "../lib/format.js";
-import { formatStat, sortRecords } from "../lib/records.js";
-import { DEFAULT_DATE, PAGE_SIZE, paging, to } from "../lib/query.js";
-import { DataTable, Empty, NextLink, PlayerLink, SectionTitle } from "../components/common.jsx";
-import { FilterSelect, KindTabs, Pager, StatHeader, TeamSelect } from "../components/controls.jsx";
+import type { DailyPlayerRecords, MatchSummary } from "../api/types.ts";
+import { teamShort, useUrl } from "../hooks.ts";
+import { displayDate, formatStat, sortBy } from "../lib/format.ts";
+import { DEFAULT_DATE, PAGE_SIZE, paging, to } from "../lib/query.ts";
+import { gameColumns, type GameRecord } from "../lib/stats.ts";
+import { DataTable, Empty, NextLink, PlayerLink, SectionTitle } from "../components/common.tsx";
+import { FilterSelect, KindTabs, Pager, StatHeader, TeamSelect } from "../components/controls.tsx";
 
-export const statuses = {
+export const statuses: Record<string, string> = {
   FINISHED: "경기 종료",
   CANCELED: "경기 취소",
   SCHEDULED: "경기 예정",
   IN_PROGRESS: "경기 중",
 };
-export const batDaily = [
-  ["at_bats", "타수"],
-  ["hits", "안타"],
-  ["home_runs", "홈런"],
-  ["rbi", "타점"],
-  ["runs", "득점"],
-  ["ops", "OPS"],
-];
-export const pitDaily = [
-  ["outs_recorded", "이닝"],
-  ["strikeouts", "탈삼진"],
-  ["hits_allowed", "피안타"],
-  ["earned_runs", "자책"],
-  ["pitches", "투구 수"],
-  ["game_era", "ERA"],
-];
 
 /** 더블헤더 경기도 구분할 수 있도록 DB 경기 id를 포함한 상세 주소를 만든다. */
-export function gameUrl(g) {
-  return to("game", { id: g.id, date: g.match_date });
+export function gameUrl(g: MatchSummary): string {
+  return to("game", { id: g.id, date: g.matchDate });
 }
 
 /** 구장, 경기 상태, 홈·원정 점수를 한 장의 경기 카드로 표시한다. */
-export function GameCard({ game: g }) {
-  const { shortTeam } = useReference();
+export function GameCard({ game: g }: { game: MatchSummary }) {
   /** 지정한 팀의 점수를 표시하고 종료 경기에서 이긴 팀에 승리 표시를 붙인다. */
-  const side = (s) => {
-    const other = s === "home" ? "away" : "home";
-    const winner =
-      g.status === "FINISHED" && Number(g[s + "_score"]) > Number(g[other + "_score"]);
+  const side = (s: "away" | "home") => {
+    const winner = s === "home" ? g.result === "HOME_WIN" : g.result === "AWAY_WIN";
     return (
       <div className={`scoreline ${winner ? "winner" : ""}`}>
         <span>
-          {shortTeam(g[s + "_team_code"])} {winner ? <b>승</b> : null}{" "}
+          {teamShort(s === "home" ? g.homeTeam : g.awayTeam)} {winner ? <b>승</b> : null}{" "}
           <small>{s === "away" ? "원정" : "홈"}</small>
         </span>
-        <strong>{formatStat("score", g[s + "_score"])}</strong>
+        <strong>{formatStat(s === "home" ? g.homeScore : g.awayScore)}</strong>
       </div>
     );
   };
@@ -75,24 +57,31 @@ export function NoGames() {
 
 /**
  * 일별 출전 기록에 팀·최소 타수 또는 이닝 조건을 적용해 홈 미리보기(8명)나 전체 목록(25명씩)을 만든다.
- * records = { bat, pit }, games = 그 날 경기 (기록이 없을 때 미수집인지 구분하는 데 쓴다).
+ * 필터·정렬은 그 날 기록 전체를 받아 화면에서 한다. games 는 기록이 없을 때 미수집인지 구분하는 데 쓴다.
  */
-export function DailyRecords({ records, games, full = false }) {
-  const { kind, date, get, page, params } = useQuery();
+export function DailyRecords({
+  records,
+  games,
+  full = false,
+}: {
+  records: DailyPlayerRecords;
+  games: MatchSummary[];
+  full?: boolean;
+}) {
+  const { kind, date, get, page, params } = useUrl();
   const pit = kind === "pit";
-  const cols = pit ? pitDaily : batDaily;
-  const all = records[pit ? "pit" : "bat"];
-  const minKey = pit ? "outs_recorded" : "at_bats";
+  const cols = gameColumns(kind);
+  const all: GameRecord[] = pit ? records.pitchers : records.batters;
+  const minOf = (r: GameRecord) => ("outs" in r ? r.outs : r.ab) ?? 0;
   const min = get("min", pit ? "0" : "3");
-  const sort = cols.some(([k]) => k === get("sort")) ? get("sort") : pit ? "strikeouts" : "hits";
+  const sortCol = cols.find((c) => c.key === get("sort")) ?? cols.find((c) => c.key === (pit ? "strikeouts" : "hits"))!;
   const asc = get("dir") === "asc";
-  const rows = sortRecords(
-    all.filter(
-      (r) => (!get("team") || r.team_code === get("team")) && Number(r[minKey]) >= Number(min),
-    ),
-    sort,
+  const tie = (r: GameRecord) => ("outs" in r ? r.outs : r.rbi);
+  const rows = sortBy(
+    all.filter((r) => (!get("team") || r.team?.code === get("team")) && minOf(r) >= Number(min)),
+    sortCol.get,
     asc,
-    pit ? "outs_recorded" : "rbi",
+    tie,
   );
   const { offset, current, pages } = paging(rows.length, page);
   const start = full ? offset : 0;
@@ -163,15 +152,15 @@ export function DailyRecords({ records, games, full = false }) {
               "순번",
               "선수",
               "팀",
-              ...cols.map(([k, n]) => (
-                <StatHeader k={k} label={n} sort={sort} asc={asc} defaultAsc={k === "game_era"} />
+              ...cols.map((c) => (
+                <StatHeader k={c.key} label={c.label} sort={sortCol.key} asc={asc} defaultAsc={c.key === "era"} />
               )),
             ]}
             rows={shown.map((r, i) => [
               start + i + 1,
-              <PlayerLink id={r.player_id} name={r.player_name} type={kind} />,
-              r.team_name,
-              ...cols.map(([k]) => formatStat(k, r[k])),
+              <PlayerLink id={r.player?.id} name={r.playerName} type={kind} />,
+              r.team?.shortName,
+              ...cols.map((c) => formatStat(c.get(r), c.format)),
             ])}
           />
           {full ? <Pager current={current} pages={pages} /> : null}

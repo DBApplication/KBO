@@ -610,6 +610,10 @@ tr.chosen:hover,
 .week .active small {
   color: white;
 }
+/* 경기가 없는 날 (GET /api/matches/dates) */
+.week .no-games:not(.active) {
+  color: #a3abb3;
+}
 .row-actions {
   gap: 16px;
 }

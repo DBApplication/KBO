@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import {
   Link,
   Outlet,
@@ -7,10 +7,10 @@ import {
   useNavigation,
   useRevalidator,
 } from "react-router";
-import { useQuery } from "../hooks.js";
-import { to } from "../lib/query.js";
-import { Empty, NextLink } from "./common.jsx";
-import { SearchForm } from "./controls.jsx";
+import { useUrl } from "../hooks.ts";
+import { to } from "../lib/query.ts";
+import { Empty, NextLink } from "./common.tsx";
+import { SearchForm } from "./controls.tsx";
 
 // 상단 메뉴에 보이는 화면. 상세 화면은 소속 메뉴를 강조한다 (경기 상세 → 경기 기록).
 const NAV = [
@@ -19,9 +19,9 @@ const NAV = [
   ["players", "선수 기록"],
   ["teams", "팀 기록"],
   ["compare", "선수 비교"],
-];
-const NAV_PARENT = { game: "games", player: "players", daily: "home" };
-const TITLES = {
+] as const;
+const NAV_PARENT: Record<string, string> = { game: "games", player: "players", daily: "home" };
+const TITLES: Record<string, string> = {
   ...Object.fromEntries(NAV),
   game: "경기 상세",
   player: "선수 상세",
@@ -30,14 +30,14 @@ const TITLES = {
 };
 
 /** 주소 첫 단계로 화면 이름을 정한다 ("/" 는 홈). */
-function pageOf(pathname) {
+function pageOf(pathname: string): string {
   return pathname.replace(/^\//, "").split("/")[0] || "home";
 }
 
 /** 로고, 주 메뉴, 통합 검색. 좁은 화면에서는 메뉴 버튼으로 펼친다. */
-function Header({ page }) {
+function Header({ page }: { page: string }) {
   const [open, setOpen] = useState(false);
-  const { get } = useQuery();
+  const { get } = useUrl();
   const current = NAV_PARENT[page] || page;
   return (
     <header>
@@ -71,10 +71,17 @@ function Header({ page }) {
 }
 
 /** 모든 화면이 공유하는 틀: 본문 바로가기, 머리글, 본문, 바닥글. */
-function Shell({ children, busy = false, mainRef }) {
+function Shell({
+  children,
+  busy = false,
+  mainRef,
+}: {
+  children: ReactNode;
+  busy?: boolean;
+  mainRef?: RefObject<HTMLElement | null>;
+}) {
   const location = useLocation();
-  const page = pageOf(location.pathname);
-  const fallbackRef = useRef(null);
+  const fallbackRef = useRef<HTMLElement>(null);
   const ref = mainRef || fallbackRef;
   return (
     <>
@@ -90,7 +97,7 @@ function Shell({ children, busy = false, mainRef }) {
         본문 바로가기
       </a>
       {/* 화면을 옮길 때마다 메뉴가 닫히도록 주소마다 새로 만든다 */}
-      <Header key={location.key} page={page} />
+      <Header key={location.key} page={pageOf(location.pathname)} />
       <main id="content" tabIndex={-1} ref={ref} aria-busy={busy || undefined}>
         {children}
       </main>
@@ -111,7 +118,7 @@ export function Layout() {
   const location = useLocation();
   const navigation = useNavigation();
   const page = pageOf(location.pathname);
-  const mainRef = useRef(null);
+  const mainRef = useRef<HTMLElement>(null);
   const first = useRef(true);
 
   useEffect(() => {

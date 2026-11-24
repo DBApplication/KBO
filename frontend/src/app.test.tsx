@@ -2,10 +2,11 @@ import { afterAll, beforeEach, describe, expect, test } from "vitest";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { cleanup, render, screen, within } from "@testing-library/react";
+import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
 import { RouterProvider, createMemoryRouter } from "react-router";
-import { formatStat, sortRecords, shiftDate, safeLink } from "./lib/records.js";
-import { clearCache, standings, toBatterGame, toGame } from "./lib/api.js";
-import { routes } from "./routes.jsx";
+import { createQueryClient, standingsQuery } from "./api/queries.ts";
+import { formatStat, safeLink, shiftDate, sortBy } from "./lib/format.ts";
+import { createRoutes } from "./routes.tsx";
 
 /*
  * 화면 테스트는 백엔드 API 응답을 녹화한 파일(test-fixtures/api.json)로 돈다.
@@ -15,10 +16,12 @@ import { routes } from "./routes.jsx";
 // jsdom 환경에서는 import.meta.url 이 file: 주소가 아니어서 프로젝트 폴더 기준 경로를 쓴다.
 const FIXTURE = resolve(process.cwd(), "src/test-fixtures/api.json");
 const recordFrom = process.env.KBO_RECORD_API;
-const fixtures = recordFrom ? {} : JSON.parse(readFileSync(FIXTURE, "utf8"));
-const requested = [];
+type Saved = { status: number; body: unknown };
+const fixtures: Record<string, Saved> = recordFrom ? {} : JSON.parse(readFileSync(FIXTURE, "utf8"));
+const requested: string[] = [];
 const realFetch = globalThis.fetch;
-globalThis.fetch = async (url) => {
+globalThis.fetch = async (input: RequestInfo | URL) => {
+  const url = String(input);
   requested.push(url);
   if (recordFrom) {
     const res = await realFetch(recordFrom + url);
@@ -29,57 +32,53 @@ globalThis.fetch = async (url) => {
   return new Response(JSON.stringify(saved.body), { status: saved.status });
 };
 afterAll(() => {
-  if (recordFrom) writeFileSync(FIXTURE, JSON.stringify(fixtures, null, 1));
+  if (recordFrom) {
+    const sorted = Object.fromEntries(Object.entries(fixtures).sort(([a], [b]) => a.localeCompare(b)));
+    writeFileSync(FIXTURE, JSON.stringify(sorted, null, 1) + "\n");
+  }
 });
-// 요청 기록을 보는 테스트가 앞 테스트의 캐시에 영향을 받지 않도록 매번 비운다.
+
+// 테스트마다 새 캐시로 시작해 앞 테스트의 응답이 요청 기록에 영향을 주지 않게 한다.
+let qc: QueryClient;
 beforeEach(() => {
-  clearCache();
+  qc = createQueryClient();
   requested.length = 0;
 });
 
 /** 주소(예: "/players?season=2025")의 화면을 그리고, 로더가 끝나 본문이 나올 때까지 기다린다. */
-async function open(path, waitFor) {
-  const router = createMemoryRouter(routes, { initialEntries: [path] });
-  render(<RouterProvider router={router} />);
+async function open(path: string, waitFor: string | RegExp): Promise<HTMLElement> {
+  const router = createMemoryRouter(createRoutes(qc), { initialEntries: [path] });
+  render(
+    <QueryClientProvider client={qc}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>,
+  );
   await screen.findAllByText(waitFor, {}, { timeout: 8000 });
-  return document.querySelector("main");
+  return document.querySelector("main")!;
+}
+
+/** 한 테스트 안에서 다른 화면을 새로 그릴 때 이전 화면과 요청 기록을 지운다. */
+function reset() {
+  cleanup();
+  requested.length = 0;
 }
 
 describe("기록 계산", () => {
   test("빈 기록, 0, 분수 이닝을 구분한다", () => {
-    expect(formatStat("pit_outs", 19)).toBe("6⅓");
-    expect(formatStat("bat_avg", "0")).toBe(".000");
-    expect(formatStat("bat_avg", 0)).toBe(".000");
-    expect(formatStat("pit_era", "")).toBe("—");
-    expect(formatStat("pit_era", null)).toBe("—");
-    expect(
-      sortRecords([{ v: "" }, { v: "0" }, { v: "2" }], "v", true).map((r) => r.v),
-    ).toEqual(["0", "2", ""]);
+    expect(formatStat(19, "outs")).toBe("6⅓");
+    expect(formatStat("0", "rate")).toBe(".000");
+    expect(formatStat(0, "rate")).toBe(".000");
+    expect(formatStat(2.249, "era")).toBe("2.25");
+    expect(formatStat("", "era")).toBe("—");
+    expect(formatStat(null, "era")).toBe("—");
+    expect(formatStat(0)).toBe("0");
+    expect(sortBy([{ v: "" }, { v: "0" }, { v: "2" }], (r) => r.v, true).map((r) => r.v)).toEqual([
+      "0",
+      "2",
+      "",
+    ]);
     expect(shiftDate("2025-01-01", -1)).toBe("2024-12-31");
     expect(safeLink("javascript:alert(1)")).toBe("");
-  });
-
-  test("API 응답을 화면용 행으로 바꾼다", () => {
-    const g = toGame({
-      id: 7,
-      kboGameId: "20250601_OBWO0",
-      season: 2025,
-      matchDate: "2025-06-01",
-      matchTime: "14:00:00",
-      homeTeam: { code: "WO" },
-      awayTeam: { code: "OB" },
-      homeScore: 1,
-      awayScore: 0,
-      status: "FINISHED",
-      actions: { ticketUrl: null, highlightUrl: "https://youtu.be/a" },
-    });
-    expect(g.match_time).toBe("14:00");
-    expect(g.home_team_code).toBe("WO");
-    expect(g.ticket_url).toBe("");
-    // 동명이인이라 선수 확인이 안 된 기록은 링크하지 않도록 player_id 를 비운다
-    const b = toBatterGame({ playerName: "김민석", player: null, ab: 4, ops: 0.2 });
-    expect(b.player_id).toBe("");
-    expect(b.at_bats).toBe(4);
   });
 });
 
@@ -95,15 +94,23 @@ describe("화면", () => {
     await open("/home?date=2025-06-03", /아직 수집되지 않았습니다/);
   });
 
-  test("팀·시즌 목록은 DB에서 받아 시즌 선택기에 쓴다", async () => {
+  test("팀 순위의 시즌 선택기는 순위가 있는 시즌 목록을 쓴다", async () => {
     await open("/teams?season=2024", /2024\.10\.31/);
-    const seasons = within(screen.getByLabelText("시즌")).getAllByRole("option");
+    const select = screen.getByLabelText("시즌") as HTMLSelectElement;
+    const seasons = within(select).getAllByRole<HTMLOptionElement>("option");
     expect(seasons.map((o) => o.value)).toEqual(["2026", "2025", "2024"]);
+  });
+
+  test("경기 목록: 그 주의 경기 없는 날을 표시한다", async () => {
+    const main = await open("/games?date=2025-06-01", "5경기");
+    expect(requested).toContain("/api/matches/dates?from=2025-05-26&to=2025-06-01");
+    // 6월 2일(월)은 KBO 휴식일
+    expect(main.querySelectorAll(".week a.no-games").length).toBeGreaterThan(0);
   });
 
   test("경기 상세: 이닝표(9회말 X), 주요 기록, 출전 선수", async () => {
     const main = await open("/game?id=1116", "이닝별 기록");
-    expect(main.querySelector('caption')?.textContent).toBe("이닝별 득점");
+    expect(main.querySelector("caption")?.textContent).toBe("이닝별 득점");
     expect([...main.querySelectorAll("td")].some((td) => td.textContent === "X")).toBe(true);
     expect(main.textContent).toMatch(/결승타/);
     expect(main.textContent).toMatch(/김재현/);
@@ -116,11 +123,9 @@ describe("화면", () => {
   test("선수 기록: 처음에는 KBO 기록실처럼 규정타석·규정이닝 이상", async () => {
     await open("/players?season=2025", "규정타석 이상 (446타석)");
     expect(requested.some((u) => u.includes("minPa=446") && u.includes("sort=avg"))).toBe(true);
-    cleanupAndReset();
+    reset();
     await open("/players?season=2025&type=pit", "규정이닝 이상 (144이닝)");
-    expect(requested.some((u) => u.includes("minInnings=144") && u.includes("sort=era"))).toBe(
-      true,
-    );
+    expect(requested.some((u) => u.includes("minInnings=144") && u.includes("sort=era"))).toBe(true);
   });
 
   test("선수 기록: 필터·정렬·페이지는 서버에 넘긴다", async () => {
@@ -134,9 +139,9 @@ describe("화면", () => {
           u.includes("order=desc"),
       ),
     ).toBe(true);
-    cleanupAndReset();
-    await open("/players?season=2025&type=pit&min=100", "폰세");
-    expect(requested.some((u) => u.includes("minInnings=100"))).toBe(true);
+    reset();
+    await open("/players?season=2025&type=pit&min=100&team=HT", "네일");
+    expect(requested.some((u) => u.includes("minInnings=100") && u.includes("teamId="))).toBe(true);
   });
 
   test("선수 상세", async () => {
@@ -148,18 +153,14 @@ describe("화면", () => {
     expect(screen.getAllByText("김택연").length).toBeGreaterThan(0);
     expect(requested.some((u) => u.startsWith("/api/records/pitchers/compare?"))).toBe(true);
   });
+
+  test("검색: 선수와 팀", async () => {
+    await open("/search?q=KIA", "KIA 타이거즈");
+  });
 });
 
-test("같은 주소는 한 번만 요청한다", async () => {
-  clearCache();
-  requested.length = 0;
-  await standings("2025");
-  await standings("2025");
+test("같은 쿼리는 캐시에서 읽고 한 번만 요청한다", async () => {
+  await qc.ensureQueryData(standingsQuery("2025"));
+  await qc.ensureQueryData(standingsQuery("2025"));
   expect(requested.filter((u) => u === "/api/standings?season=2025")).toHaveLength(1);
 });
-
-/** 한 테스트 안에서 다른 화면을 새로 그릴 때 이전 화면과 요청 기록을 지운다. */
-function cleanupAndReset() {
-  cleanup();
-  requested.length = 0;
-}

@@ -1,29 +1,36 @@
-import { Link, useLoaderData } from "react-router";
-import * as api from "../lib/api.js";
-import { sortRecords } from "../lib/records.js";
-import { requestQuery, to } from "../lib/query.js";
-import { useQuery } from "../hooks.js";
-import { Count, Heading, NextLink, Photo, SectionTitle } from "../components/common.jsx";
-import { DateControl } from "../components/controls.jsx";
-import { DailyRecords, GameCard, NoGames } from "./match-shared.jsx";
+import { useSuspenseQuery, type QueryClient } from "@tanstack/react-query";
+import { Link, type LoaderFunctionArgs } from "react-router";
+import { dailyRecordsQuery, matchesQuery } from "../api/queries.ts";
+import { useUrl } from "../hooks.ts";
+import { sortBy } from "../lib/format.ts";
+import { requestQuery, to } from "../lib/query.ts";
+import { Count, Heading, NextLink, Photo, SectionTitle } from "../components/common.tsx";
+import { DateControl } from "../components/controls.tsx";
+import { DailyRecords, GameCard, NoGames } from "./match-shared.tsx";
 
 /** 선택한 날짜의 경기 목록과 일별 선수 기록. */
-export async function loader({ request }) {
-  const { date } = requestQuery(request);
-  const [games, records] = await Promise.all([api.matches(date), api.dailyRecords(date)]);
-  return { games, records };
-}
+export const loader =
+  (qc: QueryClient) =>
+  async ({ request }: LoaderFunctionArgs) => {
+    const { date } = requestQuery(request);
+    await Promise.all([
+      qc.ensureQueryData(matchesQuery(date)),
+      qc.ensureQueryData(dailyRecordsQuery(date)),
+    ]);
+    return null;
+  };
 
 /** 선택한 날짜의 경기 카드, 일별 선수 기록, 대표 선수 사진을 홈 화면에 배치한다. */
 export default function Home() {
-  const { games, records } = useLoaderData();
-  const { date } = useQuery();
+  const { date } = useUrl();
+  const { data: games } = useSuspenseQuery(matchesQuery(date));
+  const { data: records } = useSuspenseQuery(dailyRecordsQuery(date));
   // 그 날 홈런(동률이면 안타)이 가장 많은 타자를 대표 선수로 보여 준다.
-  const featured = sortRecords(
-    records.bat.filter((r) => r.player_id),
-    "home_runs",
+  const featured = sortBy(
+    records.batters.filter((r) => r.player),
+    (r) => r.homeRuns,
     false,
-    "hits",
+    (r) => r.hits,
   )[0];
 
   return (
@@ -54,13 +61,13 @@ export default function Home() {
         <section>
           <DailyRecords records={records} games={games} />
         </section>
-        {featured ? (
+        {featured?.player ? (
           <aside className="home-photo">
-            <Link to={to("player", { id: featured.player_id, type: "bat" })}>
-              <Photo name={featured.player_name} src={featured.image_url} className="hero-photo" />
+            <Link to={to("player", { id: featured.player.id, type: "bat" })}>
+              <Photo name={featured.playerName} src={featured.player.imageUrl} className="hero-photo" />
               <div className="photo-caption">
-                <span>{featured.team_name}</span>
-                <strong>{featured.player_name}</strong>
+                <span>{featured.team?.shortName}</span>
+                <strong>{featured.playerName}</strong>
                 <span aria-hidden="true">↗</span>
               </div>
             </Link>

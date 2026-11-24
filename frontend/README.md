@@ -27,29 +27,34 @@
 
 ## 구조
 
-React 19 + React Router 7 + Vite. 주소는 예전과 같은 해시 방식(`#/players?season=2025`)이라 `dist/`를 어느 정적 서버에 올려도 새로고침이 됩니다.
+React 19 · TypeScript · React Router 7 · TanStack Query 5 · Vite. 주소는 해시 방식(`#/players?season=2025`)이라 `dist/`를 어느 정적 서버에 올려도 새로고침이 됩니다.
 
 ```
 src/
-  main.jsx            진입점 (해시 라우터)
-  routes.jsx          화면 주소 ↔ 화면 모듈. 루트 로더가 팀·시즌 목록을 한 번 받는다
-  hooks.js            useQuery (주소의 조회 조건), useReference (팀·시즌 목록)
-  lib/api.js          API 호출·응답 변환 (같은 주소는 한 번만 요청)
-  lib/query.js        주소 읽기·만들기, 페이지 계산
-  lib/records.js      기록 정렬·표시 형식
+  main.tsx            진입점 (QueryClientProvider + 해시 라우터)
+  routes.tsx          화면 주소 ↔ 화면 모듈. 루트 로더가 팀·시즌 목록을 한 번 받는다
+  api/types.ts        백엔드 DTO 타입 (backend/**/dto 와 1:1, 백엔드를 바꾸면 같이 고친다)
+  api/client.ts       엔드포인트별 fetch 함수와 ApiError
+  api/queries.ts      TanStack Query 옵션(queryKey + queryFn)과 QueryClient 설정
+  hooks.ts            useUrl (주소의 조회 조건), useReference (팀·시즌 목록)
+  lib/query.ts        주소 읽기·만들기, 페이지 계산
+  lib/format.ts       기록 표시 형식, 날짜, 정렬
+  lib/stats.ts        기록표 열 정의 (머리글·값·형식·서버 정렬 키)
   components/         Layout(머리글·메뉴·오류), common(표·빈 상태·링크), controls(필터·탭·검색·페이지)
-  pages/              화면마다 loader(데이터 조회) + 컴포넌트(그리기)
+  pages/              화면마다 loader(쿼리를 미리 채움) + 컴포넌트(useSuspenseQuery 로 읽음)
 ```
 
-화면은 로더가 API 응답을 다 받은 뒤 그립니다. 조건(주소)이 바뀌면 로더가 다시 돌고, 그 사이 다른 화면으로 이동하면 늦게 온 결과는 버립니다. 필터·정렬·페이지는 모두 주소에 남으므로 뒤로 가기와 새로고침에도 유지됩니다.
+데이터 흐름: 주소가 바뀌면 그 화면의 로더가 필요한 쿼리를 `queryClient.ensureQueryData`로 채우고, 컴포넌트는 같은 쿼리 옵션으로 `useSuspenseQuery`를 불러 캐시에서 바로 읽습니다. 받은 응답은 5분 동안 다시 요청하지 않고(팀·시즌 목록은 계속), 4xx 오류는 재시도하지 않습니다. 필터·정렬·페이지는 모두 주소에 남으므로 뒤로 가기와 새로고침에도 유지됩니다.
+
+`pnpm typecheck`로 타입 검사만 따로 할 수 있고, `pnpm build`는 타입 검사 후 빌드합니다.
 
 ## 화면별 API
 
 | 화면 | API |
 |---|---|
-| 처음 한 번 | `GET /api/teams`, `GET /api/standings/seasons` |
+| 처음 한 번 | `GET /api/teams`, `GET /api/standings/seasons`(팀 기록 시즌), `GET /api/records/seasons`(선수 기록·비교 시즌) |
 | 홈 · 일별 선수 기록 | `GET /api/matches?date=`, `GET /api/matches/player-records?date=` |
-| 경기 기록 | `GET /api/matches?date=&teamId=&status=` |
+| 경기 기록 | `GET /api/matches?date=&teamId=&status=`, 주간 달력의 경기 있는 날은 `GET /api/matches/dates?from=&to=` |
 | 경기 상세 | `GET /api/matches/{id}` (점수판·하이라이트·주요 기록·출전 선수) |
 | 선수 기록 | `GET /api/records/batters`·`/pitchers` (시즌·팀·이름·최소 타석/이닝·정렬·페이지) |
 | 선수 상세 | `GET /api/players/{id}`, `/api/players/{id}/records/batter`·`/pitcher` |
