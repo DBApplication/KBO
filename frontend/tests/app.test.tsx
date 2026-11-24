@@ -132,6 +132,32 @@ describe("화면", () => {
     expect(main.querySelectorAll(".week a.no-games").length).toBeGreaterThan(0);
   });
 
+  test("경기 목록: 예정 경기는 예매하기만, 취소 경기는 버튼 없음 (서버 actions 규칙)", async () => {
+    // 녹화된 6월 1일 응답을 바탕으로 첫 경기를 예정, 둘째 경기를 취소 상태로 바꿔 본다 (실제 데이터엔 예정 경기가 없다).
+    const key = "/api/matches?date=2025-06-01";
+    const saved = fixtures[key]!;
+    type Row = { status: string; actions: Record<string, unknown> };
+    const rows = structuredClone(saved.body) as Row[];
+    const [first, second] = rows;
+    if (!first || !second) throw new Error("6월 1일 녹화 응답에 경기가 2개 이상 있어야 합니다");
+    first.status = "SCHEDULED";
+    first.actions = { ticketUrl: "https://www.ticketlink.co.kr/sports", showRecord: false, highlightUrl: null, highlightList: false };
+    second.status = "CANCELED";
+    second.actions = { ticketUrl: null, showRecord: false, highlightUrl: null, highlightList: false };
+    fixtures[key] = { status: 200, body: rows };
+    try {
+      const main = await open("/games?date=2025-06-01", "5경기");
+      const [scheduled, canceled] = Array.from(main.querySelectorAll<HTMLElement>("table.matches tbody tr"));
+      if (!scheduled || !canceled) throw new Error("경기 목록 줄이 없습니다");
+      const ticket = within(scheduled).getByRole("link", { name: "예매하기" });
+      expect(ticket.getAttribute("href")).toBe("https://www.ticketlink.co.kr/sports");
+      expect(within(scheduled).queryByText("경기 기록")).toBeNull();
+      expect(within(canceled).queryAllByRole("link")).toHaveLength(0);
+    } finally {
+      fixtures[key] = saved;
+    }
+  });
+
   test("경기 상세: 이닝표(9회말 X), 주요 기록, 출전 선수", async () => {
     const main = await open("/game?id=1116", "이닝별 기록");
     expect(main.querySelector("caption")?.textContent).toBe("이닝별 득점");

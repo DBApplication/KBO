@@ -72,9 +72,16 @@ export function GamesPage() {
           teamShort(g.homeTeam),
           statusLabel(g.status),
           <div className="row-actions">
-            <NextLink variant="button" to={gameUrl(g)}>
-              경기 기록
-            </NextLink>
+            {g.actions.ticketUrl ? (
+              <ExternalLink variant="button" href={g.actions.ticketUrl}>
+                예매하기
+              </ExternalLink>
+            ) : null}
+            {g.actions.showRecord ? (
+              <NextLink variant="button" to={gameUrl(g)}>
+                경기 기록
+              </NextLink>
+            ) : null}
             <HighlightLink game={g} />
           </div>,
         ])}
@@ -101,6 +108,7 @@ export function GamesPage() {
             selected={get("status")}
             values={[
               ["", "전체 상태"],
+              ["SCHEDULED", "경기 예정"],
               ["FINISHED", "경기 종료"],
               ["CANCELED", "경기 취소"],
             ]}
