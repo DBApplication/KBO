@@ -105,7 +105,7 @@ button,
   font-weight: 600;
   transition: background-color 0.12s;
 }
-button:hover,
+button:not(:disabled):hover,
 .button:hover {
   background: var(--hover);
 }
@@ -446,8 +446,10 @@ small {
   background: transparent;
   color: var(--muted);
 }
-.tabs .button:hover {
+.tabs .button:not(.active):hover {
   color: var(--ink);
+}
+.tabs .button:hover {
   background: transparent;
 }
 .tabs .button.active {
@@ -609,12 +611,6 @@ th {
 .records td:first-child {
   color: var(--faint);
 }
-tbody tr {
-  transition: background-color 0.1s;
-}
-tbody tr:hover {
-  background: var(--soft);
-}
 .player-link {
   font-weight: 600;
   color: var(--ink);
@@ -633,8 +629,7 @@ tbody tr:hover {
   color: var(--ink);
   font-weight: 700;
 }
-tr.chosen,
-tr.chosen:hover {
+tr.chosen {
   background: var(--hover);
 }
 tr.chosen td:first-child {
@@ -1233,9 +1228,6 @@ dialog input {
   .records :is(th, td):nth-child(2) {
     left: 36px;
     box-shadow: inset -1px 0 var(--line);
-  }
-  .records tbody tr:hover :is(td):nth-child(-n + 2) {
-    background: var(--soft);
   }
   .standings :is(th, td):nth-child(3),
   .standings :is(th, td):nth-child(n + 8) {
