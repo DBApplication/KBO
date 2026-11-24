@@ -1,2 +1,2 @@
-export { choicesQuery, comparisonQuery, fetchComparison, fetchPlayerHistory, fetchRanking, fetchRecordSeasons, playerHistoryQuery, rankingQuery, recordSeasonsQuery, type RankingParams } from "./api";
+export { choicesQuery, comparisonQuery, playerHistoryQuery, rankingQuery, recordSeasonsQuery } from "./queries";
 export { seasonColumns } from "./columns";

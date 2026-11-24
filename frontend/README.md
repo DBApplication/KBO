@@ -27,19 +27,20 @@
 
 ## 구조
 
-React 19 · TypeScript · React Router 7 · TanStack Query 5 · Vite. 주소는 해시 방식(`#/players?season=2025`)이라 `dist/`를 어느 정적 서버에 올려도 새로고침이 됩니다.
+React 19 · TypeScript · React Router 7 · TanStack Query 5 · axios · Vite. 주소는 해시 방식(`#/players?season=2025`)이라 `dist/`를 어느 정적 서버에 올려도 새로고침이 됩니다.
 
 ```
 src/
+├── api/           # 백엔드 API 호출 함수 — 엔드포인트 하나에 함수 하나 (team·player·match·record·standing)
 ├── components/    # 공통 컴포넌트 (표·빈 상태·링크·필터 드롭다운·페이지 이동), layout/ (머리글·메뉴·오류 화면)
 ├── constants/     # 라우트(ROUTES·메뉴) · API 엔드포인트(ENDPOINTS) · 기본값
 ├── features/      # 기능 단위 모듈
-│   ├── team/ player/ match/ record/ standing/   # 백엔드 도메인별 API 호출 + TanStack 쿼리 + 도메인 컴포넌트
+│   ├── team/ player/ match/ record/ standing/   # 도메인별 TanStack 쿼리(queries.ts) + 도메인 컴포넌트
 │   ├── filters/   # 팀·시즌·타자/투수·날짜 선택
 │   ├── search/    # 검색 폼
 │   └── compare/   # 선수 비교 데이터 조합 · 선수 선택 창
 ├── hooks/         # 커스텀 훅 (useUrl, useTeams, useRecordSeasons, useStandingSeasons, useDebounced)
-├── lib/           # API 클라이언트 (fetch · ApiError) · QueryClient 설정
+├── lib/           # axios 클라이언트(baseURL /api, 에러 → ApiError) · QueryClient 설정
 ├── pages/         # 화면마다 폴더: <이름>Page.tsx + loader.ts (+ 화면 전용 파일)
 │   ├── Home/ Daily/ Games/ Game/ Players/ Player/ Teams/ Compare/ Search/ NotFound/
 ├── types/         # 백엔드 DTO 타입 (도메인별 파일)
@@ -51,9 +52,31 @@ tests/             # Vitest 화면 테스트와 녹화된 API 응답(fixtures/ap
 
 - 각 폴더는 `index.ts`로 내보내고, 다른 폴더에서는 `@/components`, `@/features/match`처럼 가져옵니다 (`@/` = `src/`). 같은 폴더 안에서는 상대 경로를 씁니다.
 - 백엔드 API 경로는 `constants/endpoints.ts`, 화면 경로는 `constants/routes.ts`의 `ROUTES`로만 씁니다.
-- API 호출은 `features/<도메인>/api.ts`의 `queryOptions`로 합니다. 화면은 `loader.ts`에서 `queryClient.ensureQueryData`로 미리 받고, 컴포넌트에서 같은 쿼리를 `useSuspenseQuery`로 읽습니다. 받은 응답은 5분 동안 다시 요청하지 않고(팀·시즌 목록은 계속), 4xx 오류는 재시도하지 않습니다.
+- API 호출 흐름: `api/<도메인>.ts`(axios 로 엔드포인트 호출) → `features/<도메인>/queries.ts`(TanStack `queryOptions`) → 화면. 화면 컴포넌트에서 `api/`를 직접 부르지 않습니다. 화면은 `loader.ts`에서 `queryClient.ensureQueryData`로 미리 받고, 컴포넌트에서 같은 쿼리를 `useSuspenseQuery`로 읽습니다. 받은 응답은 5분 동안 다시 요청하지 않고(팀·시즌 목록은 계속), 4xx 오류는 재시도하지 않습니다.
 
 `pnpm typecheck`로 타입 검사만, `pnpm build`는 타입 검사 후 빌드합니다.
+
+## API 연결 목록
+
+백엔드 엔드포인트 16개를 모두 `src/api/`에서 호출합니다 (Swagger: http://localhost:8080/swagger-ui.html).
+
+| 엔드포인트 | 호출 함수 (`src/api/`) | Swagger 설명 |
+|---|---|---|
+| `GET /api/teams` | `fetchTeams` (team.ts) | 있음 |
+| `GET /api/standings?season=` | `fetchStandings` (standing.ts) | 없음 (StandingsController) |
+| `GET /api/standings/seasons` | `fetchStandingSeasons` (standing.ts) | 없음 (StandingsController) |
+| `GET /api/matches?date=&teamId=&status=` | `fetchMatches` (match.ts) | 없음 (MatchController) |
+| `GET /api/matches/dates?from=&to=&teamId=` | `fetchMatchDates` (match.ts) | 없음 (MatchController) |
+| `GET /api/matches/{id}` | `fetchMatch` (match.ts) | 없음 (MatchController) |
+| `GET /api/matches/player-records?date=` | `fetchDailyRecords` (match.ts) | 없음 (MatchController) |
+| `GET /api/players?keyword=&teamId=&type=&page=&size=` | `fetchPlayers` (player.ts) | 있음 |
+| `GET /api/players/{id}` | `fetchPlayer` (player.ts) | 있음 |
+| `GET /api/players/{id}/records/batter` · `/pitcher` | `fetchPlayerHistory` (record.ts) | 있음 |
+| `GET /api/records/seasons` | `fetchRecordSeasons` (record.ts) | 있음 |
+| `GET /api/records/batters` · `/pitchers` | `fetchRanking` (record.ts) | 있음 |
+| `GET /api/records/batters/compare` · `/pitchers/compare` | `fetchComparison` (record.ts) | 있음 |
+
+"없음"은 컨트롤러에 `@Tag`/`@Operation`이 없어 Swagger 에 설명 없이 경로만 나오는 API 입니다. 코드(`backend/.../controller`, DTO)를 기준으로 연결했습니다.
 
 ## 화면별 API
 
