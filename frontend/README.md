@@ -11,7 +11,7 @@
    ```sh
    cd backend && ./gradlew bootRun          # Docker Desktop 켜고. Flyway V1~V3 자동 적용
    # 다른 터미널, 저장소 루트에서
-   scripts/db/load_csv.sh frontend/public/data frontend/public/data/daily
+   scripts/db/load_csv.sh                   # data/ 의 CSV 를 DB 에 넣음
    ```
 
 2. 화면을 켭니다. Node.js 22.12 이상과 pnpm(10 이상, `corepack enable` 로 켤 수 있음), `frontend` 폴더에서:
@@ -73,7 +73,7 @@ API 호출과 응답 변환은 `api.js` 한 곳에 있습니다. 같은 주소�
 
 ## 데이터 범위
 
-- `public/data/`의 2024~2026시즌 CSV는 화면이 직접 읽지 않고, `scripts/db/load_csv.sh`로 DB에 넣을 때 씁니다.
+- 원본 CSV(2024~2026시즌)는 저장소 루트의 `data/`에 있고 `scripts/db/load_csv.sh`로 DB에 넣습니다. 프론트엔드는 CSV를 갖고 있지 않고, 모든 화면이 백엔드 API 응답만 표시합니다.
 - 경기별 박스스코어(이닝 점수·출전 선수·주요 기록)는 2025년 6월 1일 하루치만 있습니다. 다른 날짜에 종료 경기가 있어도 박스스코어가 없으면 미수집 상태가 표시됩니다.
 - 선수 ID가 확정되지 않은 일별 출전 기록(동명이인 등)은 이름과 경기 성적만 표시하고 선수 상세로 연결하지 않습니다. 비어 있는 값은 —로, 기록된 0은 0으로 표시합니다.
 - 선수 사진과 영상은 DB에 저장된 외부 주소를 사용합니다.
