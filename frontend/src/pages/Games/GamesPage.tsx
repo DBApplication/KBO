@@ -17,8 +17,18 @@ function NoGames() {
 
 /** 영상 한 개는 외부 재생 링크로, 여러 개는 경기 상세의 영상 목록으로 연결한다 (서버의 버튼 규칙 actions). */
 function HighlightLink({ game: g }: { game: MatchSummary }) {
-  if (g.actions.highlightUrl) return <ExternalLink href={g.actions.highlightUrl}>하이라이트</ExternalLink>;
-  if (g.actions.highlightList) return <NextLink to={gameUrl(g)}>하이라이트 목록</NextLink>;
+  if (g.actions.highlightUrl)
+    return (
+      <ExternalLink variant="button" href={g.actions.highlightUrl}>
+        하이라이트
+      </ExternalLink>
+    );
+  if (g.actions.highlightList)
+    return (
+      <NextLink variant="button" to={gameUrl(g)}>
+        하이라이트 목록
+      </NextLink>
+    );
   return null;
 }
 
@@ -50,7 +60,8 @@ export function GamesPage() {
       <DataTable
         caption="경기 목록"
         className="matches"
-        headers={["시각", "구장", "원정", "점수", "홈", "상태", "기록"]}
+        // 마지막 열은 버튼만 있어 머리글을 보이지 않게 두되, 화면 낭독기에는 읽히도록 남긴다.
+        headers={["시각", "구장", "원정", "점수", "홈", "상태", <span className="sr">기록</span>]}
         rows={rows.map((g) => [
           g.matchTime?.slice(0, 5) || "—",
           (g.stadium ?? "") + (g.doubleheader ? ` · DH${g.doubleheader}` : ""),
@@ -61,7 +72,9 @@ export function GamesPage() {
           teamShort(g.homeTeam),
           statusLabel(g.status),
           <div className="row-actions">
-            <NextLink to={gameUrl(g)}>경기 기록</NextLink>
+            <NextLink variant="button" to={gameUrl(g)}>
+              경기 기록
+            </NextLink>
             <HighlightLink game={g} />
           </div>,
         ])}

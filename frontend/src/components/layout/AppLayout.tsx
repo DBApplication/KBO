@@ -15,7 +15,7 @@ export function AppLayout() {
   const busy = navigation.state === "loading";
 
   useEffect(() => {
-    document.title = (TITLES[page] || "페이지 없음") + " · DIAMOND / KBO";
+    document.title = (TITLES[page] || "페이지 없음") + " · KBO";
   }, [page]);
 
   // 다른 화면으로 이동했으면 본문으로 포커스를 옮겨 스크린 리더가 새 내용을 읽게 한다.

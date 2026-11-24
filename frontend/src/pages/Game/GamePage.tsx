@@ -44,7 +44,7 @@ function GameDetail() {
   return (
     <div className="wrap page">
       <Link className="back" to={to(ROUTES.GAMES, { date: g.matchDate })}>
-        ‹ 경기 기록
+        경기 기록
       </Link>
       <Heading
         title={teamShort(g.awayTeam) + " vs " + teamShort(g.homeTeam)}

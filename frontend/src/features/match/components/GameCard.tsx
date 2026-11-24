@@ -2,12 +2,12 @@ import { Link } from "react-router";
 import { TeamLogo } from "@/components";
 import { teamShort } from "@/features/team";
 import type { MatchSummary } from "@/types";
-import { formatStat } from "@/utils";
+import { formatStat, shortDate } from "@/utils";
 import { gameUrl } from "../gameUrl";
 import { statusLabel } from "../status";
 
-/** 구장, 경기 상태, 홈·원정 점수를 한 장의 경기 카드로 표시한다. */
-export function GameCard({ game: g }: { game: MatchSummary }) {
+/** 구장, 경기 상태, 홈·원정 점수를 한 장의 경기 카드로 표시한다. showDate 면 경기 날짜도 함께 보여 준다. */
+export function GameCard({ game: g, showDate = false }: { game: MatchSummary; showDate?: boolean }) {
   /** 지정한 팀의 점수를 표시하고 종료 경기에서 이긴 팀에 승리 표시를 붙인다. */
   const side = (s: "away" | "home") => {
     const winner = s === "home" ? g.result === "HOME_WIN" : g.result === "AWAY_WIN";
@@ -27,7 +27,10 @@ export function GameCard({ game: g }: { game: MatchSummary }) {
   return (
     <Link className="game-card" to={gameUrl(g)}>
       <div className="card-meta">
-        <span>{g.stadium}</span>
+        <span>
+          {showDate ? <time dateTime={g.matchDate}>{shortDate(g.matchDate)} · </time> : null}
+          {g.stadium}
+        </span>
         <span>{statusLabel(g.status)}</span>
       </div>
       {side("away")}

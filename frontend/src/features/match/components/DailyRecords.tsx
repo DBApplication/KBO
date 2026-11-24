@@ -3,9 +3,9 @@ import { DEFAULT_DATE, PAGE_SIZE, ROUTES } from "@/constants";
 import { KindTabs, TeamSelect } from "@/features/filters";
 import { PlayerLink } from "@/features/player";
 import { useUrl } from "@/hooks";
-import type { DailyPlayerRecords, GameRecord, MatchSummary } from "@/types";
-import { displayDate, formatStat, paging, sortBy, to } from "@/utils";
-import { gameColumns } from "../columns";
+import type { DailyPlayerRecords, MatchSummary } from "@/types";
+import { displayDate, formatStat, paging, to } from "@/utils";
+import { dailyRows } from "../dailyRows";
 
 /**
  * 일별 출전 기록에 팀·최소 타수 또는 이닝 조건을 적용해 홈 미리보기(8명)나 전체 목록(25명씩)을 만든다.
@@ -21,22 +21,12 @@ export function DailyRecords({
   full?: boolean;
 }) {
   const { kind, date, get, page, params } = useUrl();
-  const pit = kind === "pit";
-  const cols = gameColumns(kind);
-  const all: GameRecord[] = pit ? records.pitchers : records.batters;
-  const minOf = (r: GameRecord) => ("outs" in r ? r.outs : r.ab) ?? 0;
-  const min = get("min", pit ? "0" : "3");
-  const sortCol =
-    cols.find((c) => c.key === get("sort")) ?? cols.find((c) => c.key === (pit ? "strikeouts" : "hits"))!;
-  const asc = get("dir") === "asc";
-  // 동률이면 투수는 이닝, 타자는 타점이 많은 순
-  const tie = (r: GameRecord) => ("outs" in r ? r.outs : r.rbi);
-  const rows = sortBy(
-    all.filter((r) => (!get("team") || r.team?.code === get("team")) && minOf(r) >= Number(min)),
-    sortCol.get,
-    asc,
-    tie,
-  );
+  const { rows, all, cols, sortCol, asc, min, pit } = dailyRows(records, kind, {
+    team: get("team"),
+    min: get("min"),
+    sort: get("sort"),
+    dir: get("dir"),
+  });
   const { offset, current, pages } = paging(rows.length, page);
   const start = full ? offset : 0;
   const shown = rows.slice(start, start + (full ? PAGE_SIZE : 8));

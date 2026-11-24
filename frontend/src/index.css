@@ -13,7 +13,11 @@
   --line-strong: #d6dadf;
   --soft: #f6f7f8;
   --hover: #f2f4f6;
-  --accent: #1d4f91;
+  --accent: #2858d6;
+  --accent-strong: #1e45b0;
+  --accent-soft: #eef3fd;
+  --accent-line: #d6e1fa;
+  --up: #15803d;
   --radius: 8px;
   --gutter: clamp(20px, 5.55vw, 80px);
   color: var(--text);
@@ -229,7 +233,7 @@ header {
   right: 8px;
   bottom: -1px;
   height: 2px;
-  background: var(--ink);
+  background: var(--accent);
 }
 .menu-button {
   display: none;
@@ -325,7 +329,6 @@ footer strong span {
 .card-meta,
 .card-bottom,
 .scoreline,
-.team-detail > div,
 .result,
 .pair,
 .profile {
@@ -338,7 +341,6 @@ footer strong span {
 .scoreline,
 .card-meta,
 .card-bottom,
-.team-detail > div,
 .result {
   justify-content: space-between;
   gap: 16px;
@@ -388,7 +390,7 @@ small {
   transition: color 0.12s;
 }
 .textlink:hover {
-  color: var(--ink);
+  color: var(--accent-strong);
 }
 .textlink span {
   transition: transform 0.12s;
@@ -404,9 +406,17 @@ small {
 }
 .back {
   display: inline-flex;
+  align-items: center;
+  gap: 5px;
   margin-top: 24px;
   font-size: 14px;
   color: var(--muted);
+}
+/* 화살표는 글자보다 크게. 각 화면에서 "‹" 를 직접 쓰지 않고 여기서 한 번만 그린다. */
+.back::before {
+  content: "‹";
+  font-size: 22px;
+  line-height: 1;
 }
 .back:hover {
   color: var(--ink);
@@ -454,7 +464,7 @@ small {
 }
 .tabs .button.active {
   background: #fff;
-  color: var(--ink);
+  color: var(--accent-strong);
   box-shadow: 0 1px 2px rgb(22 25 29 / 0.1);
 }
 .select {
@@ -615,9 +625,21 @@ th {
   font-weight: 600;
   color: var(--ink);
 }
-.player-link:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
+/* 선수 이름이 있는 기록표는 행 어디를 눌러도 선수 상세로 간다.
+   이름 링크를 행 전체로 늘려 링크는 하나만 두고(키보드·새 탭 열기 유지),
+   밑줄 대신 행 배경으로 누를 수 있다는 걸 알린다. */
+tbody tr:has(.player-link) {
+  position: relative;
+  cursor: pointer;
+}
+tbody tr:has(.player-link):hover,
+tbody tr:has(.player-link:focus-visible) {
+  background: var(--hover);
+}
+tbody tr .player-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
 }
 .sort {
   display: block;
@@ -629,21 +651,58 @@ th {
   color: var(--ink);
   font-weight: 700;
 }
-tr.chosen {
-  background: var(--hover);
+/* 경기 목록과 같은 이유로 버튼을 오른쪽 끝에 붙이고 세로 여백을 줄인다. */
+.standings td:last-child {
+  padding-block: 8px;
+  text-align: right;
 }
-tr.chosen td:first-child {
-  box-shadow: inset 2px 0 var(--ink);
-}
-.comparison th:not(:first-child),
-.comparison td:not(:first-child) {
-  width: 35%;
+/* 가운데가 비교 항목, 좌우가 두 선수의 값, 맨 바깥이 우위 표시.
+   변화량을 값과 같은 칸에 두면 숫자 자리가 밀리므로 칸을 따로 뒀다.
+   칸 순서: 1·5 우위 · 2·4 값 · 3 항목명 */
+.comparison th,
+.comparison td {
   text-align: center;
+}
+/* 값 칸은 내용 너비만큼만 차지하게 해(width:1%) 변화량과 붙이고, 남는 폭은 바깥 칸이 가져간다.
+   값 칸 너비가 곧 숫자가 놓이는 자리라 행마다 세로로 맞는다. */
+.comparison th:nth-child(2),
+.comparison th:nth-child(4),
+.comparison td:nth-child(2),
+.comparison td:nth-child(4) {
+  width: 1%;
   font-weight: 600;
   color: var(--ink);
 }
+.comparison th:nth-child(2),
+.comparison td:nth-child(2) {
+  text-align: right;
+  padding-left: 4px;
+}
+.comparison th:nth-child(4),
+.comparison td:nth-child(4) {
+  text-align: left;
+  padding-right: 4px;
+}
+.comparison td:nth-child(1),
+.comparison td:nth-child(5) {
+  width: 30%;
+}
+.comparison td:nth-child(1) {
+  text-align: right;
+  padding-right: 4px;
+}
+.comparison td:nth-child(5) {
+  text-align: left;
+  padding-left: 4px;
+}
 .comparison {
   margin-bottom: 20px;
+}
+.comparison .lead {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--up);
+  white-space: nowrap;
 }
 .events td:first-child {
   width: 120px;
@@ -666,8 +725,14 @@ tr.chosen td:first-child {
   font-weight: 700;
   color: var(--ink);
 }
+/* 버튼 칸은 남는 가로 폭을 혼자 차지하므로, 버튼을 표 오른쪽 끝에 붙여 빈 공간을 없앤다.
+   버튼이 들어가 행이 높아지므로 세로 여백도 줄인다. */
 .row-actions {
-  gap: 16px;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.matches td:has(.row-actions) {
+  padding-block: 8px;
 }
 
 /* ------------------------------------------------------------------ 빈 상태 */
@@ -704,13 +769,70 @@ tr.chosen td:first-child {
 
 .scoreband {
   padding: 4px 0 28px;
-  background: var(--soft);
-  border-block: 1px solid var(--line);
+  background: var(--accent-soft);
+  border-block: 1px solid var(--accent-line);
 }
 .cards {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 12px;
+}
+/* 최근 경기 캐러셀: 데스크톱은 한 화면에 5장, 양 끝 화살표로 넘김 */
+.carousel {
+  position: relative;
+}
+.carousel-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 4 * 12px) / 5);
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-inline: contain;
+}
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+.carousel-track > * {
+  scroll-snap-align: start;
+}
+/* 화살표: 카드와 겹치지 않게 바깥 여백에 두고, 캐러셀에 마우스를 올리거나 키보드로 들어왔을 때만 보인다 */
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 56px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--faint);
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1;
+  opacity: 0;
+  transform: translateY(-50%);
+  transition:
+    opacity 0.15s,
+    color 0.12s;
+}
+.carousel-button.prev {
+  left: -44px;
+}
+.carousel-button.next {
+  right: -44px;
+}
+.carousel:hover .carousel-button,
+.carousel:focus-within .carousel-button {
+  opacity: 1;
+}
+.carousel-button:not(:disabled):hover {
+  background: transparent;
+  color: var(--accent);
 }
 .game-card {
   padding: 14px 16px 12px;
@@ -720,7 +842,7 @@ tr.chosen td:first-child {
   transition: border-color 0.12s;
 }
 .game-card:hover {
-  border-color: var(--faint);
+  border-color: var(--accent);
 }
 .card-meta,
 .card-bottom {
@@ -730,13 +852,17 @@ tr.chosen td:first-child {
 .card-meta {
   margin-bottom: 6px;
 }
+.card-meta time {
+  font-weight: 600;
+  color: var(--text);
+}
 .card-bottom {
   margin-top: 8px;
   padding-top: 10px;
   border-top: 1px solid var(--line);
 }
 .game-card:hover .card-bottom {
-  color: var(--ink);
+  color: var(--accent-strong);
 }
 .scoreline {
   min-height: 34px;
@@ -754,9 +880,13 @@ tr.chosen td:first-child {
   color: var(--faint);
 }
 .scoreline b {
+  padding: 0 4px;
+  border-radius: 4px;
   font-size: 11px;
   font-weight: 700;
-  color: var(--accent);
+  line-height: 1.5;
+  color: var(--accent-strong);
+  background: var(--accent-soft);
 }
 .scoreline strong {
   font-size: 22px;
@@ -773,30 +903,6 @@ tr.chosen td:first-child {
 .team-logo {
   flex: none;
   object-fit: contain;
-}
-.home-body {
-  padding-block: 20px 56px;
-}
-.home-body.with-photo {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(170px, 20%);
-  align-items: start;
-  gap: 32px;
-}
-.home-body .section-title:first-child {
-  margin: 12px 0 14px;
-}
-.home-photo {
-  position: sticky;
-  top: 84px;
-  margin-top: 12px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  overflow: hidden;
-  transition: border-color 0.12s;
-}
-.home-photo:hover {
-  border-color: var(--faint);
 }
 .portrait {
   position: relative;
@@ -820,24 +926,6 @@ tr.chosen td:first-child {
   display: block;
   width: 100%;
   height: auto;
-}
-.photo-caption {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 11px 14px;
-  border-top: 1px solid var(--line);
-  background: #fff;
-}
-.photo-caption span {
-  font-size: 13px;
-  color: var(--muted);
-}
-.photo-caption strong {
-  color: var(--ink);
-}
-.photo-caption span:last-child {
-  margin-left: auto;
 }
 
 /* ------------------------------------------------------------------ 경기 기록 · 경기 상세 */
@@ -871,7 +959,7 @@ tr.chosen td:first-child {
 }
 .week .active,
 .week .active:hover {
-  background: var(--ink);
+  background: var(--accent);
   color: #fff;
 }
 .week .active small {
@@ -938,24 +1026,6 @@ tr.chosen td:first-child {
 
 /* ------------------------------------------------------------------ 팀 기록 · 선수 상세 · 비교 */
 
-.team-detail {
-  max-width: 440px;
-  margin: 20px 0 12px;
-  padding: 16px 18px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-}
-.team-detail p {
-  margin: 10px 0;
-  font-size: 15px;
-}
-.team-detail span {
-  font-size: 14px;
-  color: var(--muted);
-}
-.team-detail b {
-  color: var(--ink);
-}
 .profile {
   flex-wrap: wrap;
   gap: 24px;
@@ -1071,12 +1141,11 @@ dialog input {
 /* ------------------------------------------------------------------ 좁은 화면 */
 
 @media (max-width: 1000px) {
+  .carousel-track {
+    grid-auto-columns: calc((100% - 3 * 12px) / 4);
+  }
   .cards {
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  }
-  .home-body.with-photo {
-    grid-template-columns: minmax(0, 1fr) 150px;
-    gap: 20px;
   }
   .topbar .search {
     width: 20vw;
@@ -1166,10 +1235,13 @@ dialog input {
     flex: 0 0 168px;
     scroll-snap-align: start;
   }
-  .home-body.with-photo {
-    display: block;
+  .carousel-track {
+    grid-auto-columns: 168px;
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 0 var(--gutter) 4px;
+    scroll-padding-inline: var(--gutter);
   }
-  .home-photo {
+  .carousel-button {
     display: none;
   }
   .section-title {
@@ -1273,9 +1345,6 @@ dialog input {
   }
   .scoreboard strong {
     font-size: 32px;
-  }
-  .home-body .toolbar {
-    align-items: flex-start;
   }
   .events td:first-child {
     width: 84px;

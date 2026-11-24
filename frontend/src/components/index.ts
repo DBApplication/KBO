@@ -1,3 +1,4 @@
+export { Carousel } from "./Carousel";
 export { DataTable } from "./DataTable";
 export { Empty } from "./Empty";
 export { FilterSelect } from "./FilterSelect";

@@ -36,9 +36,7 @@ export function Shell({
       </main>
       <footer>
         <div className="wrap">
-          <strong>
-            DIAMOND <span>/ KBO</span>
-          </strong>
+          <strong>KBO</strong>
           <span>KBO 경기 · 선수 · 팀 기록</span>
         </div>
       </footer>

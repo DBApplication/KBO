@@ -52,6 +52,12 @@ export function displayDate(value: string, long = false): string {
     : value.replaceAll("-", ".") + ` (${"일월화수목금토"[d.getUTCDay()]})`;
 }
 
+/** 카드처럼 좁은 곳에 쓰는 짧은 날짜. 예) 2025-06-01 → 6.1 (일) */
+export function shortDate(value: string): string {
+  const d = new Date(value + "T12:00:00Z");
+  return `${d.getUTCMonth() + 1}.${d.getUTCDate()} (${"일월화수목금토"[d.getUTCDay()]})`;
+}
+
 /** 브라우저 시간대 기준 오늘 날짜(YYYY-MM-DD). */
 export function localToday(): string {
   const t = new Date();

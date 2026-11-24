@@ -15,6 +15,12 @@ const pit = (
   format?: StatFormat,
 ): Column<PitcherStats, PitcherSortKey> => ({ key, label, get, format });
 
+/** 낮을수록 좋은 투수 지표. 선수 비교에서 우위(초록 세모)를 낮은 쪽에 붙인다. */
+const lower = (c: Column<PitcherStats, PitcherSortKey>): Column<PitcherStats, PitcherSortKey> => ({
+  ...c,
+  lowerIsBetter: true,
+});
+
 /** 선수 기록 목록 */
 const batterList = [
   bat("games", "경기"),
@@ -33,14 +39,14 @@ const pitcherList = [
   // 이닝은 아웃 수로 표시하고, 서버 정렬 키는 innings
   pit("innings", "이닝", (s) => s.outs, "outs"),
   pit("wins", "승", (s) => s.wins),
-  pit("losses", "패", (s) => s.losses),
+  lower(pit("losses", "패", (s) => s.losses)),
   pit("saves", "세이브", (s) => s.saves),
   pit("holds", "홀드", (s) => s.holds),
   pit("strikeouts", "탈삼진", (s) => s.strikeouts),
-  pit("walks", "볼넷", (s) => s.walks),
-  pit("hits", "피안타", (s) => s.hits),
-  pit("earnedRuns", "자책", (s) => s.earnedRuns),
-  pit("era", "ERA", (s) => s.era, "era"),
+  lower(pit("walks", "볼넷", (s) => s.walks)),
+  lower(pit("hits", "피안타", (s) => s.hits)),
+  lower(pit("earnedRuns", "자책", (s) => s.earnedRuns)),
+  lower(pit("era", "ERA", (s) => s.era, "era")),
 ];
 
 /** 선수 비교 (투수는 목록과 같다) */

@@ -12,14 +12,22 @@ export function to(page: string, params: UrlParams = {}): string {
 }
 
 /** 주소의 날짜 형식과 실제 달력 날짜를 검사하고 유효하지 않으면 기본 경기일을 반환한다. */
+/** 주소에 날짜가 없을 때 쓸 날짜. 루트 로더가 가장 최근 경기일로 바꾼다 (setFallbackDate). */
+let fallbackDate = DEFAULT_DATE;
+
+/** 앱을 열 때 한 번, 가장 최근 경기일을 기본 날짜로 삼는다. 못 받으면 빌드 기본값을 그대로 쓴다. */
+export function setFallbackDate(value: string): void {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) fallbackDate = value;
+}
+
 export function validDate(value: string): string {
-  const v = value || DEFAULT_DATE;
+  const v = value || fallbackDate;
   const d = new Date(v + "T12:00:00Z");
   return /^\d{4}-\d{2}-\d{2}$/.test(v) &&
     Number.isFinite(+d) &&
     d.toISOString().slice(0, 10) === v
     ? v
-    : DEFAULT_DATE;
+    : fallbackDate;
 }
 
 export interface UrlQuery {

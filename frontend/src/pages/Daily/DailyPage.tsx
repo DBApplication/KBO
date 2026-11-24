@@ -14,7 +14,7 @@ export function DailyPage() {
   return (
     <div className="wrap page">
       <Link className="back" to={to(ROUTES.HOME, { date })}>
-        ‹ 홈
+        홈
       </Link>
       <div className="toolbar">
         <DateControl />
