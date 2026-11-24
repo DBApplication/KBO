@@ -36,7 +36,8 @@ export function GameCard({ game: g, showDate = false }: { game: MatchSummary; sh
       {side("away")}
       {side("home")}
       <div className="card-bottom">
-        경기 기록 <span aria-hidden="true">→</span>
+        {g.status === "SCHEDULED" ? `${g.matchTime?.slice(0, 5) ?? "시각 미정"} 시작 · 예매하기` : "경기 기록"}{" "}
+        <span aria-hidden="true">→</span>
       </div>
     </Link>
   );

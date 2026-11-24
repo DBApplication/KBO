@@ -22,6 +22,8 @@ import com.dbapplication.kbo.domain.match.repository.MatchRepository;
 import com.dbapplication.kbo.domain.match.repository.MatchTeamRecordRepository;
 import com.dbapplication.kbo.domain.match.repository.PitcherMatchRecordRepository;
 import com.dbapplication.kbo.domain.team.dto.TeamSummary;
+import com.dbapplication.kbo.domain.team.entity.TeamTicketSite;
+import com.dbapplication.kbo.domain.team.repository.TeamTicketSiteRepository;
 import com.dbapplication.kbo.global.error.BusinessException;
 import com.dbapplication.kbo.global.error.ErrorCode;
 import java.time.LocalDate;
@@ -52,6 +54,7 @@ public class MatchService {
     private final BatterMatchRecordRepository batterRecordRepository;
     private final PitcherMatchRecordRepository pitcherRecordRepository;
     private final MatchEventRepository eventRepository;
+    private final TeamTicketSiteRepository ticketSiteRepository;
 
     /** 경기 기록 화면: 날짜 + 팀 + 상태 조건. 영상은 경기 수와 상관없이 쿼리 1번으로 붙인다. */
     public List<MatchSummaryResponse> getMatches(LocalDate date, Long teamId, String status) {
@@ -70,8 +73,10 @@ public class MatchService {
                 .findByMatchIds(matches.stream().map(Match::getId).toList()).stream()
                 .collect(Collectors.groupingBy(h -> h.getMatch().getId(),
                         Collectors.mapping(MatchHighlight::getUrl, Collectors.toList())));
+        Map<String, String> ticketSites = ticketSites();
         return matches.stream()
-                .map(m -> MatchSummaryResponse.of(m, urlsByMatch.getOrDefault(m.getId(), List.of())))
+                .map(m -> MatchSummaryResponse.of(m, urlsByMatch.getOrDefault(m.getId(), List.of()),
+                        ticketUrl(m, ticketSites)))
                 .toList();
     }
 
@@ -82,12 +87,26 @@ public class MatchService {
         List<MatchHighlight> highlights = highlightRepository.findByMatchIds(List.of(matchId));
         List<String> urls = highlights.stream().map(MatchHighlight::getUrl).toList();
         return new MatchDetailResponse(
-                MatchSummaryResponse.of(match, urls),
+                MatchSummaryResponse.of(match, urls, ticketUrl(match, ticketSites())),
                 highlights.stream().map(HighlightResponse::from).toList(),
                 buildScoreboard(match),
                 eventRepository.findByMatchIdOrderByIdAsc(matchId).stream().map(MatchEventResponse::from).toList(),
                 batterRecordRepository.findByMatchId(matchId).stream().map(BatterGameRecordResponse::from).toList(),
                 pitcherRecordRepository.findByMatchId(matchId).stream().map(PitcherGameRecordResponse::from).toList());
+    }
+
+    /** 구단 코드 → 예매 페이지 (10행). */
+    private Map<String, String> ticketSites() {
+        return ticketSiteRepository.findAll().stream()
+                .collect(Collectors.toMap(TeamTicketSite::getTeamCode, TeamTicketSite::getUrl));
+    }
+
+    /** 경기별 예매 주소가 있으면 그 주소, 없으면 홈팀 구단 예매 페이지. 버튼 노출 여부는 MatchActions 가 상태로 정한다. */
+    private static String ticketUrl(Match match, Map<String, String> ticketSites) {
+        if (match.getTicketUrl() != null && !match.getTicketUrl().isBlank()) {
+            return match.getTicketUrl();
+        }
+        return match.getHomeTeam() == null ? null : ticketSites.get(match.getHomeTeam().getCode());
     }
 
     /** 홈 화면 일별 선수 기록: 그 날짜 모든 경기의 타자·투수. 필터·정렬은 화면에서 한다 (하루 최대 수백 행). */

@@ -32,6 +32,11 @@ public record MatchSummaryResponse(
 ) {
 
     public static MatchSummaryResponse of(Match match, List<String> highlightUrls) {
+        return of(match, highlightUrls, match.getTicketUrl());
+    }
+
+    /** @param ticketUrl 예매하기 주소. 경기별 주소가 없으면 홈팀 구단 예매 페이지 (예정 경기에만 쓰인다) */
+    public static MatchSummaryResponse of(Match match, List<String> highlightUrls, String ticketUrl) {
         MatchStatus status = MatchStatus.parse(match.getStatus()).orElse(null);
         return new MatchSummaryResponse(
                 match.getId(),
@@ -49,7 +54,7 @@ public record MatchSummaryResponse(
                 match.getHomeScore(),
                 result(status, match.getHomeScore(), match.getAwayScore()),
                 highlightUrls.size(),
-                MatchActions.of(status, match.getTicketUrl(), highlightUrls));
+                MatchActions.of(status, ticketUrl, highlightUrls));
     }
 
     private static String result(MatchStatus status, Integer home, Integer away) {

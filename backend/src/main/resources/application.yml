@@ -44,3 +44,11 @@ springdoc:
 app:
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000}
+  # KBO 경기 데이터 자동 수집 (domain/collect). 매일 예약 실행은 기본으로 꺼 두고 운영(prod)에서 켠다.
+  # 관리자 수동 수집 API(POST /api/admin/kbo-sync)는 KBO_SYNC_ADMIN_TOKEN 이 설정돼 있을 때만 열린다.
+  kbo-sync:
+    enabled: ${KBO_SYNC_ENABLED:false}
+    cron: ${KBO_SYNC_CRON:0 30 4 * * *}
+    lookback-days: 2
+    upcoming-days: 7
+    admin-token: ${KBO_SYNC_ADMIN_TOKEN:}

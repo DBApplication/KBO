@@ -9,3 +9,6 @@ springdoc:
 logging:
   level:
     root: info
+app:
+  kbo-sync:
+    enabled: ${KBO_SYNC_ENABLED:true}
