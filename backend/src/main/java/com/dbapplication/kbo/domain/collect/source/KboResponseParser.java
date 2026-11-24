@@ -40,14 +40,14 @@ public class KboResponseParser {
                     LocalDate.parse(text(g, "G_DT"), YYYYMMDD), time(text(g, "G_TM")),
                     text(g, "AWAY_ID"), text(g, "HOME_ID"), blankToNull(text(g, "S_NM")), state,
                     scored ? integer(text(g, "T_SCORE_CN")) : null, scored ? integer(text(g, "B_SCORE_CN")) : null,
-                    pitcherIds(g)));
+                    pitcherIds(g), text(g, "GAME_STATE_SC")));
         }
         return games;
     }
 
     /**
      * 상태: CANCEL_SC_ID 가 0 이 아니면 취소(우천취소 1, 기타 99 …).
-     * GAME_STATE_SC 1 예정, 2 진행 중, 3 종료, 4 취소.
+     * GAME_STATE_SC 1 예정, 2 진행 중, 3 종료, 4 취소. 그 밖의 값은 UNKNOWN (그 경기만 건너뛴다).
      */
     static KboGame.State state(JsonNode g) {
         String cancel = text(g, "CANCEL_SC_ID");
@@ -57,7 +57,7 @@ public class KboResponseParser {
             case "2" -> KboGame.State.IN_PROGRESS;
             case "3" -> KboGame.State.FINISHED;
             case "4" -> KboGame.State.CANCELED;
-            default -> throw new KboSourceException("알 수 없는 경기 상태: " + text(g, "GAME_STATE_SC"));
+            default -> KboGame.State.UNKNOWN;
         };
     }
 

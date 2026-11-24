@@ -10,6 +10,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @param cron          예약 실행 시각 (Asia/Seoul). 기본 매일 04:30 — 전날 경기가 모두 끝난 뒤.
  * @param lookbackDays  예약 실행 때 오늘 기준 며칠 전까지 다시 수집할지 (1 = 어제만).
  * @param upcomingDays  예약 실행 때 앞으로 며칠 치 일정(예정 경기)을 미리 넣을지. 0 이면 하지 않는다.
+ * @param liveEnabled   경기 시간대 실시간 갱신 여부 (enabled 가 true 일 때만 동작).
+ * @param liveCron      실시간 갱신 시각 (Asia/Seoul). 기본 13~23시 5분마다 오늘 경기 목록을 다시 받는다.
  * @param baseUrl       KBO 홈페이지 주소. 테스트에서는 가짜 서버 주소로 바꾼다.
  * @param requestDelay  KBO 서버 부담을 줄이려고 경기 사이에 쉬는 시간.
  * @param timeout       요청 하나의 제한 시간.
@@ -21,6 +23,8 @@ public record KboSyncProperties(
         String cron,
         int lookbackDays,
         int upcomingDays,
+        boolean liveEnabled,
+        String liveCron,
         String baseUrl,
         Duration requestDelay,
         Duration timeout,
@@ -30,6 +34,7 @@ public record KboSyncProperties(
         if (cron == null || cron.isBlank()) cron = "0 30 4 * * *";
         if (lookbackDays < 1) lookbackDays = 1;
         if (upcomingDays < 0) upcomingDays = 0;
+        if (liveCron == null || liveCron.isBlank()) liveCron = "0 */5 13-23 * * *";
         if (baseUrl == null || baseUrl.isBlank()) baseUrl = "https://www.koreabaseball.com";
         if (requestDelay == null) requestDelay = Duration.ofMillis(500);
         if (timeout == null) timeout = Duration.ofSeconds(15);

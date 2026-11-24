@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
  * 매일 정해진 시각(기본 04:30, 한국 시간)에 DB 를 최신 경기 상태로 맞춘다.
  * 1) 최근 며칠(lookbackDays, 기본 2일) 경기: 결과·박스스코어 적재, 늦게 끝난 경기·취소 반영
  * 2) 앞으로 며칠(upcomingDays, 기본 7일) 일정: 예정 경기 추가 (화면의 예정 경기·예매 버튼용)
+ * 3) live-enabled 면 경기 시간대에 몇 분마다 오늘 경기 점수·상태 갱신 (live())
  * app.kbo-sync.enabled=false 이면 이 빈이 만들어지지 않는다 (테스트, 수집을 원하지 않는 환경).
  */
 @Slf4j
@@ -42,6 +43,20 @@ public class KboSyncScheduler {
             service.sync(dates, "SCHEDULE");
         } catch (KboSyncService.SyncBusyException e) {
             log.warn("[KBO 수집] 다른 수집이 실행 중이라 이번 예약 실행은 건너뜁니다");
+        }
+    }
+
+    /**
+     * 경기 시간대 실시간 갱신 (기본 13~23시 5분마다, app.kbo-sync.live-enabled).
+     * 오늘 경기 목록만 다시 받아 진행 중 점수·상태를 바꾸고, 새로 끝난 경기만 박스스코어를 넣는다.
+     */
+    @Scheduled(cron = "${app.kbo-sync.live-cron:0 */5 13-23 * * *}", zone = "Asia/Seoul")
+    public void live() {
+        if (!props.liveEnabled()) return;
+        try {
+            service.syncLive(LocalDate.now(SEOUL));
+        } catch (KboSyncService.SyncBusyException e) {
+            log.debug("[KBO 수집] 다른 수집이 실행 중이라 이번 실시간 갱신은 건너뜁니다");
         }
     }
 }

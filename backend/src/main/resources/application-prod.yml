@@ -12,3 +12,4 @@ logging:
 app:
   kbo-sync:
     enabled: ${KBO_SYNC_ENABLED:true}
+    live-enabled: ${KBO_SYNC_LIVE_ENABLED:true}
