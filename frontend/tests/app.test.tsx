@@ -89,15 +89,33 @@ describe("기록 계산", () => {
 });
 
 describe("화면", () => {
-  test("홈: 6월 1일 5경기와 일별 선수 기록", async () => {
-    const main = await open("/", /78개 출전 기록/);
-    expect(main.querySelectorAll(".game-card")).toHaveLength(5);
-    expect(requested).toContain("/api/matches/player-records?date=2025-06-01");
-    expect(document.title).toBe("홈 · DIAMOND / KBO");
+  test("홈: 주소에 날짜가 없으면 가장 최근 경기일까지의 최근 경기 7개", async () => {
+    const main = await open("/", /7경기/);
+    expect(requested).toContain("/api/matches?date=2026-10-12");
+    expect(main.querySelector(".game-card time")?.getAttribute("datetime")).toBe("2026-10-12");
+    expect(document.title).toBe("홈 · KBO");
   });
 
-  test("홈: 기록이 없는 날은 미수집 안내", async () => {
-    await open("/home?date=2025-06-03", /아직 수집되지 않았습니다/);
+  test("홈: 기준 날짜까지 최근 경기(최신순, 날짜 표시)와 그 시즌 팀 순위", async () => {
+    const main = await open("/home?date=2025-06-01", /7경기/);
+    // 경기가 있었던 날을 최근 30일 범위에서 찾아 최신 날짜부터 채운다
+    expect(requested).toContain("/api/matches/dates?from=2025-05-02&to=2025-06-01");
+    const dates = [...main.querySelectorAll(".game-card time")].map((t) => t.getAttribute("datetime"));
+    expect(dates).toHaveLength(7);
+    expect(dates.slice(0, 5)).toEqual(Array(5).fill("2025-06-01"));
+    expect(dates.slice(5)).toEqual(["2025-05-31", "2025-05-31"]);
+    expect(main.querySelector(".game-card time")?.textContent).toBe("6.1 (일) · ");
+    expect(requested).toContain("/api/standings?season=2025");
+    expect(main.querySelectorAll(".standings tbody tr")).toHaveLength(10);
+  });
+
+  test("일별 기록: 6월 1일 출전 기록", async () => {
+    await open("/daily?date=2025-06-01", /78개 출전 기록/);
+    expect(requested).toContain("/api/matches/player-records?date=2025-06-01");
+  });
+
+  test("일별 기록: 기록이 없는 날은 미수집 안내", async () => {
+    await open("/daily?date=2025-06-03", /아직 수집되지 않았습니다/);
   });
 
   test("팀 순위의 시즌 선택기는 순위가 있는 시즌 목록을 쓴다", async () => {

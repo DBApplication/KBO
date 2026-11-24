@@ -18,4 +18,6 @@ export interface Column<T, K extends string = string> {
   label: string;
   get: (row: T) => number | string | null;
   format?: StatFormat;
+  /** 값이 낮을수록 좋은 지표 (ERA·패·자책 등). 선수 비교에서 우위 표시 방향을 정한다. */
+  lowerIsBetter?: boolean;
 }

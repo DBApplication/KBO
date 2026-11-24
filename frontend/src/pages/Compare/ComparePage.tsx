@@ -8,6 +8,27 @@ import { seasonColumns } from "@/features/record";
 import { useRecordSeasons, useUrl } from "@/hooks";
 import { formatStat } from "@/utils";
 
+/**
+ * 두 값 중 나은 쪽과 그 차이. 한쪽이라도 기록이 없거나 같으면 null 이라 아무 표시도 하지 않는다.
+ * ERA·패·자책처럼 낮을수록 좋은 지표는 열 정의의 lowerIsBetter 로 방향을 뒤집는다.
+ */
+function lead(a: number | string | null, b: number | string | null, lowerIsBetter?: boolean) {
+  if (a == null || a === "" || b == null || b === "") return null;
+  const [x, y] = [Number(a), Number(b)];
+  if (!Number.isFinite(x) || !Number.isFinite(y) || x === y) return null;
+  return { leftWins: lowerIsBetter ? x < y : x > y, diff: Math.abs(x - y) };
+}
+
+/** 우위 표시. 값과 같은 칸에 두면 숫자 자리가 밀리므로 바깥쪽 별도 칸에 그린다. */
+function Lead({ gap }: { gap: string }) {
+  return (
+    <b className="lead">
+      <span aria-hidden="true">▲</span> {gap}
+      <span className="sr"> 우위</span>
+    </b>
+  );
+}
+
 /** 두 선수의 같은 시즌 기록을 지표별로 나란히 표시한다. */
 export function ComparePage() {
   const url = useUrl();
@@ -33,8 +54,20 @@ export function ComparePage() {
       <DataTable
         caption="선수 비교"
         className="comparison"
-        headers={["기록", l.player.name, r.player.name]}
-        rows={cols.map((c) => [c.label, formatStat(c.get(l.stats), c.format), formatStat(c.get(r.stats), c.format)])}
+        // 가운데가 비교 항목, 좌우가 두 선수의 값, 맨 바깥이 우위 표시.
+        headers={[<span className="sr">우위</span>, l.player.name, "기록", r.player.name, <span className="sr">우위</span>]}
+        rows={cols.map((c) => {
+          const [lv, rv] = [c.get(l.stats), c.get(r.stats)];
+          const d = lead(lv, rv, c.lowerIsBetter);
+          const gap = d ? formatStat(d.diff, c.format) : "";
+          return [
+            d?.leftWins ? <Lead gap={gap} /> : null,
+            formatStat(lv, c.format),
+            c.label,
+            formatStat(rv, c.format),
+            d && !d.leftWins ? <Lead gap={gap} /> : null,
+          ];
+        })}
       />
     );
   } else if (data.left && data.right)

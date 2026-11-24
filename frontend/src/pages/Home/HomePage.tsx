@@ -1,66 +1,56 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { Link } from "react-router";
-import { Count, Empty, Heading, NextLink, SectionTitle } from "@/components";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { Carousel, Count, Empty, Heading, NextLink, SectionTitle } from "@/components";
 import { ROUTES } from "@/constants";
-import { DateControl } from "@/features/filters";
-import { DailyRecords, GameCard, dailyRecordsQuery, matchesQuery } from "@/features/match";
-import { PlayerPhoto } from "@/features/player";
+import { GameCard, recentMatchesQuery } from "@/features/match";
+import { StandingsTable, standingsQuery } from "@/features/standing";
 import { useUrl } from "@/hooks";
-import { sortBy, to } from "@/utils";
+import { to } from "@/utils";
 
-/** 선택한 날짜의 경기 카드, 일별 선수 기록, 대표 선수 사진. */
+/** 홈에 보여 줄 최근 경기 수 */
+export const RECENT_GAMES = 7;
+
+/** 기준 날짜까지의 최근 경기 결과와, 그 시즌의 전체 팀 순위. */
 export function HomePage() {
   const { date } = useUrl();
-  const { data: games } = useSuspenseQuery(matchesQuery(date));
-  const { data: records } = useSuspenseQuery(dailyRecordsQuery(date));
-  // 그 날 홈런(동률이면 안타)이 가장 많은 타자를 대표 선수로 보여 준다.
-  const featured = sortBy(
-    records.batters.filter((r) => r.player),
-    (r) => r.homeRuns,
-    false,
-    (r) => r.hits,
-  )[0];
+  // 순위는 보고 있는 날짜의 시즌 기준으로 맞춘다.
+  const season = date.slice(0, 4);
+  const qc = useQueryClient();
+  const { data: games } = useSuspenseQuery(recentMatchesQuery(qc, date, RECENT_GAMES));
+  const { data: standings } = useSuspenseQuery(standingsQuery(season));
+  const rows = standings?.standings ?? [];
 
   return (
     <>
       <div className="wrap">
-        <Heading title="KBO 일별 기록" sub="날짜별 경기 결과와 선수의 기록을 한눈에 확인하세요.">
-          <DateControl />
-        </Heading>
+        <Heading title="KBO 일별 기록" sub="가장 최근 경기 결과와 팀 순위를 한눈에 확인하세요." />
       </div>
       <section className="scoreband">
         <div className="wrap">
-          <SectionTitle title="오늘의 경기">
+          <SectionTitle title="최근 경기">
             <Count>{games.length}경기</Count>
             <NextLink to={to(ROUTES.GAMES, { date })}>일정 전체 보기</NextLink>
           </SectionTitle>
           {games.length ? (
-            <div className="cards">
+            <Carousel label="최근 경기">
               {games.map((g) => (
-                <GameCard key={g.id} game={g} />
+                <GameCard key={g.id} game={g} showDate />
               ))}
-            </div>
+            </Carousel>
           ) : (
-            <Empty title="해당 날짜의 경기 기록이 없습니다." sub="다른 날짜를 선택해 보세요." />
+            <Empty title="최근 30일 동안 경기 기록이 없습니다." sub="경기 기록에서 다른 날짜를 찾아보세요." />
           )}
         </div>
       </section>
-      <div className={`wrap home-body ${featured ? "with-photo" : ""}`}>
-        <section>
-          <DailyRecords records={records} games={games} />
-        </section>
-        {featured?.player ? (
-          <aside className="home-photo">
-            <Link to={to(ROUTES.PLAYER, { id: featured.player.id, type: "bat" })}>
-              <PlayerPhoto name={featured.playerName} src={featured.player.imageUrl} className="hero-photo" />
-              <div className="photo-caption">
-                <span>{featured.team?.shortName}</span>
-                <strong>{featured.playerName}</strong>
-                <span aria-hidden="true">↗</span>
-              </div>
-            </Link>
-          </aside>
-        ) : null}
+      <div className="wrap page">
+        <SectionTitle title="전체 팀 순위">
+          <Count>{season} 시즌</Count>
+          <NextLink to={to(ROUTES.TEAMS, { season })}>팀 기록 전체 보기</NextLink>
+        </SectionTitle>
+        {rows.length ? (
+          <StandingsTable rows={rows} season={season} />
+        ) : (
+          <Empty title="해당 시즌의 순위가 없습니다." />
+        )}
       </div>
     </>
   );

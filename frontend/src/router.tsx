@@ -2,9 +2,11 @@ import type { QueryClient } from "@tanstack/react-query";
 import type { RouteObject } from "react-router";
 import { AppLayout, AppLoading, RootError, RouteError } from "@/components";
 import { ROUTES } from "@/constants";
+import { latestMatchDateQuery } from "@/features/match";
 import { recordSeasonsQuery } from "@/features/record";
 import { standingSeasonsQuery } from "@/features/standing";
 import { teamsQuery } from "@/features/team";
+import { setFallbackDate } from "@/utils";
 import { ComparePage, compareLoader } from "@/pages/Compare";
 import { DailyPage, dailyLoader } from "@/pages/Daily";
 import { GamePage, gameLoader } from "@/pages/Game";
@@ -27,12 +29,15 @@ export function createRoutes(qc: QueryClient): RouteObject[] {
       id: "root",
       path: "/",
       // 팀 목록(필터·팀명)과 시즌 목록은 처음 한 번만 받는다.
+      // 기본 날짜도 여기서 가장 최근 경기일로 맞춘다. 화면보다 먼저 실행되므로 첫 화면부터 적용된다.
       loader: async () => {
-        await Promise.all([
+        const [, , , latest] = await Promise.all([
           qc.ensureQueryData(teamsQuery()),
           qc.ensureQueryData(standingSeasonsQuery()),
           qc.ensureQueryData(recordSeasonsQuery()),
+          qc.ensureQueryData(latestMatchDateQuery()),
         ]);
+        setFallbackDate(latest);
         return null;
       },
       shouldRevalidate: () => false,

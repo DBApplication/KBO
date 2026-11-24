@@ -42,7 +42,7 @@ function PlayerDetailView() {
 
   return (
     <div className="wrap page">
-      <BackLink href={to(ROUTES.PLAYERS, { type, season })}>‹ 선수 기록</BackLink>
+      <BackLink href={to(ROUTES.PLAYERS, { type, season })}>선수 기록</BackLink>
       <section className="profile">
         <PlayerPhoto name={p.name} src={p.imageUrl} />
         <div>

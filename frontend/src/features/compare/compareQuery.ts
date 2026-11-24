@@ -8,6 +8,7 @@ export interface ComparePick {
   id: number;
   name: string;
   position: string | null;
+  imageUrl: string | null;
   team: TeamSummary | null;
 }
 
@@ -33,7 +34,7 @@ export function compareQuery({ kind, season, get, params }: UrlQuery) {
         if (!id) return undefined;
         try {
           const p = await fetchPlayer(id);
-          return { id: p.id, name: p.name, position: p.position, team: p.team };
+          return { id: p.id, name: p.name, position: p.position, imageUrl: p.imageUrl, team: p.team };
         } catch {
           return undefined;
         }

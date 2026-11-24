@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useLoaderData } from "react-router";
-import { DataTable, Empty, ExternalLink, Heading, NextLink, SectionTitle } from "@/components";
+import { DataTable, Empty, ExternalLink, Heading, NextLink, SectionTitle, TeamLogo } from "@/components";
 import { ROUTES } from "@/constants";
 import { KindTabs } from "@/features/filters";
 import { gameColumns, matchQuery, statusLabel } from "@/features/match";
@@ -35,15 +35,16 @@ function GameDetail() {
   /** 스코어보드 한쪽에 홈·원정 구분과 팀 이름을 표시한다. */
   const scoreSide = (s: "away" | "home") => (
     <div>
-      <small>{s === "away" ? "원정" : "홈"}</small>
+      <TeamLogo team={s === "away" ? g.awayTeam : g.homeTeam} size={44} />
       <b>{teamShort(s === "away" ? g.awayTeam : g.homeTeam)}</b>
+      <small>{s === "away" ? "원정" : "홈"}</small>
     </div>
   );
 
   return (
     <div className="wrap page">
       <Link className="back" to={to(ROUTES.GAMES, { date: g.matchDate })}>
-        ‹ 경기 기록
+        경기 기록
       </Link>
       <Heading
         title={teamShort(g.awayTeam) + " vs " + teamShort(g.homeTeam)}
@@ -78,6 +79,7 @@ function GameDetail() {
           {board ? (
             <DataTable
               caption="이닝별 득점"
+              className="linescore"
               headers={["팀", ...innings, "R", "H", "E"]}
               rows={[board.away, board.home].map((line) => [
                 line.team?.shortName,

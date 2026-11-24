@@ -1,4 +1,184 @@
 {
+ "/api/matches?date=2025-05-31": {
+  "status": 200,
+  "body": [
+   {
+    "id": 1111,
+    "kboGameId": "20250531_HTKT0",
+    "season": 2025,
+    "matchDate": "2025-05-31",
+    "matchTime": "14:00:00",
+    "stadium": "수원",
+    "status": "FINISHED",
+    "doubleheader": 0,
+    "sequence": 2,
+    "awayTeam": {
+     "id": 7,
+     "code": "HT",
+     "name": "KIA 타이거즈",
+     "shortName": "KIA",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HT.png"
+    },
+    "homeTeam": {
+     "id": 10,
+     "code": "KT",
+     "name": "KT 위즈",
+     "shortName": "KT",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_KT.png"
+    },
+    "awayScore": 1,
+    "homeScore": 5,
+    "result": "HOME_WIN",
+    "highlightCount": 1,
+    "actions": {
+     "ticketUrl": null,
+     "showRecord": true,
+     "highlightUrl": "https://www.youtube.com/watch?v=CXeQRKchJuc",
+     "highlightList": false
+    }
+   },
+   {
+    "id": 1112,
+    "kboGameId": "20250531_HHNC0",
+    "season": 2025,
+    "matchDate": "2025-05-31",
+    "matchTime": "14:00:00",
+    "stadium": "창원",
+    "status": "FINISHED",
+    "doubleheader": 0,
+    "sequence": 2,
+    "awayTeam": {
+     "id": 6,
+     "code": "HH",
+     "name": "한화 이글스",
+     "shortName": "한화",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HH.png"
+    },
+    "homeTeam": {
+     "id": 9,
+     "code": "NC",
+     "name": "NC 다이노스",
+     "shortName": "NC",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_NC.png"
+    },
+    "awayScore": 9,
+    "homeScore": 6,
+    "result": "AWAY_WIN",
+    "highlightCount": 1,
+    "actions": {
+     "ticketUrl": null,
+     "showRecord": true,
+     "highlightUrl": "https://www.youtube.com/watch?v=4LtJA_KR1fI",
+     "highlightList": false
+    }
+   },
+   {
+    "id": 1113,
+    "kboGameId": "20250531_SSLG0",
+    "season": 2025,
+    "matchDate": "2025-05-31",
+    "matchTime": "17:00:00",
+    "stadium": "잠실",
+    "status": "FINISHED",
+    "doubleheader": 0,
+    "sequence": 2,
+    "awayTeam": {
+     "id": 5,
+     "code": "SS",
+     "name": "삼성 라이온즈",
+     "shortName": "삼성",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SS.png"
+    },
+    "homeTeam": {
+     "id": 2,
+     "code": "LG",
+     "name": "LG 트윈스",
+     "shortName": "LG",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LG.png"
+    },
+    "awayScore": 4,
+    "homeScore": 2,
+    "result": "AWAY_WIN",
+    "highlightCount": 1,
+    "actions": {
+     "ticketUrl": null,
+     "showRecord": true,
+     "highlightUrl": "https://www.youtube.com/watch?v=OVduO4maPG0",
+     "highlightList": false
+    }
+   },
+   {
+    "id": 1114,
+    "kboGameId": "20250531_SKLT0",
+    "season": 2025,
+    "matchDate": "2025-05-31",
+    "matchTime": "17:00:00",
+    "stadium": "사직",
+    "status": "FINISHED",
+    "doubleheader": 0,
+    "sequence": 2,
+    "awayTeam": {
+     "id": 8,
+     "code": "SK",
+     "name": "SSG 랜더스",
+     "shortName": "SSG",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SK.png"
+    },
+    "homeTeam": {
+     "id": 4,
+     "code": "LT",
+     "name": "롯데 자이언츠",
+     "shortName": "롯데",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LT.png"
+    },
+    "awayScore": 4,
+    "homeScore": 1,
+    "result": "AWAY_WIN",
+    "highlightCount": 1,
+    "actions": {
+     "ticketUrl": null,
+     "showRecord": true,
+     "highlightUrl": "https://www.youtube.com/watch?v=Ik7vC2qQW_o",
+     "highlightList": false
+    }
+   },
+   {
+    "id": 1115,
+    "kboGameId": "20250531_OBWO0",
+    "season": 2025,
+    "matchDate": "2025-05-31",
+    "matchTime": "17:00:00",
+    "stadium": "고척",
+    "status": "FINISHED",
+    "doubleheader": 0,
+    "sequence": 2,
+    "awayTeam": {
+     "id": 1,
+     "code": "OB",
+     "name": "두산 베어스",
+     "shortName": "두산",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_OB.png"
+    },
+    "homeTeam": {
+     "id": 3,
+     "code": "WO",
+     "name": "키움 히어로즈",
+     "shortName": "키움",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_WO.png"
+    },
+    "awayScore": 0,
+    "homeScore": 1,
+    "result": "HOME_WIN",
+    "highlightCount": 1,
+    "actions": {
+     "ticketUrl": null,
+     "showRecord": true,
+     "highlightUrl": "https://www.youtube.com/watch?v=P8R5wkGG1s4",
+     "highlightList": false
+    }
+   }
+  ]
+ },
  "/api/matches?date=2025-06-01": {
   "status": 200,
   "body": [
@@ -354,6 +534,301 @@
      "ticketUrl": null,
      "showRecord": true,
      "highlightUrl": "https://www.youtube.com/watch?v=DwZY9eR9QHY",
+     "highlightList": false
+    }
+   }
+  ]
+ },
+ "/api/matches?date=2026-10-10": {
+  "status": 200,
+  "body": [
+   {
+    "id": 2388,
+    "kboGameId": "20261010_LGLT0",
+    "season": 2026,
+    "matchDate": "2026-10-10",
+    "matchTime": "14:00:00",
+    "stadium": "사직",
+    "status": "FINISHED",
+    "doubleheader": 0,
+    "sequence": 2,
+    "awayTeam": {
+     "id": 2,
+     "code": "LG",
+     "name": "LG 트윈스",
+     "shortName": "LG",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LG.png"
+    },
+    "homeTeam": {
+     "id": 4,
+     "code": "LT",
+     "name": "롯데 자이언츠",
+     "shortName": "롯데",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LT.png"
+    },
+    "awayScore": 4,
+    "homeScore": 3,
+    "result": "AWAY_WIN",
+    "highlightCount": 1,
+    "actions": {
+     "ticketUrl": null,
+     "showRecord": true,
+     "highlightUrl": "https://www.youtube.com/watch?v=6_HshTRhL8w",
+     "highlightList": false
+    }
+   },
+   {
+    "id": 2389,
+    "kboGameId": "20261010_SKHT0",
+    "season": 2026,
+    "matchDate": "2026-10-10",
+    "matchTime": "17:00:00",
+    "stadium": "광주",
+    "status": "FINISHED",
+    "doubleheader": 0,
+    "sequence": 1,
+    "awayTeam": {
+     "id": 8,
+     "code": "SK",
+     "name": "SSG 랜더스",
+     "shortName": "SSG",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SK.png"
+    },
+    "homeTeam": {
+     "id": 7,
+     "code": "HT",
+     "name": "KIA 타이거즈",
+     "shortName": "KIA",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HT.png"
+    },
+    "awayScore": 5,
+    "homeScore": 8,
+    "result": "HOME_WIN",
+    "highlightCount": 1,
+    "actions": {
+     "ticketUrl": null,
+     "showRecord": true,
+     "highlightUrl": "https://www.youtube.com/watch?v=SAvp3fh0xYM",
+     "highlightList": false
+    }
+   },
+   {
+    "id": 2390,
+    "kboGameId": "20261010_NCHH0",
+    "season": 2026,
+    "matchDate": "2026-10-10",
+    "matchTime": "17:00:00",
+    "stadium": "대전",
+    "status": "FINISHED",
+    "doubleheader": 0,
+    "sequence": 1,
+    "awayTeam": {
+     "id": 9,
+     "code": "NC",
+     "name": "NC 다이노스",
+     "shortName": "NC",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_NC.png"
+    },
+    "homeTeam": {
+     "id": 6,
+     "code": "HH",
+     "name": "한화 이글스",
+     "shortName": "한화",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HH.png"
+    },
+    "awayScore": 9,
+    "homeScore": 8,
+    "result": "AWAY_WIN",
+    "highlightCount": 1,
+    "actions": {
+     "ticketUrl": null,
+     "showRecord": true,
+     "highlightUrl": "https://www.youtube.com/watch?v=yQaY5ro1abg",
+     "highlightList": false
+    }
+   }
+  ]
+ },
+ "/api/matches?date=2026-10-11": {
+  "status": 200,
+  "body": [
+   {
+    "id": 2391,
+    "kboGameId": "20261011_KTSS0",
+    "season": 2026,
+    "matchDate": "2026-10-11",
+    "matchTime": "14:00:00",
+    "stadium": "대구",
+    "status": "FINISHED",
+    "doubleheader": 0,
+    "sequence": 1,
+    "awayTeam": {
+     "id": 10,
+     "code": "KT",
+     "name": "KT 위즈",
+     "shortName": "KT",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_KT.png"
+    },
+    "homeTeam": {
+     "id": 5,
+     "code": "SS",
+     "name": "삼성 라이온즈",
+     "shortName": "삼성",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SS.png"
+    },
+    "awayScore": 12,
+    "homeScore": 3,
+    "result": "AWAY_WIN",
+    "highlightCount": 1,
+    "actions": {
+     "ticketUrl": null,
+     "showRecord": true,
+     "highlightUrl": "https://www.youtube.com/watch?v=Xs4o_UH3nM4",
+     "highlightList": false
+    }
+   },
+   {
+    "id": 2392,
+    "kboGameId": "20261011_LTHT0",
+    "season": 2026,
+    "matchDate": "2026-10-11",
+    "matchTime": "14:00:00",
+    "stadium": "광주",
+    "status": "FINISHED",
+    "doubleheader": 0,
+    "sequence": 1,
+    "awayTeam": {
+     "id": 4,
+     "code": "LT",
+     "name": "롯데 자이언츠",
+     "shortName": "롯데",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LT.png"
+    },
+    "homeTeam": {
+     "id": 7,
+     "code": "HT",
+     "name": "KIA 타이거즈",
+     "shortName": "KIA",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HT.png"
+    },
+    "awayScore": 4,
+    "homeScore": 1,
+    "result": "AWAY_WIN",
+    "highlightCount": 1,
+    "actions": {
+     "ticketUrl": null,
+     "showRecord": true,
+     "highlightUrl": "https://www.youtube.com/watch?v=hxrULVRHCjY",
+     "highlightList": false
+    }
+   }
+  ]
+ },
+ "/api/matches?date=2026-10-12": {
+  "status": 200,
+  "body": [
+   {
+    "id": 2393,
+    "kboGameId": "20261012_LTOB0",
+    "season": 2026,
+    "matchDate": "2026-10-12",
+    "matchTime": "18:30:00",
+    "stadium": "잠실",
+    "status": "FINISHED",
+    "doubleheader": 0,
+    "sequence": 1,
+    "awayTeam": {
+     "id": 4,
+     "code": "LT",
+     "name": "롯데 자이언츠",
+     "shortName": "롯데",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LT.png"
+    },
+    "homeTeam": {
+     "id": 1,
+     "code": "OB",
+     "name": "두산 베어스",
+     "shortName": "두산",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_OB.png"
+    },
+    "awayScore": 7,
+    "homeScore": 4,
+    "result": "AWAY_WIN",
+    "highlightCount": 1,
+    "actions": {
+     "ticketUrl": null,
+     "showRecord": true,
+     "highlightUrl": "https://www.youtube.com/watch?v=oZ2Me2pGbMs",
+     "highlightList": false
+    }
+   },
+   {
+    "id": 2394,
+    "kboGameId": "20261012_KTSS0",
+    "season": 2026,
+    "matchDate": "2026-10-12",
+    "matchTime": "18:30:00",
+    "stadium": "대구",
+    "status": "FINISHED",
+    "doubleheader": 0,
+    "sequence": 2,
+    "awayTeam": {
+     "id": 10,
+     "code": "KT",
+     "name": "KT 위즈",
+     "shortName": "KT",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_KT.png"
+    },
+    "homeTeam": {
+     "id": 5,
+     "code": "SS",
+     "name": "삼성 라이온즈",
+     "shortName": "삼성",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SS.png"
+    },
+    "awayScore": 4,
+    "homeScore": 2,
+    "result": "AWAY_WIN",
+    "highlightCount": 1,
+    "actions": {
+     "ticketUrl": null,
+     "showRecord": true,
+     "highlightUrl": "https://www.youtube.com/watch?v=FrNf0NjuJyA",
+     "highlightList": false
+    }
+   },
+   {
+    "id": 2395,
+    "kboGameId": "20261012_LGHT0",
+    "season": 2026,
+    "matchDate": "2026-10-12",
+    "matchTime": "18:30:00",
+    "stadium": "광주",
+    "status": "FINISHED",
+    "doubleheader": 0,
+    "sequence": 1,
+    "awayTeam": {
+     "id": 2,
+     "code": "LG",
+     "name": "LG 트윈스",
+     "shortName": "LG",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LG.png"
+    },
+    "homeTeam": {
+     "id": 7,
+     "code": "HT",
+     "name": "KIA 타이거즈",
+     "shortName": "KIA",
+     "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HT.png"
+    },
+    "awayScore": 2,
+    "homeScore": 4,
+    "result": "HOME_WIN",
+    "highlightCount": 1,
+    "actions": {
+     "ticketUrl": null,
+     "showRecord": true,
+     "highlightUrl": "https://www.youtube.com/watch?v=zg41q-JrVPc",
      "highlightList": false
     }
    }
@@ -1630,8 +2105,40 @@
    "message": "경기를 찾을 수 없습니다.",
    "status": 404,
    "errors": [],
-   "timestamp": "2026-11-24T10:22:26.447918"
+   "timestamp": "2026-11-24T14:04:02.702409"
   }
+ },
+ "/api/matches/dates?from=2025-05-02&to=2025-06-01": {
+  "status": 200,
+  "body": [
+   "2025-05-02",
+   "2025-05-03",
+   "2025-05-04",
+   "2025-05-05",
+   "2025-05-06",
+   "2025-05-07",
+   "2025-05-09",
+   "2025-05-10",
+   "2025-05-11",
+   "2025-05-13",
+   "2025-05-14",
+   "2025-05-15",
+   "2025-05-16",
+   "2025-05-17",
+   "2025-05-18",
+   "2025-05-20",
+   "2025-05-21",
+   "2025-05-22",
+   "2025-05-23",
+   "2025-05-24",
+   "2025-05-25",
+   "2025-05-27",
+   "2025-05-28",
+   "2025-05-29",
+   "2025-05-30",
+   "2025-05-31",
+   "2025-06-01"
+  ]
  },
  "/api/matches/dates?from=2025-05-26&to=2025-06-01": {
   "status": 200,
@@ -1642,6 +2149,207 @@
    "2025-05-30",
    "2025-05-31",
    "2025-06-01"
+  ]
+ },
+ "/api/matches/dates?from=2026-01-01&to=2026-12-31": {
+  "status": 200,
+  "body": [
+   "2026-03-28",
+   "2026-03-29",
+   "2026-03-31",
+   "2026-04-01",
+   "2026-04-02",
+   "2026-04-03",
+   "2026-04-04",
+   "2026-04-05",
+   "2026-04-07",
+   "2026-04-08",
+   "2026-04-09",
+   "2026-04-10",
+   "2026-04-11",
+   "2026-04-12",
+   "2026-04-14",
+   "2026-04-15",
+   "2026-04-16",
+   "2026-04-17",
+   "2026-04-18",
+   "2026-04-19",
+   "2026-04-21",
+   "2026-04-22",
+   "2026-04-23",
+   "2026-04-24",
+   "2026-04-25",
+   "2026-04-26",
+   "2026-04-28",
+   "2026-04-29",
+   "2026-04-30",
+   "2026-05-01",
+   "2026-05-02",
+   "2026-05-03",
+   "2026-05-05",
+   "2026-05-06",
+   "2026-05-07",
+   "2026-05-08",
+   "2026-05-09",
+   "2026-05-10",
+   "2026-05-12",
+   "2026-05-13",
+   "2026-05-14",
+   "2026-05-15",
+   "2026-05-16",
+   "2026-05-17",
+   "2026-05-19",
+   "2026-05-20",
+   "2026-05-21",
+   "2026-05-22",
+   "2026-05-23",
+   "2026-05-24",
+   "2026-05-26",
+   "2026-05-27",
+   "2026-05-28",
+   "2026-05-29",
+   "2026-05-30",
+   "2026-05-31",
+   "2026-06-02",
+   "2026-06-03",
+   "2026-06-04",
+   "2026-06-05",
+   "2026-06-06",
+   "2026-06-07",
+   "2026-06-09",
+   "2026-06-10",
+   "2026-06-11",
+   "2026-06-12",
+   "2026-06-13",
+   "2026-06-14",
+   "2026-06-16",
+   "2026-06-17",
+   "2026-06-18",
+   "2026-06-19",
+   "2026-06-20",
+   "2026-06-21",
+   "2026-06-23",
+   "2026-06-24",
+   "2026-06-25",
+   "2026-06-26",
+   "2026-06-27",
+   "2026-06-28",
+   "2026-06-30",
+   "2026-07-01",
+   "2026-07-02",
+   "2026-07-03",
+   "2026-07-04",
+   "2026-07-05",
+   "2026-07-07",
+   "2026-07-08",
+   "2026-07-09",
+   "2026-07-16",
+   "2026-07-17",
+   "2026-07-18",
+   "2026-07-19",
+   "2026-07-21",
+   "2026-07-22",
+   "2026-07-23",
+   "2026-07-24",
+   "2026-07-25",
+   "2026-07-26",
+   "2026-07-28",
+   "2026-07-29",
+   "2026-07-30",
+   "2026-07-31",
+   "2026-08-01",
+   "2026-08-02",
+   "2026-08-04",
+   "2026-08-05",
+   "2026-08-06",
+   "2026-08-07",
+   "2026-08-08",
+   "2026-08-09",
+   "2026-08-11",
+   "2026-08-12",
+   "2026-08-13",
+   "2026-08-14",
+   "2026-08-15",
+   "2026-08-16",
+   "2026-08-18",
+   "2026-08-19",
+   "2026-08-20",
+   "2026-08-21",
+   "2026-08-22",
+   "2026-08-23",
+   "2026-08-25",
+   "2026-08-26",
+   "2026-08-27",
+   "2026-08-28",
+   "2026-08-29",
+   "2026-08-30",
+   "2026-09-01",
+   "2026-09-02",
+   "2026-09-03",
+   "2026-09-04",
+   "2026-09-05",
+   "2026-09-06",
+   "2026-09-08",
+   "2026-09-09",
+   "2026-09-10",
+   "2026-09-11",
+   "2026-09-12",
+   "2026-09-13",
+   "2026-09-15",
+   "2026-09-16",
+   "2026-09-17",
+   "2026-09-18",
+   "2026-09-19",
+   "2026-09-20",
+   "2026-09-22",
+   "2026-09-23",
+   "2026-09-24",
+   "2026-09-25",
+   "2026-09-26",
+   "2026-09-27",
+   "2026-09-29",
+   "2026-09-30",
+   "2026-10-01",
+   "2026-10-03",
+   "2026-10-04",
+   "2026-10-05",
+   "2026-10-06",
+   "2026-10-07",
+   "2026-10-09",
+   "2026-10-10",
+   "2026-10-11",
+   "2026-10-12"
+  ]
+ },
+ "/api/matches/dates?from=2026-09-12&to=2026-10-12": {
+  "status": 200,
+  "body": [
+   "2026-09-12",
+   "2026-09-13",
+   "2026-09-15",
+   "2026-09-16",
+   "2026-09-17",
+   "2026-09-18",
+   "2026-09-19",
+   "2026-09-20",
+   "2026-09-22",
+   "2026-09-23",
+   "2026-09-24",
+   "2026-09-25",
+   "2026-09-26",
+   "2026-09-27",
+   "2026-09-29",
+   "2026-09-30",
+   "2026-10-01",
+   "2026-10-03",
+   "2026-10-04",
+   "2026-10-05",
+   "2026-10-06",
+   "2026-10-07",
+   "2026-10-09",
+   "2026-10-10",
+   "2026-10-11",
+   "2026-10-12"
   ]
  },
  "/api/matches/player-records?date=2025-06-01": {
@@ -10620,6 +11328,195 @@
      "gamesBehind": 37.5,
      "last10": "3승0무7패",
      "streak": "5패"
+    }
+   ]
+  }
+ },
+ "/api/standings?season=2026": {
+  "status": 200,
+  "body": {
+   "season": 2026,
+   "asOfDate": "2026-10-31",
+   "standings": [
+    {
+     "rank": 1,
+     "team": {
+      "id": 10,
+      "code": "KT",
+      "name": "KT 위즈",
+      "shortName": "KT",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_KT.png"
+     },
+     "games": 144,
+     "wins": 90,
+     "losses": 49,
+     "draws": 5,
+     "winPct": 0.647,
+     "gamesBehind": 0,
+     "last10": "9승1무0패",
+     "streak": "10승"
+    },
+    {
+     "rank": 2,
+     "team": {
+      "id": 5,
+      "code": "SS",
+      "name": "삼성 라이온즈",
+      "shortName": "삼성",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SS.png"
+     },
+     "games": 144,
+     "wins": 83,
+     "losses": 58,
+     "draws": 3,
+     "winPct": 0.589,
+     "gamesBehind": 8,
+     "last10": "4승0무6패",
+     "streak": "4패"
+    },
+    {
+     "rank": 3,
+     "team": {
+      "id": 7,
+      "code": "HT",
+      "name": "KIA 타이거즈",
+      "shortName": "KIA",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HT.png"
+     },
+     "games": 144,
+     "wins": 79,
+     "losses": 63,
+     "draws": 2,
+     "winPct": 0.556,
+     "gamesBehind": 12.5,
+     "last10": "7승0무3패",
+     "streak": "1승"
+    },
+    {
+     "rank": 4,
+     "team": {
+      "id": 2,
+      "code": "LG",
+      "name": "LG 트윈스",
+      "shortName": "LG",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LG.png"
+     },
+     "games": 144,
+     "wins": 78,
+     "losses": 65,
+     "draws": 1,
+     "winPct": 0.545,
+     "gamesBehind": 14,
+     "last10": "3승0무7패",
+     "streak": "1패"
+    },
+    {
+     "rank": 5,
+     "team": {
+      "id": 1,
+      "code": "OB",
+      "name": "두산 베어스",
+      "shortName": "두산",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_OB.png"
+     },
+     "games": 144,
+     "wins": 73,
+     "losses": 66,
+     "draws": 5,
+     "winPct": 0.525,
+     "gamesBehind": 17,
+     "last10": "6승0무4패",
+     "streak": "2패"
+    },
+    {
+     "rank": 6,
+     "team": {
+      "id": 8,
+      "code": "SK",
+      "name": "SSG 랜더스",
+      "shortName": "SSG",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_SK.png"
+     },
+     "games": 144,
+     "wins": 65,
+     "losses": 74,
+     "draws": 5,
+     "winPct": 0.468,
+     "gamesBehind": 25,
+     "last10": "7승0무3패",
+     "streak": "1패"
+    },
+    {
+     "rank": 7,
+     "team": {
+      "id": 4,
+      "code": "LT",
+      "name": "롯데 자이언츠",
+      "shortName": "롯데",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_LT.png"
+     },
+     "games": 144,
+     "wins": 64,
+     "losses": 77,
+     "draws": 3,
+     "winPct": 0.454,
+     "gamesBehind": 27,
+     "last10": "4승1무5패",
+     "streak": "2승"
+    },
+    {
+     "rank": 8,
+     "team": {
+      "id": 9,
+      "code": "NC",
+      "name": "NC 다이노스",
+      "shortName": "NC",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_NC.png"
+     },
+     "games": 144,
+     "wins": 64,
+     "losses": 78,
+     "draws": 2,
+     "winPct": 0.451,
+     "gamesBehind": 27.5,
+     "last10": "2승0무8패",
+     "streak": "1승"
+    },
+    {
+     "rank": 9,
+     "team": {
+      "id": 6,
+      "code": "HH",
+      "name": "한화 이글스",
+      "shortName": "한화",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_HH.png"
+     },
+     "games": 144,
+     "wins": 57,
+     "losses": 83,
+     "draws": 4,
+     "winPct": 0.407,
+     "gamesBehind": 33.5,
+     "last10": "3승0무7패",
+     "streak": "2패"
+    },
+    {
+     "rank": 10,
+     "team": {
+      "id": 3,
+      "code": "WO",
+      "name": "키움 히어로즈",
+      "shortName": "키움",
+      "logoUrl": "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/emblem/regular/2026/emblem_WO.png"
+     },
+     "games": 144,
+     "wins": 50,
+     "losses": 90,
+     "draws": 4,
+     "winPct": 0.357,
+     "gamesBehind": 40.5,
+     "last10": "5승0무5패",
+     "streak": "1승"
     }
    ]
   }

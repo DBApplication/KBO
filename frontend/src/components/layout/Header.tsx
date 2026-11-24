@@ -14,7 +14,7 @@ export function Header({ page }: { page: string }) {
     <header>
       <div className="wrap topbar">
         <Link className="brand" to={to(ROUTES.HOME)}>
-          DIAMOND <span>/ KBO</span>
+        <span>KBO</span>
         </Link>
         <button
           className="menu-button"
