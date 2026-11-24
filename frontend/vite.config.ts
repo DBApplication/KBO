@@ -10,7 +10,7 @@ const proxy = { "/api/": { target: backend, changeOrigin: true } };
 
 export default defineConfig({
   plugins: [react()],
-  // FSD 레이어를 @/app, @/pages, @/widgets, @/features, @/entities, @/shared 로 가져온다.
+  // @/components, @/features/match 처럼 src 기준 경로로 가져온다.
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
   server: { proxy },
   preview: { proxy },

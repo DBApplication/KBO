@@ -1,4 +1,4 @@
-export { DateControl } from "./ui/DateControl";
-export { KindTabs } from "./ui/KindTabs";
-export { SeasonSelect } from "./ui/SeasonSelect";
-export { TeamSelect } from "./ui/TeamSelect";
+export { DateControl } from "./components/DateControl";
+export { KindTabs } from "./components/KindTabs";
+export { SeasonSelect } from "./components/SeasonSelect";
+export { TeamSelect } from "./components/TeamSelect";

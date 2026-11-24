@@ -27,31 +27,31 @@
 
 ## 구조
 
-React 19 · TypeScript · React Router 7 · TanStack Query 5 · Vite. 폴더는 [Feature-Sliced Design](https://feature-sliced.design/kr/)을 따릅니다. 주소는 해시 방식(`#/players?season=2025`)이라 `dist/`를 어느 정적 서버에 올려도 새로고침이 됩니다.
+React 19 · TypeScript · React Router 7 · TanStack Query 5 · Vite. 주소는 해시 방식(`#/players?season=2025`)이라 `dist/`를 어느 정적 서버에 올려도 새로고침이 됩니다.
 
 ```
 src/
-  app/        진입점(main.tsx), 라우터(router.tsx), 전역 스타일
-  pages/      화면 하나 = 슬라이스 하나 (home, daily, games, game, players, player, teams, compare, search, not-found)
-                api/loader.ts   쿼리를 캐시에 미리 채움 (ensureQueryData)
-                model/          화면 전용 쿼리 조합·계산
-                ui/             화면 컴포넌트 (useSuspenseQuery 로 캐시를 읽음)
-  widgets/    layout(머리글·메뉴·오류 화면), daily-records(일별 선수 기록 표)
-  features/   filters(팀·시즌·타자/투수·날짜 선택), search(검색 폼)
-  entities/   백엔드 도메인. 슬라이스마다 model/types.ts(DTO 타입) · api(fetch + queryOptions) · ui
-                team, player, match, record(시즌 기록), standing(팀 순위)
-  shared/     api(fetch·ApiError·QueryClient), config(상수), lib(주소·표시 형식), ui(표·빈 상태·링크 등)
-tests/        Vitest 화면 테스트와 녹화된 API 응답(fixtures/api.json)
+├── components/    # 공통 컴포넌트 (표·빈 상태·링크·필터 드롭다운·페이지 이동), layout/ (머리글·메뉴·오류 화면)
+├── constants/     # 라우트(ROUTES·메뉴) · API 엔드포인트(ENDPOINTS) · 기본값
+├── features/      # 기능 단위 모듈
+│   ├── team/ player/ match/ record/ standing/   # 백엔드 도메인별 API 호출 + TanStack 쿼리 + 도메인 컴포넌트
+│   ├── filters/   # 팀·시즌·타자/투수·날짜 선택
+│   ├── search/    # 검색 폼
+│   └── compare/   # 선수 비교 데이터 조합 · 선수 선택 창
+├── hooks/         # 커스텀 훅 (useUrl, useTeams, useRecordSeasons, useStandingSeasons, useDebounced)
+├── lib/           # API 클라이언트 (fetch · ApiError) · QueryClient 설정
+├── pages/         # 화면마다 폴더: <이름>Page.tsx + loader.ts (+ 화면 전용 파일)
+│   ├── Home/ Daily/ Games/ Game/ Players/ Player/ Teams/ Compare/ Search/ NotFound/
+├── types/         # 백엔드 DTO 타입 (도메인별 파일)
+├── utils/         # 표시 형식 · 주소 만들기/읽기
+├── main.tsx       # 진입점
+└── router.tsx     # 화면 경로 ↔ 페이지·로더
+tests/             # Vitest 화면 테스트와 녹화된 API 응답(fixtures/api.json)
 ```
 
-규칙
-- 위 레이어 순서대로 **아래 레이어만** import 합니다 (`pages → widgets → features → entities → shared`). 같은 레이어의 다른 슬라이스는 import 하지 않습니다.
-- 슬라이스 밖에서는 `@/entities/match`처럼 **`index.ts`(Public API)로만** 가져옵니다.
-- 엔티티끼리 타입이 필요하면 `@x` 표기를 씁니다 (예: `entities/match` → `@/entities/team/@x/match`).
-- 한 화면에서만 쓰는 코드는 그 화면 슬라이스 안에 둡니다 (예: 선수 비교의 선수 선택 창은 `pages/compare/ui`).
-- `pnpm lint:fsd`(steiger)가 위 규칙을 검사합니다.
-
-데이터 흐름: 주소가 바뀌면 그 화면의 로더가 필요한 쿼리를 `queryClient.ensureQueryData`로 채우고, 컴포넌트는 같은 쿼리 옵션으로 `useSuspenseQuery`를 불러 캐시에서 바로 읽습니다. 받은 응답은 5분 동안 다시 요청하지 않고(팀·시즌 목록은 계속), 4xx 오류는 재시도하지 않습니다.
+- 각 폴더는 `index.ts`로 내보내고, 다른 폴더에서는 `@/components`, `@/features/match`처럼 가져옵니다 (`@/` = `src/`). 같은 폴더 안에서는 상대 경로를 씁니다.
+- 백엔드 API 경로는 `constants/endpoints.ts`, 화면 경로는 `constants/routes.ts`의 `ROUTES`로만 씁니다.
+- API 호출은 `features/<도메인>/api.ts`의 `queryOptions`로 합니다. 화면은 `loader.ts`에서 `queryClient.ensureQueryData`로 미리 받고, 컴포넌트에서 같은 쿼리를 `useSuspenseQuery`로 읽습니다. 받은 응답은 5분 동안 다시 요청하지 않고(팀·시즌 목록은 계속), 4xx 오류는 재시도하지 않습니다.
 
 `pnpm typecheck`로 타입 검사만, `pnpm build`는 타입 검사 후 빌드합니다.
 

@@ -1,13 +1,13 @@
-import { afterAll, beforeEach, describe, expect, test } from "vitest";
+import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
+import { cleanup, render, screen, within } from "@testing-library/react";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { cleanup, render, screen, within } from "@testing-library/react";
-import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
 import { RouterProvider, createMemoryRouter } from "react-router";
-import { createRoutes } from "@/app/router";
-import { standingsQuery } from "@/entities/standing";
-import { createQueryClient } from "@/shared/api";
-import { formatStat, safeLink, shiftDate, sortBy } from "@/shared/lib";
+import { afterAll, beforeEach, describe, expect, test } from "vitest";
+import { standingsQuery } from "@/features/standing";
+import { createQueryClient } from "@/lib";
+import { createRoutes } from "@/router";
+import { formatStat, safeLink, shiftDate, sortBy } from "@/utils";
 
 /*
  * 화면 테스트는 백엔드 API 응답을 녹화한 파일(tests/fixtures/api.json)로 돈다.
