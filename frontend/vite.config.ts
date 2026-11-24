@@ -1,4 +1,5 @@
 import { defineConfig } from "vitest/config";
+import { fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react";
 
 // 화면은 /api 로 백엔드(Spring Boot, 기본 localhost:8080)를 부른다.
@@ -9,11 +10,13 @@ const proxy = { "/api/": { target: backend, changeOrigin: true } };
 
 export default defineConfig({
   plugins: [react()],
+  // FSD 레이어를 @/app, @/pages, @/widgets, @/features, @/entities, @/shared 로 가져온다.
+  resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
   server: { proxy },
   preview: { proxy },
   test: {
     environment: "jsdom",
     testTimeout: 15000,
-    setupFiles: ["./src/test-setup.ts"],
+    setupFiles: ["./tests/setup.ts"],
   },
 });
