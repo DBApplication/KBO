@@ -3,6 +3,7 @@ package com.dbapplication.kbo.global.config;
 import com.dbapplication.kbo.global.error.ErrorResponse;
 import io.swagger.v3.core.converter.ModelConverters;
 import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
@@ -20,6 +21,27 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 @Configuration
 public class OpenApiConfig {
+
+    private static final String API_DESCRIPTION = """
+            KBO 경기 결과 · 팀별 기록 · 선수별 기록 조회 API. 모두 조회 전용(GET)이며 인증이 필요 없다.
+
+            - 날짜는 `yyyy-MM-dd`, 시각은 `HH:mm` (KST).
+            - 페이지네이션이 있는 응답은 `PageResponse` 로 감싸고 `page` 는 0부터 센다.
+            - 실패 응답은 모두 `ErrorResponse` 형식이며, `code` 앞 글자가 도메인을 뜻한다 —
+              `C` 공통, `P` 선수, `T` 팀, `M` 경기, `R` 기록.
+            """;
+
+    /**
+     * Swagger UI 상단 제목·설명. OpenAPI 빈을 직접 정의하면 springdoc 이 채우는 components 를
+     * 덮어쓸 수 있으므로, 커스터마이저로 info 만 얹는다.
+     */
+    @Bean
+    OpenApiCustomizer apiInfoCustomizer() {
+        return openApi -> openApi.info(new Info()
+                .title("KBO API")
+                .version("v1")
+                .description(API_DESCRIPTION));
+    }
 
     @Bean
     OperationCustomizer errorResponseCustomizer() {
