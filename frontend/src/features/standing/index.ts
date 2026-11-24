@@ -1,1 +1,1 @@
-export { fetchStandingSeasons, fetchStandings, standingSeasonsQuery, standingsQuery } from "./api";
+export { standingSeasonsQuery, standingsQuery } from "./queries";

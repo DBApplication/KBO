@@ -1,6 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import { fetchPlayer } from "@/features/player";
-import { fetchComparison, fetchRanking } from "@/features/record";
+import { fetchComparison, fetchPlayer, fetchRanking } from "@/api";
 import type { Kind, TeamSummary } from "@/types";
 import type { UrlQuery } from "@/utils";
 

@@ -1,2 +1,2 @@
-export { fetchTeams, teamIdOf, teamsQuery } from "./api";
+export { teamIdOf, teamsQuery } from "./queries";
 export { teamShort } from "./teamShort";

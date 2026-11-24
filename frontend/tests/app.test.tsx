@@ -1,11 +1,14 @@
 import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
 import { cleanup, render, screen, within } from "@testing-library/react";
+import { AxiosError } from "axios";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { RouterProvider, createMemoryRouter } from "react-router";
 import { afterAll, beforeEach, describe, expect, test } from "vitest";
+import { fetchMatch } from "@/api";
+import { ENDPOINTS } from "@/constants";
 import { standingsQuery } from "@/features/standing";
-import { createQueryClient } from "@/lib";
+import { ApiError, apiClient, createQueryClient, serializeParams } from "@/lib";
 import { createRoutes } from "@/router";
 import { formatStat, safeLink, shiftDate, sortBy } from "@/utils";
 
@@ -20,17 +23,19 @@ const recordFrom = process.env.KBO_RECORD_API;
 type Saved = { status: number; body: unknown };
 const fixtures: Record<string, Saved> = recordFrom ? {} : JSON.parse(readFileSync(FIXTURE, "utf8"));
 const requested: string[] = [];
-const realFetch = globalThis.fetch;
-globalThis.fetch = async (input: RequestInfo | URL) => {
-  const url = String(input);
+// axios 요청을 실제 네트워크 대신 녹화 파일에서 응답한다 (키: /api/...?쿼리, 운영과 같은 쿼리 직렬화).
+apiClient.defaults.adapter = async (config) => {
+  const url = apiClient.getUri(config);
   requested.push(url);
   if (recordFrom) {
-    const res = await realFetch(recordFrom + url);
+    const res = await fetch(recordFrom + url);
     fixtures[url] = { status: res.status, body: await res.json() };
   }
   const saved = fixtures[url];
   if (!saved) throw new Error("녹화된 응답이 없습니다: " + url);
-  return new Response(JSON.stringify(saved.body), { status: saved.status });
+  const response = { data: saved.body, status: saved.status, statusText: "", headers: {}, config };
+  if (saved.status >= 200 && saved.status < 300) return response;
+  throw new AxiosError("HTTP " + saved.status, AxiosError.ERR_BAD_RESPONSE, config, null, response);
 };
 afterAll(() => {
   if (recordFrom) {
@@ -164,4 +169,19 @@ test("같은 쿼리는 캐시에서 읽고 한 번만 요청한다", async () =>
   await qc.ensureQueryData(standingsQuery("2025"));
   await qc.ensureQueryData(standingsQuery("2025"));
   expect(requested.filter((u) => u === "/api/standings?season=2025")).toHaveLength(1);
+});
+
+describe("API 클라이언트 (axios)", () => {
+  test("빈 조건은 쿼리에서 빼고 백엔드 순서대로 붙인다", () => {
+    expect(serializeParams({ date: "2025-06-01", teamId: "", status: undefined })).toBe("date=2025-06-01");
+    expect(apiClient.getUri({ url: ENDPOINTS.MATCHES, params: { date: "2025-06-01", teamId: 7 } })).toBe(
+      "/api/matches?date=2025-06-01&teamId=7",
+    );
+  });
+
+  test("실패 응답은 백엔드 ErrorResponse 의 코드를 담은 ApiError 로 바뀐다", async () => {
+    const error = await fetchMatch(999999).catch((e: unknown) => e);
+    expect(error).toBeInstanceOf(ApiError);
+    expect(error).toMatchObject({ status: 404, code: "M001" });
+  });
 });
