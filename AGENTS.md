@@ -25,6 +25,7 @@ cd frontend
 pnpm install && pnpm dev   # 화면 실행 (/api 는 localhost:8080 으로 프록시)
 pnpm test                  # Vitest (녹화된 API 응답 사용, 서버 불필요)
 pnpm build                 # 타입 검사(tsc) + 빌드
+pnpm lint:fsd              # FSD 구조 검사 (steiger)
 ```
 
 - Swagger: http://localhost:8080/swagger-ui.html
@@ -56,5 +57,12 @@ domain/{player,team,match,record}/{entity,repository,service,controller,dto}
 - DB 스키마는 **Flyway 마이그레이션**(`src/main/resources/db/migration/V{번호}__{설명}.sql`)으로만 변경한다. `ddl-auto`는 `validate`이므로 엔티티와 스키마가 일치해야 한다. 이미 머지된 마이그레이션 파일은 수정하지 않는다.
 - Lombok 사용 가능. 엔티티에는 `@Data`/`@Setter`를 쓰지 않는다.
 - 설정은 `application.yml`(공통) + `application-{local,prod}.yml`. 환경별 값은 환경변수(`DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USERNAME`, `DB_PASSWORD`, `CORS_ALLOWED_ORIGINS`)로 주입한다.
-- 응답 DTO 나 API 파라미터를 바꾸면 `frontend/src/api/types.ts`·`client.ts` 도 같이 고치고 `pnpm typecheck` 로 확인한다.
+- 응답 DTO 나 API 파라미터를 바꾸면 `frontend/src/entities/<도메인>/model/types.ts`·`api/*-api.ts` 도 같이 고치고 `pnpm typecheck` 로 확인한다.
 - 새 기능에는 테스트를 함께 추가하고, PR 전에 `./gradlew build`가 통과해야 한다.
+
+## 프론트엔드 코드 구조 · 규칙
+
+- 폴더는 Feature-Sliced Design(`app → pages → widgets → features → entities → shared`)을 따른다. 자세한 규칙은 [frontend/README.md](frontend/README.md)의 "구조".
+- 아래 레이어만 import 하고, 슬라이스는 `index.ts`(Public API)로만 가져온다. 엔티티 간 참조는 `@x`.
+- API 호출은 `entities/*/api`의 `queryOptions` 로만 하고, 화면은 로더(`ensureQueryData`) + `useSuspenseQuery` 로 읽는다.
+- PR 전에 `pnpm typecheck`·`pnpm lint:fsd`·`pnpm test`·`pnpm build`가 통과해야 한다.
