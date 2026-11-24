@@ -51,4 +51,6 @@ app:
     cron: ${KBO_SYNC_CRON:0 30 4 * * *}
     lookback-days: 2
     upcoming-days: 7
+    live-enabled: ${KBO_SYNC_LIVE_ENABLED:false}   # 경기 시간대 실시간 갱신
+    live-cron: ${KBO_SYNC_LIVE_CRON:0 */5 13-23 * * *}
     admin-token: ${KBO_SYNC_ADMIN_TOKEN:}

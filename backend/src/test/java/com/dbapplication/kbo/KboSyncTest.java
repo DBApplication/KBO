@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -126,6 +128,40 @@ class KboSyncTest {
                 .andExpect(jsonPath("$[0].status").value("CANCELED"))
                 .andExpect(jsonPath("$[0].actions.ticketUrl").value(nullValue()))
                 .andExpect(jsonPath("$[0].actions.showRecord").value(false));
+    }
+
+    @Test
+    @DisplayName("처음 보는 경기 상태는 그 경기만 건너뛰고 실패로 남긴다 (나머지 경기는 저장)")
+    void unknownStateSkipsOnlyThatGame() {
+        given(client.gameList(LocalDate.of(2025, 4, 5))).willReturn(fixture("gamelist_20250405_unknown_state.json"));
+
+        KboSyncService.SyncResult r = service.sync(List.of(LocalDate.of(2025, 4, 5)), "MANUAL").get(0);
+
+        assertThat(r.status()).isEqualTo("PARTIAL");
+        assertThat(r.updated()).isEqualTo(1);
+        assertThat(r.failures()).singleElement().asString()
+                .contains("20250405_HTLG2").contains("GAME_STATE_SC=5");
+        assertThat(jdbc.queryForList("SELECT kbo_game_id || ' ' || status FROM matches", String.class))
+                .containsExactly("20250405_HTLG0 CANCELED");
+        assertThat(jdbc.queryForObject("SELECT status FROM kbo_sync_run", String.class)).isEqualTo("PARTIAL");
+    }
+
+    @Test
+    @DisplayName("실시간 갱신: 진행 중 경기는 점수·상태만 바꾸고, 이미 저장한 종료 경기는 박스스코어를 다시 받지 않는다")
+    void liveSync() {
+        given(client.gameList(LocalDate.of(2025, 4, 6))).willReturn(fixture("gamelist_20250406_in_progress.json"));
+
+        KboSyncService.SyncResult inProgress = service.syncLive(LocalDate.of(2025, 4, 6));
+        assertThat(inProgress.updated()).isEqualTo(1);
+        assertThat(jdbc.queryForList("SELECT status || ' ' || away_score || ':' || home_score FROM matches WHERE kbo_game_id = '20250406_HTLG0'", String.class))
+                .containsExactly("IN_PROGRESS 2:3");
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM match_team_record", Integer.class)).isZero();
+
+        service.sync(List.of(LocalDate.of(2025, 6, 1)), "MANUAL");   // 종료 경기 저장 (박스스코어 1번)
+        KboSyncService.SyncResult again = service.syncLive(LocalDate.of(2025, 6, 1));
+        assertThat(again.loaded()).isZero();
+        verify(client, times(1)).boxScore(any(KboGame.class));
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM match_inning_score", Integer.class)).isEqualTo(17);
     }
 
     @Test

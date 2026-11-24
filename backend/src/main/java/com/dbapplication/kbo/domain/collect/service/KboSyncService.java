@@ -60,14 +60,27 @@ public class KboSyncService {
 
     /** 여러 날짜를 차례로 수집한다. 다른 수집이 돌고 있으면 SyncBusyException. */
     public List<SyncResult> sync(List<LocalDate> dates, String trigger) {
+        return sync(dates, trigger, false);
+    }
+
+    /**
+     * 경기 중 실시간 갱신: 그 날짜 경기 목록을 다시 받아 점수·상태만 바꾸고,
+     * 새로 끝난 경기만 박스스코어를 받는다 (이미 저장한 종료 경기는 다시 받지 않는다).
+     */
+    public SyncResult syncLive(LocalDate date) {
+        return sync(List.of(date), "SCHEDULE", true).get(0);
+    }
+
+    private List<SyncResult> sync(List<LocalDate> dates, String trigger, boolean live) {
         if (!lock.tryLock()) throw new SyncBusyException();
         try {
             List<SyncResult> results = new ArrayList<>();
             Set<Integer> seasons = new TreeSet<>();
             for (LocalDate date : dates) {
-                SyncResult r = syncDate(date, trigger);
+                SyncResult r = syncDate(date, trigger, live);
                 results.add(r);
-                if (r.loaded() + r.updated() > 0) seasons.add(date.getYear());
+                // 실시간 갱신은 새로 끝난 경기가 있을 때만 순위를 다시 계산한다
+                if (live ? r.loaded() > 0 : r.loaded() + r.updated() > 0) seasons.add(date.getYear());
             }
             for (int season : seasons) {
                 LocalDate asOf = standings.refresh(season);
@@ -79,7 +92,7 @@ public class KboSyncService {
         }
     }
 
-    SyncResult syncDate(LocalDate date, String trigger) {
+    SyncResult syncDate(LocalDate date, String trigger, boolean live) {
         long runId = runLog.start(date, trigger);
         int loaded = 0, updated = 0;
         List<String> failures = new ArrayList<>();
@@ -95,6 +108,14 @@ public class KboSyncService {
         boolean first = true;
         for (KboGame game : games) {
             try {
+                if (game.state() == KboGame.State.UNKNOWN) {
+                    failures.add(game.kboGameId() + " 알 수 없는 경기 상태(GAME_STATE_SC=" + game.stateCode()
+                            + ")라 건너뜀");
+                    continue;
+                }
+                if (game.state() == KboGame.State.FINISHED && live && writer.hasFinishedBoxScore(game.kboGameId())) {
+                    continue; // 실시간 갱신: 이미 저장한 종료 경기는 다시 받지 않는다
+                }
                 if (game.state() == KboGame.State.FINISHED) {
                     if (!first) pause();
                     first = false;

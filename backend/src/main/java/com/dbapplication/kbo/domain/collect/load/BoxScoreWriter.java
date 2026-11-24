@@ -32,6 +32,15 @@ public class BoxScoreWriter {
         return ids.get(0);
     }
 
+    /** 이미 종료 경기로 박스스코어까지 저장했는지 (실시간 갱신에서 같은 경기를 다시 받지 않으려고). */
+    public boolean hasFinishedBoxScore(String kboGameId) {
+        Boolean stored = jdbc.queryForObject("""
+                SELECT EXISTS (SELECT 1 FROM matches m JOIN match_team_record t ON t.match_id = m.id
+                               WHERE m.kbo_game_id = ? AND m.status = 'FINISHED')
+                """, Boolean.class, kboGameId);
+        return Boolean.TRUE.equals(stored);
+    }
+
     /** 경기 한 줄을 넣거나 갱신하고 matches.id 를 돌려준다. 점수는 종료·진행 경기만 저장한다. */
     public long upsertMatch(KboGame g) {
         boolean scored = g.state() == KboGame.State.FINISHED || g.state() == KboGame.State.IN_PROGRESS;
