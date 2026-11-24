@@ -28,8 +28,16 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /** KBO 팀 코드 (OB, WO, LT ...). 크롤링 자료와 연결하는 키. */
+    @Column(name = "code", length = 2, unique = true)
+    private String code;
+
     @Column(name = "name", nullable = false, length = 50)
     private String name;
+
+    /** 화면 표시용 약칭 (두산, KIA ...). */
+    @Column(name = "short_name", length = 20)
+    private String shortName;
 
     @Column(name = "home_stadium", length = 100)
     private String homeStadium;
@@ -53,8 +61,10 @@ public class Team {
     private List<PitcherSeasonRecord> pitcherSeasonRecords = new ArrayList<>();
 
     @Builder
-    private Team(String name, String homeStadium, String logoUrl) {
+    private Team(String code, String name, String shortName, String homeStadium, String logoUrl) {
+        this.code = code;
         this.name = name;
+        this.shortName = shortName;
         this.homeStadium = homeStadium;
         this.logoUrl = logoUrl;
     }
