@@ -9,7 +9,7 @@ KBO 경기 결과 · 팀별 기록 · 선수별 기록 조회 서비스 (모노�
 | 경로 | 내용 |
 |------|------|
 | `backend/` | Spring Boot 4.1 · Java 21 · Gradle · PostgreSQL 16 · Flyway · JPA |
-| `frontend/` | 프론트엔드 (미정) |
+| `frontend/` | React 19 · React Router 7 · Vite · pnpm |
 
 ## 자주 쓰는 명령어
 
@@ -18,6 +18,13 @@ cd backend
 ./gradlew bootRun     # 서버 실행 (Docker 필요, compose.yaml 의 PostgreSQL 자동 기동, 호스트 포트 5434)
 ./gradlew build       # 빌드 + 테스트 (Testcontainers 사용, Docker 필요)
 ./gradlew test
+```
+
+```bash
+cd frontend
+pnpm install && pnpm dev   # 화면 실행 (/api 는 localhost:8080 으로 프록시)
+pnpm test                  # Vitest (녹화된 API 응답 사용, 서버 불필요)
+pnpm build
 ```
 
 - Swagger: http://localhost:8080/swagger-ui.html
