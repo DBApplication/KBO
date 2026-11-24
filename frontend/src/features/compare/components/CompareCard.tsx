@@ -1,3 +1,4 @@
+import { TeamLogo } from "@/components";
 import { teamShort } from "@/features/team";
 import { useUrl } from "@/hooks";
 import type { ComparePick } from "../compareQuery";
@@ -7,7 +8,9 @@ export function CompareCard({ pick, onPick }: { pick: ComparePick | null; onPick
   const { season } = useUrl();
   return (
     <div className="compare-card">
-      <div className="badge">{pick?.team?.code || "—"}</div>
+      <div className="badge">
+        <TeamLogo team={pick?.team} size={36} />
+      </div>
       <div>
         <h2>{pick ? pick.name : "선수 선택"}</h2>
         <p>{pick ? teamShort(pick.team) + " · " + (pick.position || "포지션 미제공") : "비교할 선수를 선택하세요."}</p>

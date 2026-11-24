@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { TeamLogo } from "@/components";
 import { teamShort } from "@/features/team";
 import type { MatchSummary } from "@/types";
 import { formatStat } from "@/utils";
@@ -10,11 +11,14 @@ export function GameCard({ game: g }: { game: MatchSummary }) {
   /** 지정한 팀의 점수를 표시하고 종료 경기에서 이긴 팀에 승리 표시를 붙인다. */
   const side = (s: "away" | "home") => {
     const winner = s === "home" ? g.result === "HOME_WIN" : g.result === "AWAY_WIN";
+    const team = s === "home" ? g.homeTeam : g.awayTeam;
     return (
       <div className={`scoreline ${winner ? "winner" : ""}`}>
-        <span>
-          {teamShort(s === "home" ? g.homeTeam : g.awayTeam)} {winner ? <b>승</b> : null}{" "}
+        <span className="team-name">
+          <TeamLogo team={team} />
+          {teamShort(team)}
           <small>{s === "away" ? "원정" : "홈"}</small>
+          {winner ? <b>승</b> : null}
         </span>
         <strong>{formatStat(s === "home" ? g.homeScore : g.awayScore)}</strong>
       </div>

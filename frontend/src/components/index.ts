@@ -6,6 +6,7 @@ export { Pager } from "./Pager";
 export { Portrait } from "./Portrait";
 export { Count, SectionTitle } from "./SectionTitle";
 export { StatHeader } from "./StatHeader";
+export { TeamLogo } from "./TeamLogo";
 export { AppLayout } from "./layout/AppLayout";
 export { Header } from "./layout/Header";
 export { Shell } from "./layout/Shell";

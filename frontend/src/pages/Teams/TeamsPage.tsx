@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
-import { DataTable, Empty, Heading, NextLink } from "@/components";
+import { DataTable, Empty, Heading, NextLink, TeamLogo } from "@/components";
 import { ROUTES } from "@/constants";
 import { SeasonSelect } from "@/features/filters";
 import { standingsQuery } from "@/features/standing";
@@ -42,7 +42,8 @@ export function TeamsPage() {
             rowClassName={(i) => (rows[i] === selected ? "chosen" : "")}
             rows={rows.map((r) => [
               r.rank,
-              <Link className="player-link" to={here({ team: r.team.code })}>
+              <Link className="player-link team-name" to={here({ team: r.team.code })}>
+                <TeamLogo team={r.team} />
                 {r.team.name}
               </Link>,
               ...columns.map(([k, f]) => formatStat(r[k], f)),
