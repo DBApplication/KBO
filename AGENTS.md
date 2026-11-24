@@ -9,7 +9,7 @@ KBO 경기 결과 · 팀별 기록 · 선수별 기록 조회 서비스 (모노�
 | 경로 | 내용 |
 |------|------|
 | `backend/` | Spring Boot 4.1 · Java 21 · Gradle · PostgreSQL 16 · Flyway · JPA |
-| `frontend/` | 프론트엔드 (미정) |
+| `frontend/` | React 19 · TypeScript · React Router 7 · TanStack Query · Vite · pnpm |
 
 ## 자주 쓰는 명령어
 
@@ -18,6 +18,13 @@ cd backend
 ./gradlew bootRun     # 서버 실행 (Docker 필요, compose.yaml 의 PostgreSQL 자동 기동, 호스트 포트 5434)
 ./gradlew build       # 빌드 + 테스트 (Testcontainers 사용, Docker 필요)
 ./gradlew test
+```
+
+```bash
+cd frontend
+pnpm install && pnpm dev   # 화면 실행 (/api 는 localhost:8080 으로 프록시)
+pnpm test                  # Vitest (녹화된 API 응답 사용, 서버 불필요)
+pnpm build                 # 타입 검사(tsc) + 빌드
 ```
 
 - Swagger: http://localhost:8080/swagger-ui.html
@@ -49,4 +56,17 @@ domain/{player,team,match,record}/{entity,repository,service,controller,dto}
 - DB 스키마는 **Flyway 마이그레이션**(`src/main/resources/db/migration/V{번호}__{설명}.sql`)으로만 변경한다. `ddl-auto`는 `validate`이므로 엔티티와 스키마가 일치해야 한다. 이미 머지된 마이그레이션 파일은 수정하지 않는다.
 - Lombok 사용 가능. 엔티티에는 `@Data`/`@Setter`를 쓰지 않는다.
 - 설정은 `application.yml`(공통) + `application-{local,prod}.yml`. 환경별 값은 환경변수(`DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USERNAME`, `DB_PASSWORD`, `CORS_ALLOWED_ORIGINS`)로 주입한다.
+- 응답 DTO 나 API 경로·파라미터를 바꾸면 `frontend/src/types/<도메인>.ts`·`constants/endpoints.ts`·`features/<도메인>/api.ts` 도 같이 고치고 `pnpm typecheck` 로 확인한다.
 - 새 기능에는 테스트를 함께 추가하고, PR 전에 `./gradlew build`가 통과해야 한다.
+
+## 프론트엔드 코드 구조 · 규칙
+
+```
+src/  components/ constants/ features/ hooks/ lib/ pages/ types/ utils/  (+ main.tsx, router.tsx)
+```
+
+- 폴더 역할은 [frontend/README.md](frontend/README.md)의 "구조"를 따른다. 공통 컴포넌트는 `components/`, 도메인별 API·쿼리·컴포넌트는 `features/<도메인>/`, 화면은 `pages/<이름>/`.
+- 다른 폴더는 `index.ts`를 통해 `@/폴더`로 가져오고, 같은 폴더 안은 상대 경로로 가져온다.
+- API 경로·화면 경로를 문자열로 쓰지 않고 `ENDPOINTS`·`ROUTES` 상수를 쓴다.
+- API 호출은 `features/*/api.ts`의 `queryOptions`로만 하고, 화면은 로더(`ensureQueryData`) + `useSuspenseQuery`로 읽는다.
+- PR 전에 `pnpm typecheck`·`pnpm test`·`pnpm build`가 통과해야 한다.

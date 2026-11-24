@@ -5,13 +5,17 @@
 #   전체가 한 트랜잭션이라 중간에 하나라도 실패하면 아무것도 바뀌지 않는다.
 #
 # 사용법:
-#   scripts/db/load_csv.sh <CSV 폴더> [일별 박스스코어 폴더]
-#   예) scripts/db/load_csv.sh frontend/public/data frontend/public/data/daily
+#   scripts/db/load_csv.sh [CSV 폴더] [일별 박스스코어 폴더]
+#   인자가 없으면 저장소의 data/ 와 data/daily/ 를 넣는다.
+#   예) scripts/db/load_csv.sh
+#       scripts/db/load_csv.sh data data/daily
 # 접속 정보는 PGHOST/PGPORT/PGDATABASE/PGUSER/PGPASSWORD 환경변수 (기본: localhost:5434 kbo/kbo).
 set -euo pipefail
 
-DATA_DIR="$(cd "${1:?CSV 폴더를 넣어 주세요}" && pwd)"
-DAILY_DIR="${2:-}"
+REPO_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+DATA_DIR="$(cd "${1:-$REPO_DIR/data}" && pwd)"
+# 박스스코어 폴더: 인자를 하나도 안 주면 data/daily, CSV 폴더만 주면 넣지 않는다.
+if [ $# -ge 2 ]; then DAILY_DIR="$2"; elif [ $# -eq 0 ]; then DAILY_DIR="$REPO_DIR/data/daily"; else DAILY_DIR=""; fi
 [ -n "$DAILY_DIR" ] && DAILY_DIR="$(cd "$DAILY_DIR" && pwd)"
 
 export PGHOST="${PGHOST:-localhost}" PGPORT="${PGPORT:-5434}" PGDATABASE="${PGDATABASE:-kbo}"

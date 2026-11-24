@@ -7,9 +7,8 @@
 cd backend && ./gradlew bootRun
 
 # 2) 다른 터미널에서 저장소 루트 기준으로 적재
+scripts/db/load_csv.sh                      # 기본: data/ 와 data/daily/
 scripts/db/load_csv.sh <CSV 폴더> [박스스코어 폴더]
-# 예) frontend 브랜치의 CSV 를 쓰는 경우
-scripts/db/load_csv.sh frontend/public/data frontend/public/data/daily
 ```
 
 - 넣는 순서: team → player → matches → match_highlight → 타자·투수 시즌 기록 → 팀 순위 → (박스스코어 폴더를 주면) 경기별 R/H/E·이닝 득점·타자·투수 기록·주요 기록
