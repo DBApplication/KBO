@@ -14,16 +14,34 @@
    scripts/db/load_csv.sh frontend/public/data frontend/public/data/daily
    ```
 
-2. 화면을 켭니다. Node.js 22.12 이상, `frontend` 폴더에서:
+2. 화면을 켭니다. Node.js 22.12 이상과 pnpm(10 이상, `corepack enable` 로 켤 수 있음), `frontend` 폴더에서:
 
    ```sh
-   npm ci
-   npm run dev
+   pnpm install
+   pnpm dev
    ```
 
-터미널에 출력된 로컬 주소를 엽니다. 개발 서버는 `/api` 요청을 `http://localhost:8080`으로 넘깁니다 (`vite.config.js`, 다른 주소면 `KBO_API_URL`). `npm run build`는 정적 배포본을 `dist/`에 만들고 `npm run preview`도 같은 방식으로 API를 넘깁니다.
+터미널에 출력된 로컬 주소를 엽니다. 개발 서버는 `/api` 요청을 `http://localhost:8080`으로 넘깁니다 (`vite.config.js`, 다른 주소면 `KBO_API_URL`). `pnpm build`는 정적 배포본을 `dist/`에 만들고 `pnpm preview`도 같은 방식으로 API를 넘깁니다.
 
-`npm test`는 화면 상태와 API 응답 변환을 검사합니다. 백엔드 응답을 녹화한 `test/fixtures/api.json`으로 돌기 때문에 서버 없이 실행됩니다. 데이터가 바뀌면 서버를 켠 상태에서 `KBO_RECORD_API=http://localhost:8080 npm test`로 다시 녹화합니다.
+`pnpm test`(Vitest + Testing Library)는 화면을 실제로 그려 보고 API 응답 변환을 검사합니다. 백엔드 응답을 녹화한 `src/test-fixtures/api.json`으로 돌기 때문에 서버 없이 실행됩니다. 데이터가 바뀌면 서버를 켠 상태에서 `KBO_RECORD_API=http://localhost:8080 pnpm test`로 다시 녹화합니다.
+
+## 구조
+
+React 19 + React Router 7 + Vite. 주소는 예전과 같은 해시 방식(`#/players?season=2025`)이라 `dist/`를 어느 정적 서버에 올려도 새로고침이 됩니다.
+
+```
+src/
+  main.jsx            진입점 (해시 라우터)
+  routes.jsx          화면 주소 ↔ 화면 모듈. 루트 로더가 팀·시즌 목록을 한 번 받는다
+  hooks.js            useQuery (주소의 조회 조건), useReference (팀·시즌 목록)
+  lib/api.js          API 호출·응답 변환 (같은 주소는 한 번만 요청)
+  lib/query.js        주소 읽기·만들기, 페이지 계산
+  lib/records.js      기록 정렬·표시 형식
+  components/         Layout(머리글·메뉴·오류), common(표·빈 상태·링크), controls(필터·탭·검색·페이지)
+  pages/              화면마다 loader(데이터 조회) + 컴포넌트(그리기)
+```
+
+화면은 로더가 API 응답을 다 받은 뒤 그립니다. 조건(주소)이 바뀌면 로더가 다시 돌고, 그 사이 다른 화면으로 이동하면 늦게 온 결과는 버립니다. 필터·정렬·페이지는 모두 주소에 남으므로 뒤로 가기와 새로고침에도 유지됩니다.
 
 ## 화면별 API
 

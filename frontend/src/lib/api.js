@@ -224,6 +224,12 @@ export async function loadReference() {
   };
 }
 
+/** 팀 코드(주소의 team=HT) → DB 팀 id (API 의 teamId 조건용). 코드가 비었거나 없으면 "". */
+export async function teamId(code) {
+  if (!code) return "";
+  return (await loadReference()).team.get(code)?.id ?? "";
+}
+
 /** 날짜별 경기 (팀 id·상태 조건은 서버에서 거른다). */
 export async function matches(date, { teamId, status } = {}) {
   return (await getJSON("/matches", { date, teamId, status })).map(toGame);

@@ -6,21 +6,9 @@
     <meta name="theme-color" content="#202327" />
     <title>DIAMOND / KBO · 야구 기록</title>
     <link rel="icon" href="data:," />
-    <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <a class="skip" href="#content">본문 바로가기</a>
-    <header id="header"></header>
-    <main id="content" tabindex="-1">
-      <div class="wrap empty" role="status">기록을 불러오는 중입니다…</div>
-    </main>
-    <footer>
-      <div class="wrap">
-        <strong>DIAMOND <span>/ KBO</span></strong
-        ><span>KBO 경기 · 선수 · 팀 기록</span>
-      </div>
-    </footer>
-    <dialog id="picker" aria-labelledby="picker-title"></dialog>
-    <script type="module" src="./app.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -1,3 +1,6 @@
+#root {
+  display: contents;
+}
 :root {
   --ink: #202327;
   --muted: #58626d;
